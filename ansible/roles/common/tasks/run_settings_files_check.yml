@@ -1,0 +1,25 @@
+---
+- pause: prompt="Ensure that you have set strong values for your project's secrets 
+               [Enter] to continue after you have checked and set values"
+  tags:
+      - var_check
+
+- debug: msg="You are using a placeholder value for DJANGO_DB_PASSWD"
+  when: django_env.DB_PASSWD == 'change_db_password!!!'
+  tags:
+      - var_check
+
+- fail: msg="You are using a placeholder value for DJANGO_DB_PASSWD"
+  when: django_env.DB_PASSWD == 'change_db_password!!!' 
+  tags:
+      - var_check
+
+- debug: msg="You are using a placeholder value for DJANGO_ADMIN_PASSWD"
+  when: django_env.DJANGO_ADMIN_PASSWD == 'change_django_admin_password!!!' 
+  tags:
+      - var_check
+
+- fail: msg="You are using a placeholder value for DJANGO_ADMIN_PASSWD"
+  when: django_env.DJANGO_ADMIN_PASSWD == 'change_django_admin_password' 
+  tags:
+      - var_check

@@ -1,0 +1,82 @@
+---
+- hosts: all
+  remote_user: django 
+
+  tasks:
+    - name: update the source via hg
+      shell: hg pull
+             && hg update
+      when: vcs == "hg"
+      args:
+           chdir: "{{ sites_dir }}/{{ project_name }}"
+      tags:
+            - vcs 
+
+    - name: Update the source via git
+      git: repo={{ project_repo }} 
+           dest={{ sites_dir }}/{{ project_name }}
+           force=yes
+      when: vcs == 'git'
+      tags:
+            - vcs 
+
+    - name: Put the site in maint mode
+      shell: cp "pages/templates/offline.html" "/usr/share/nginx/html/{{ project_name }}_offline.html" 
+      become: yes
+      become_user: root
+      args:
+           chdir: "{{ sites_dir }}/{{ project_name }}"
+      tags:
+            - start_maint 
+
+    - name: Updates required by the Django app inside virtualenv
+      pip: virtualenv={{ virtualenvs_dir }}/{{ project_name }}-env 
+        requirements={{ sites_dir }}/{{ project_name }}/requirements/production.txt
+      tags:
+           - django
+
+    - name: Run Django makemigrations
+      shell: . {{ virtualenvs_dir }}/{{ project_name }}-env/bin/activate
+            && python manage.py makemigrations --merge --noinput --settings={{ project_name }}.settings.production
+      args:
+           chdir: "{{ sites_dir }}/{{ project_name }}"
+      tags:
+            - django
+
+    - name: Run Django migrations
+      shell: . {{ virtualenvs_dir }}/{{ project_name }}-env/bin/activate
+            && python manage.py migrate --noinput --settings={{ project_name }}.settings.production
+      args:
+           chdir: "{{ sites_dir }}/{{ project_name }}"
+      tags:
+            - django
+
+    - name: Run Django collectstatic
+      shell: . {{ virtualenvs_dir }}/{{ project_name }}-env/bin/activate
+            && python manage.py collectstatic --noinput --settings={{ project_name }}.settings.production
+      args:
+          chdir: "{{ sites_dir }}/{{ project_name }}"
+      tags:
+         - django
+
+    - name: Run Django compress
+      shell: . {{ virtualenvs_dir }}/{{ project_name }}-env/bin/activate
+             && python manage.py compress --settings={{ project_name }}.settings.production
+      args:
+           chdir: "{{ sites_dir }}/{{ project_name }}"
+      tags:
+           - django
+
+    - name: Take the site out of  maint mode
+      file: path="/usr/share/nginx/html/{{ project_name }}_offline.html" state=absent 
+      become: yes
+      become_user: root
+      tags:
+           - django
+           - end_maint
+
+    - name: restart gunicorn 
+      become_user: root
+      become: true
+      supervisorctl: name={{ project_name }}
+                      state=restarted 

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags joyous_tags paleocore_utils %}
+
+{% block body_class %}template-{{ self.get_verbose_name|slugify }}{% endblock %}
+
+{% block content %}
+
+	<div id="intro">
+  		<div class="orbit clean-hero-slider pad" role="region" aria-label="Homepage Slider" data-orbit>
+  		  <div class="orbit-wrapper">
+  		    <ul class="orbit-container">
+  		      {% for block in self.content_items.all %}
+  		      <li class="orbit-slide">
+  		      	<figure class="orbit-figure">
+  		      		<div class="grid-container">
+  			        	<div class="grid-x grid-padding-x grid-padding-y grid-margin-y align-middle">
+  			        		<div class="medium-6 cell text-center">
+  			        			{% image block.image fill-350x350 %}
+  			        		</div>
+  			        		<div class="medium-6 cell caption">
+  					            <h3>{{ block.title}}</h3>
+  					            {{ block.content|richtext }}
+  					            <a href="{{ block.link }}" class="button secondary" target="_blank"><strong>Learn More</strong></a>
+  					        </div>
+  					    </div>
+  					</div>
+  		        </figure>
+  		      </li>
+  		      {% endfor %}
+  		    </ul>
+  		  </div>
+  		</div>
+
+  		<div class="grid-x grid-padding-x align-center">
+  			<div class="medium-9 cells">
+					<center>
+	  				<h3>{{ self.title_text|richtext }}</h3>
+	  				{{ self.body|richtext }}
+					</center>
+  			</div>
+  		</div>
+	</div>
+
+	{% adverts %}
+
+{% endblock %}

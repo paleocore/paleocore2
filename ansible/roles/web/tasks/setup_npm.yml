@@ -1,0 +1,28 @@
+---
+- name: update the apt-cache
+  apt: update_cache=yes cache_valid_time=3600
+  become_user: root
+  become: true
+  tags:
+    - npm
+
+- name: install npm and dependencies
+  become_user: root
+  become: true
+  apt: >
+        pkg={{ item }}  
+        state=latest
+        force=yes
+  with_items:
+    - nodejs 
+    - npm
+  tags:
+    - node
+    - npm 
+
+- name: Set NPM install prefix 
+  shell: npm install --prefix ./pages/static
+  args:
+     chdir: "{{ sites_dir }}/{{ project_name }}"
+  tags:
+     - npm

@@ -1,0 +1,11 @@
+{% load static wagtailcore_tags wagtailimages_tags wagtailembeds_tags pages_tags %}
+
+{% if carousel_items %}
+    {% for carousel_item in carousel_items %}
+        <div class="cell">
+            {% if carousel_item.embed_url %}
+                {% embed carousel_item.embed_url %}
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endif %}

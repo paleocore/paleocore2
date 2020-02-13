@@ -1,0 +1,60 @@
+---
+- name: update the apt-cache
+  apt: update_cache=yes  cache_valid_time=36000
+  tags:
+      - cache 
+      - packages 
+
+- name: install common package dependencies
+  apt: >
+        pkg={{ item }}  
+        state=latest
+        force=yes
+  with_items:
+    - build-essential
+    - python 
+    - python-dev
+    - python-setuptools
+    - libjpeg-dev
+    - libtiff-dev 
+    - zlib1g-dev 
+    - libfreetype6-dev 
+    - liblcms2-dev
+    - libmagickwand-dev
+    - python3-dev
+    - python3-pip
+    - python3-venv
+    - python3-numpy
+    - bash
+    - openssl
+    - libssl-dev
+    - mercurial
+    - git
+    - supervisor
+    - ufw
+    - fail2ban
+    - aptitude
+    - acl
+  tags:
+      - packages 
+
+- name: install elasticsearch via apt 
+  apt: name=elasticsearch state=latest update_cache=yes cache_valid_time=3600
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
+  tags:
+      - packages 
+      - elasticsearch
+
+- name: "install openjdk a dependency for elasticsearch on {{ ansible_distribution_release }}"
+  apt: name=openjdk-7-jre-headless state=latest update_cache=yes cache_valid_time=3600
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+  tags:
+      - packages 
+      - elasticsearch
+      - prequsite
+
+- name: safe upgrade 
+  apt: upgrade=safe force=yes
+  tags:
+      - upgrade 
+      - packages

@@ -1,0 +1,35 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% if adverts %}
+    <div class="notification-callout-alert hide-for-print" data-closable>
+        {% for a in page_advert %}
+            {% if a.image %}
+                {% image a.image width-90 %}
+            {% endif %}
+            <div class="notification-callout-alert-content" style="margin-left: 15px;">
+                <p class="notification-callout-alert-header">{{ a.title }}</p>
+                {{ a.text|richtext }}
+                {% if a.link %}
+                    <p><a class="button small" href="{{ a.link }}" style="padding: 7px 15px; margin-bottom: 0;"><strong>{{ a.button_text }}</strong></a></p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        {% for a in non_page_associated_adverts %}
+            {% if a.image %}
+                {% image a.image width-90 %}
+            {% endif %}
+            <div class="notification-callout-alert-content" style="margin-left: 15px;">
+                <p class="notification-callout-alert-header">{{ a.title }}</p>
+                {{ a.text|richtext }}
+                {% if a.link %}
+                    <p><a class="button small" href="{{ a.link }}" style="padding: 7px 15px; margin-bottom: 0;"><strong>{{ a.button_text }}</strong></a></p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <button class="close-button" aria-label="Dismiss alert" type="button" data-close style="background: transparent;">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endif %}

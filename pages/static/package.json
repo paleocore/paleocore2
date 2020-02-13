@@ -1,0 +1,12 @@
+{
+  "name": "paleocore",
+  "version": "0.0.0",
+  "dependencies": {
+    "foundation-sites": "^6.5.3",
+    "motion-ui": "^2.0.3"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}

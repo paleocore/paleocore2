@@ -1,0 +1,16 @@
+{% load static paleocore_utils settings_tags %}
+
+{% get_contact_fields as contact %}
+{% include "contact/includes/contact_card.html" with contact=contact only %}
+
+<br>
+
+<div class="social">
+	{% include "contact/includes/social.html" %}
+</div>
+
+<hr>
+
+<a href="https://www.google.com/maps/place/chrisdev/" target="_blank">
+	<img src="{% static 'img/map.png' %}" alt="" style="border: 5px solid #fff;" />
+</a>

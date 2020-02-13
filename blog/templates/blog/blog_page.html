@@ -1,0 +1,33 @@
+{% extends "blog/blog_base.html" %}
+{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
+
+{% block canonical_url %}
+    <link rel="amphtml" href="{{ request.site.root_url }}{% routablepageurl page "amp" %}" />
+{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+	{% include "utils/includes/social_share.html" %}
+	
+	<div class="neat-article-container">
+		{% include "blog/includes/blog_header.html" %}
+		  
+		{% if self.feed_image %}
+			{% image self.feed_image fill-1200x400 as feed_image %}
+		  	<div class="neat-article-image">
+		    	<img class="article-image" src="{{ feed_image.url }}">
+		  	</div>
+		{% endif %}
+		
+		<div class="grid-container">  
+			<div class="grid-x grid-padding-x align-center neat-article-content">
+				<div class="medium-9 cell">
+					<div class="article-content">
+				    	{% include "blog/includes/blog_body.html" with body=self.body only %}
+				    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

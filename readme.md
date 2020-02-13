@@ -1,0 +1,4 @@
+paleocore
+==================
+
+Paleo Core Project

@@ -1,0 +1,503 @@
+@charset 'utf-8';
+
+@import 'css/settings';
+@import 'node_modules/foundation-sites/scss/foundation';
+@import 'node_modules/motion-ui/src/motion-ui';
+@import 'css/building-blocks';
+@import 'css/accounts';
+@import 'css/print';
+
+// Global styles
+@include foundation-global-styles;
+@include foundation-forms;
+@include foundation-typography;
+
+// Grids (choose one)
+@include foundation-xy-grid-classes;
+@include foundation-grid;
+// @include foundation-flex-grid;
+
+// Generic components
+@include foundation-button;
+@include foundation-button-group;
+@include foundation-close-button;
+@include foundation-label;
+@include foundation-progress-bar;
+@include foundation-slider;
+@include foundation-switch;
+@include foundation-table;
+
+// Basic components
+@include foundation-badge;
+@include foundation-breadcrumbs;
+@include foundation-callout;
+@include foundation-card;
+@include foundation-dropdown;
+@include foundation-pagination;
+@include foundation-tooltip;
+
+// Containers
+@include foundation-accordion;
+@include foundation-media-object;
+@include foundation-orbit;
+@include foundation-responsive-embed;
+@include foundation-tabs;
+@include foundation-thumbnail;
+
+// Menu-based containers
+@include foundation-menu;
+@include foundation-menu-icon;
+@include foundation-accordion-menu;
+@include foundation-drilldown-menu;
+@include foundation-dropdown-menu;
+
+// Layout components
+@include foundation-off-canvas;
+@include foundation-reveal;
+@include foundation-sticky;
+@include foundation-title-bar;
+@include foundation-top-bar;
+
+// Helpers
+@include foundation-float-classes;
+@include foundation-flex-classes;
+@include foundation-visibility-classes;
+// @include foundation-prototype-classes;
+
+// Motion UI
+// @include motion-ui-transitions;
+// @include motion-ui-animations;
+
+
+// Colors
+
+$primary: map-get($foundation-palette, primary);
+$secondary: map-get($foundation-palette, secondary);
+$off-white : #F8F8FA;
+$emperor: #777777;
+$dark-metal: #222222;
+$static: static;
+
+
+// Responsive image/video classes
+.rich-text img {
+  max-width: 100%;
+  height: auto;
+}
+.responsive-object {
+  position: relative;
+}
+.responsive-object iframe,
+.responsive-object object,
+.responsive-object embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+$body-font-color: $emperor;
+
+body {background: $white;}
+.grid-container {max-width: 70rem;}
+.pad {padding: 20px 0;}
+a {color: $primary;}
+a:hover {color: $secondary;}
+button, .button {background: $primary; border-radius: 2px;}
+button:hover, .button:hover {background: darken($primary, 10%);}
+hr {border-color: $light-gray;}
+
+#social_bar {
+  padding: 3px 0;
+  background: darken($primary, 10%);
+  text-align: right;
+  a {color: $white; margin-right: 8px; font-size: 12.5px;}
+  i {font-size: 14px;}
+  .dropdown-pane {
+    background-image:linear-gradient(to bottom, darken($primary, 10%), $primary);
+    border: 0;
+    border-radius: 3px;
+    padding: 0 10px;
+    text-align: right;
+    li {list-style: none; padding: 6px 0;}
+  }
+  hr {margin: 0;}
+  #user, #sign-up-link {margin-left: 40px;}
+  #log-in-link {margin-left: 15px;}
+}
+
+.title-bar {
+	background: $primary;
+	a, a:hover {color: $white;}
+}
+.top-bar {
+    @include breakpoint(medium) {
+        background: $primary;
+        a {color: $white;}
+        a:hover {color: $white;}
+        li {font-size: 13px;}
+        li a:hover{background-color:$secondary;}
+        li.menu-text{font-size: 18px; color: $white;a:hover{background: transparent;}}
+        .menu li:not(.menu-text) a {padding: 1rem;}
+        .menu .is-active > a {
+            background: $secondary;
+            color: $white;
+        }
+        ul, .dropdown.menu a {background: $primary; border: 0px;}
+        .dropdown.menu .submenu {border-top: 3px solid $secondary;}
+        .dropdown.menu .is-dropdown-submenu-parent a::after {border-color: transparent $white transparent transparent; border-style: solid;}
+        .dropdown.menu .is-dropdown-submenu-parent.is-active a{color: $white;}
+        .dropdown.menu.medium-horizontal li.is-dropdown-submenu-parent a {padding: 1rem;}
+        .dropdown.menu.medium-horizontal li.is-dropdown-submenu-parent a::after {border: 0;}
+        .is-drilldown-submenu-parent>a::after {border-color: transparent transparent transparent $white;}
+        .js-drilldown-back::before {border-color: transparent $white transparent transparent;}
+        .has-form {
+            .input-group {margin-bottom: 0;}
+            input {max-width: 140px; font-size: 13px; margin-right: 0;}
+            [type="text"] {
+                border-top-left-radius: 2px;
+                border-bottom-left-radius: 2px;
+            }
+            input.button {
+                padding-bottom: 11px;
+                padding-top: 7px;
+                border-top-right-radius: 2px;
+                border-bottom-right-radius: 2px;
+                background: $emperor;
+                color: $white;
+            }
+            [type="text"],[type="submit"]  {height: 1.8rem;}
+        }
+    }
+    @include breakpoint(small) {
+        .has-form {
+            input {max-width: 100%;}
+            input.button {width: 100%;}
+       }
+   }
+}
+
+.off-canvas {
+    background: $off-white;
+    .is-drilldown {
+        margin-top: 40px;
+        .drilldown a {background: $off-white; color: $primary; padding: 1rem; border-bottom: 1px solid #f2f2f2;}
+        .drilldown a:hover {background: $white; color: darken($primary, 10%);}
+        .drilldown .is-drilldown-submenu-parent a::after {border-color: transparent transparent transparent $primary;}
+        .drilldown .js-drilldown-back a::before {border-color: transparent $primary transparent transparent;}
+        .is-drilldown-submenu {background: $off-white;}
+    }
+    .close-button {
+        z-index: 9999;
+        background: transparent;
+        color: $emperor;
+        right: .5rem;
+        top: 0.2rem;
+    }
+    z-index: 9999;
+}
+.off-canvas.is-transition-overlap {z-index: 99999;}
+
+.breadcrumbs {
+  margin: 10px 0;
+  background: $off-white;
+  border-radius: 15px;
+  padding: 15px;
+  a {color: $primary;}
+}
+
+.list-style {li{list-style: none;}}
+
+#content {padding-top: 25px; padding-bottom: 25px; min-height: 100vh;}
+
+.card {
+  box-shadow: 1px 1px 10px 1px rgba(0,0,0,.21);
+  border: 0;
+  transform: translate3d(0px, 0px, 0px);
+  transition: box-shadow 0.2s cubic-bezier(0, 0.2, 0.4, 1) 0s;
+}
+
+#carousel {
+  margin-top: 30px;
+}
+
+#intro, #testimonials {
+  padding: 40px 0 30px;
+  background: #5E9CD1;
+
+  h3, p {color: $white;}
+
+  h3 {font-weight: 500;line-height: 1;}
+}
+
+#intro {
+	background: url('/#{$static}/img/bg.jpg') 100% no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+
+	@include breakpoint(small only) {
+		padding-top: 10px;
+	    background-attachment: unset;
+	    img{max-height: 200px; max-width: 200px;}
+	}
+}
+
+#testimonials, #media {
+    padding: 50px 0;
+}
+
+
+#section {
+  padding: 20px;
+
+  h3 {color: $primary; font-weight: 400;}
+  h5 {margin-bottom: 0;}
+  a p, a h5 {color: $emperor;}
+  img {padding: 15px 0;}
+}
+
+
+#side_menu {
+  h6.title{background: $primary; padding: 6px; color: $white;}
+  hr:last-of-type {border: 0;}
+}
+
+
+#sidebar {
+	.social a{font-size: 18px; padding-right: 8px;}
+}
+
+
+#blog_list {
+  hr:last-of-type {border:0px;}
+  a p{color: $emperor;}
+}
+
+#blog-rss
+{
+  color: $white;
+}
+
+#blog_post, #standard_page {
+    blockquote {
+      background: #f9f9f9;
+      border-left: 5px solid #ccc;
+      margin: 1.5em 10px;
+      padding: 15px;
+      padding-left: 25px;
+      quotes: "\201C""\201D""\2018""\2019";
+    }
+
+    blockquote p  {
+        color: #777;
+        font-weight: 400;
+        font-style: italic;
+        font-size: 18px;
+        margin-bottom: 0px;
+    }
+    blockquote.pullout {
+        background: transparent;
+        font-size: 22px;
+        border-left: 0;
+        font-style: italic;
+        font-weight: 300;
+        color: #777;
+        padding: 15px;
+        padding-left: 50px;
+    }
+}
+
+
+#news_feed
+{
+  h6 {color: $primary;}
+  h6.title{background: $primary; padding: 6px; color: $white;}
+  h6, li {margin-bottom :5px;}
+  li{list-style: none; font-size:14px; margin-bottom: 0px;}
+  p{font-size: 14px; margin-bottom:10px;}
+  hr:last-of-type{border: 0px;}
+  .button{margin-bottom:5px; padding:5px 8px; float: right;}
+}
+
+#more_news {
+  h6.title{background: $primary; padding: 6px; color: $white;}
+  h5{color: $primary; margin-bottom: 2px;}
+  img {display:none; border-radius: 3px; margin-bottom: 5px;}
+  img:first-of-type {display: block;}
+  hr{margin: 12px 0; border-color: #ccc;}
+  hr:last-of-type {border: 0px;}
+}
+
+#event_feed
+{
+  .feed {
+    height: 230px;
+    overflow-y: scroll;
+  }
+  h6.title{background: $primary; padding: 6px; color: $white;}
+  h6.date{margin-top: 0px; color: $black;}
+  h6.event {padding:3px 0; margin:0;}
+  .event{border-bottom: 1px solid $emperor ;padding: 11px 0;}
+  .event:last-of-type {border-bottom: 0px;}
+  a {color: $emperor}
+  hr:last-of-type {border: 0px;}
+}
+
+#event_grid {
+  .column {padding: 0 7px;}
+
+  h6 {
+    color: $emperor;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  li {color: $emperor; list-style: none; font-size: 13.5px;}
+  i {color: $emperor; font-sie: 20px;}
+  p {font-size: 14px; margin-bottom: 10px;}
+  a p {color: $emperor; font-size: 13.5px;}
+}
+
+
+#people {
+  .people {
+    text-align: center;
+    img {border-radius: 3px; margin-bottom: 8px;}
+    .panel {padding: 10px;}
+  }
+  #contact-info {
+    li{list-style: none;}
+  }
+}
+
+
+#faq {
+  .block-faq_answer {display:none;}
+  .block-faq_question {
+    background:url('/#{$static}/img/faq/open.png') right no-repeat;
+    font-size: 15px;
+    color: $primary;
+    padding: 12px 25px 12px 0;
+    cursor:pointer;
+    margin: 0;
+    font-weight: 400;}
+    .block-faq_question:hover {color: $primary;}
+    .block-faq_question.close {background-image:url('/#{$static}/img/faq/close.png');}
+    .block-faq_question {border-top: 1px solid $emperor;}
+    .block-faq_question:first-of-type {border: 0;}
+}
+
+
+#search {
+  input[type="text"]{border-top-left-radius: 5px; border-bottom-left-radius: 5px; font-size: 1.2rem;padding-left: 15px;}
+  input.button{border-top-right-radius: 5px; border-bottom-right-radius: 5px;color: $white;padding-top: 11px;}
+}
+
+select {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  -o-appearance: none !important;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='32' height='24' viewBox='0 0 32 24'><polygon points='0,0 32,0 16,24' style='fill: rgb%28138, 138, 138%29'></polygon></svg>") !important;
+  background-origin: content-box !important;
+  background-position: right -1rem center !important;
+  background-repeat: no-repeat !important;
+  background-size: 9px 6px !important;
+}
+
+[type="search"], select {
+  background: #f5f8fa !important;
+  border: 1px solid #cbd6e2 !important;
+  border-radius: 3px !important;
+}
+
+form {
+  [type="text"], [type="password"], [type="date"],
+  [type="datetime"], [type="datetime-local"], [type="month"],
+  [type="week"], [type="email"], [type="number"],
+  [type="search"], [type="tel"], [type="time"],
+  [type="url"], [type="color"], select, textarea {
+    background: #f5f8fa;
+    border: 1px solid #cbd6e2;
+    border-radius: 3px;
+  }
+
+  input:hover {
+    border-color: rgba(62,80,180,.5);
+    box-shadow: 0 0 4px 1px rgba(62,80,180,.3),0 0 0 1px #00d0e4;
+  }
+
+  textarea {max-height: 80px;}
+
+  .button, button {border-radius: 3px;}
+}
+
+
+footer {
+  background-color: #333;
+  color: $white;
+  padding: 20px 0 0;
+
+  a, h5{color: $white;}
+
+  .social a{font-size: 20px; padding-right: 10px;}
+  .menu li a {padding: 11px 8px 11px 0; font-size: 14px;}
+  .menu li a:hover {color: $white;}
+  .accordion-menu .is-accordion-submenu-parent:not(.has-submenu-toggle) > a::after {border-color: $white transparent transparent;}
+
+  #copyright
+  {
+    background-color:$dark-metal;
+    margin-top: 20px;
+    p {
+      margin-bottom: 0;
+      padding: 8px 0;
+      font-size: 13.5px;
+      color: $white;
+    }
+  }
+}
+
+
+.vcard {
+  border: 0px;
+  padding: 0;
+  margin-bottom: 0px;
+  i {font-size: 14px;}
+}
+
+.scrollup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+  z-index:99999;
+}
+
+.lightbox
+{
+  z-index: 100000;
+}
+
+
+.lightboxOverlay
+{
+  z-index: 99999;
+}
+
+/**** Preventing FOUC (flash of unstyled content) ****/
+.no-js {
+  @include breakpoint(small only) {
+    .top-bar {
+      display: none;
+    }
+  }
+
+  @include breakpoint(medium) {
+    .title-bar {
+      display: none;
+    }
+  }
+}

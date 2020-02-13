@@ -1,0 +1,3 @@
+---
+- include: setup_le.yml
+- include: setup_nginx.yml
