@@ -16,13 +16,13 @@
 
 	<div class="title-bar" data-responsive-toggle="menu" data-hide-for="large">
   		<button class="menu-icon" type="button" style="background: transparent;"data-toggle></button>
-  		<div class="title-bar-title"><a href="{% pageurl site_root %}">ChrisDev Wagtail</a></div>
+  		<div class="title-bar-title"><a href="{% pageurl site_root %}">{{request.site.site_name}}</a></div>
 	</div>
 
     <div class="top-bar" id="menu">
       	<div class="top-bar-left hide-for-small-only">
         	<ul class="dropdown menu">
-          		<li class="menu-text"><a href="{% pageurl site_root %}" style="padding: 0;">ChrisDev Wagtail</a></li>
+          		<li class="menu-text"><a href="{% pageurl site_root %}" style="padding: 0;">{{request.site.site_name}}</a></li>
         	</ul>
       	</div>
       	<div class="top-bar-right">
