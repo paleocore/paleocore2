@@ -1,4 +1,4 @@
-{% load wagtailcore_tags navigation_tags i18n wagtailsettings_tags static %}
+{% load wagtailimages_tags wagtailcore_tags navigation_tags i18n wagtailsettings_tags static %}
 {% get_settings %}
 {% get_site_root as site_root %}
 
@@ -22,7 +22,11 @@
     <div class="top-bar" id="menu">
       	<div class="top-bar-left hide-for-small-only">
         	<ul class="dropdown menu">
-          		<li class="menu-text"><a href="{% pageurl site_root %}" style="padding: 0;">{{request.site.site_name}}</a></li>
+              <li class="menu-text">{% image settings.pages.SiteBranding.logo width-50 %}</li>
+          		{% comment %}
+              <li class="menu-text"><a href="{% pageurl site_root %}" style="padding: 0;">Paleo Core</a></li>
+              {% endcomment %}
+              <li class="menu-text"><a href="{% pageurl site_root %}" style="padding-left: 0;">Paleo Core</a></li>
         	</ul>
       	</div>
       	<div class="top-bar-right">
