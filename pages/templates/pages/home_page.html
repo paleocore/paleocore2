@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load static wagtailcore_tags wagtailimages_tags joyous_tags paleocore_utils %}
 
+{% comment "Custom tags" %}
+The paleocore_utils custom tags are defined in utils/templatetags/paleocore_utils.py
+{% endcomment %}
+
+
 {% block body_class %}template-{{ self.get_verbose_name|slugify }}{% endblock %}
 
 {% block content %}
