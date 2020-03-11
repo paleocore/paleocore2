@@ -1,0 +1,56 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+<!--
+<div class="small-12 columns">-->
+{% for project in projects %}
+
+<div class="row">
+
+
+    <div class="column">
+        <div class="card">
+            <div class="card-section" style="padding: 12px;">
+
+                <div class="row">
+
+                        <div class="small-2 column">
+                            {% if project.feed_image %}
+                                <a href="{% pageurl project %}">
+                                    {% image project.feed_image fill-100x100 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="small-8 column">
+                            <a href="{% pageurl project %}">
+                                <h5><strong>{{ project.title }}</strong></h5>
+                                {% if project.intro %}
+                                    {{ project.intro|richtext|truncatewords:25 }}
+                                {% endif %}
+                                {% if project.is_public %}
+                                    Public data
+                                    {% else %}
+                                    Private data
+                                {% endif %}
+                                {% if project.record_count %}
+                                    {{ project.record_count }} records
+                                {% endif %}
+                            </a>
+                        </div>
+
+                    <div class="small-2 column">
+                        {% url 'admin:app_list' project.slug as admin_url %}
+                        {% if admin_url %}
+                          <a class="button small" href="{%  pageurl project %}">Details &raquo;</a>
+                          <a class="button warning small" href="{{ admin_url }}">Admin &raquo;</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% empty %}
+    No projects found
+{% endfor %}
+<!--</div>-->

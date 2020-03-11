@@ -1,0 +1,107 @@
+{% extends "projects/projects_base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load leaflet_tags %}
+
+{% block extra_js %}
+    {% leaflet_js %}
+    {% leaflet_css %}
+{% endblock %}
+
+{% block article_content %}
+<article>
+    <!--{% include "utils/includes/social_share.html" %}-->
+    {% include "projects/includes/project_header.html" %}
+
+    <!-- Start Logo Map Row -->
+    <div class="row">
+
+      <!-- Project Image -->
+      <div class="medium-5 columns">
+          {% if self.feed_image %}
+              {% image self.feed_image fill-300x300 %}
+          {% endif %}
+
+      </div>
+      <!-- End Image
+
+      <!-- Project Area Map -->
+      <div class="medium-7 columns">
+          {% leaflet_map "main" callback="main_map_init" %}
+
+          <script type="text/javascript">
+
+              function filterFeatures(feature, layer){
+                  var currentProjectID = {{ self.id }}
+                  if(feature.id === currentProjectID) return true
+              }
+
+              function onEachFeature(feature, layer) {
+                  layer.bindPopup(feature.properties.title);
+              }
+
+              function main_map_init (map, options) {
+
+              var dataurl = '{% url "projects:projects_geojson" %}';
+              // Download GeoJSON via Ajax
+              $.getJSON(dataurl, function (data) {
+                  // Add GeoJSON layer
+                  L.geoJson(data, {
+                  onEachFeature: onEachFeature,
+                  filter: filterFeatures
+                  }).addTo(map);
+              });
+
+              map.setView([{{ self.location.coords.1 }}, {{ self.location.coords.0 }}], 6);
+              // map.scrollWheelZoom.disable();
+              map.eachLayer(function(marker) {
+                  marker.openPopup()
+              });
+
+              }
+          </script>
+      </div>
+      <!-- End Map -->
+
+    </div>
+    <!-- End Logo Map Row -->
+
+    <!-- HR -->
+    <div class="row"><hr/></div>
+
+    <!-- Start Content Row -->
+    <div class="row">
+
+      <!-- Start Column -->
+      <div class="column">
+
+        <!-- Tab List -->
+        <ul class="tabs" data-tabs id="example-tabs">
+          <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Description</a></li>
+          {% if self.related_links.all %}
+          <li class="tabs-title"><a data-tabs-target="panel2" href="#panel2">Datasets</a></li>
+          {% endif %}
+        </ul>
+        <!-- End Tab List -->
+
+        <!-- Tab  Contents -->
+        <div class="tabs-content" data-tabs-content="example-tabs">
+          <!-- Tab Panel 1 -->
+          <div class="tabs-panel is-active" id="panel1">
+            {% include "projects/includes/project_body.html" with body=self.body only %}
+          </div>
+          <!-- Tab Panel 2 -->
+          <div class="tabs-panel" id="panel2">
+            {% include "projects/includes/project_datasets.html" with datasets=self.related_links.all only %}
+          </div>
+        </div>
+        <!-- End Tab Contents -->
+
+      </div>
+      <!-- End Column -->
+
+    </div>
+    <!-- End Content Row -->
+
+
+</article>
+{% endblock %}

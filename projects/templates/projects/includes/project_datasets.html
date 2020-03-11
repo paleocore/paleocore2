@@ -1,0 +1,8 @@
+
+{% if datasets %}
+  <ul>
+  {% for dataset in datasets %}
+    <li><a href="{{ dataset.link }}">{{ dataset.title }}</a> [{{ dataset.link_document.file_extension }}]</li>
+  {% endfor %}
+  </ul>
+{% endif %}
