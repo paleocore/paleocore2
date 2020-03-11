@@ -62,6 +62,7 @@ INSTALLED_APPS = (
     'ls.joyous',
     'ckeditor',  # projects app
     'mapwidgets',  # projects app
+    'unicodecsv',  # mlp app
 
     'blog',
     'contact',
@@ -74,6 +75,7 @@ INSTALLED_APPS = (
     'utils',
 
     'projects',  # projects app
+    'mlp',
 
     'wagtail.contrib.routable_page',
     'wagtail.contrib.sitemaps',
@@ -206,6 +208,7 @@ DATABASES = {
 }
 
 DATABASES['default']['ATOMIC_REQUESTS'] = True
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 
 # Internationalization
