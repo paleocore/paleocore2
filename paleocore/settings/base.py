@@ -60,6 +60,8 @@ INSTALLED_APPS = (
     'foundation_formtags',
     'wagtail_feeds',
     'ls.joyous',
+    'ckeditor',  # projects app
+    'mapwidgets',  # projects app
 
     'blog',
     'contact',
@@ -70,6 +72,8 @@ INSTALLED_APPS = (
     'products',
     'search',
     'utils',
+
+    'projects',  # projects app
 
     'wagtail.contrib.routable_page',
     'wagtail.contrib.sitemaps',
@@ -89,11 +93,12 @@ INSTALLED_APPS = (
     'wagtail.admin',
     'wagtail.core',
     'wagalytics',
+    'wagtailgeowidget',  # projects app
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'users',
-    
+
 )
 
 MIDDLEWARE = (
