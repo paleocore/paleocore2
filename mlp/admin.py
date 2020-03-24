@@ -5,10 +5,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, path
 
 from .models import *
-
+from projects.admin import PaleoCoreOccurrenceAdmin, TaxonomyAdmin
+# TODO Why does the line below raise an error!
+import mlp.views  # This line raises exception!
 import unicodecsv
 
 from django.core.exceptions import ObjectDoesNotExist
+
+
 
 
 mlp_default_list_display = ('barcode', 'date_recorded', 'catalog_number', 'basis_of_record', 'item_type',
@@ -32,7 +36,7 @@ mlp_search_fields = ('id',
                      'collector',)
 
 
-class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
+class OccurrenceAdmin(PaleoCoreOccurrenceAdmin):
     """
     OccurrenceAdmin <- PaleoCoreOccurrenceAdmin <- BingGeoAdmin <- OSMGeoAdmin <- GeoModelAdmin
     """
@@ -42,6 +46,7 @@ class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
     #                         'collecting_method', 'collector', 'item_scientific_name', 'item_description',
     #                         'year_collected',
     #                         'in_situ', 'problem', 'disposition', 'easting', 'northing')
+    change_list_template = 'admin/projects/projects_change_list.html'
     list_display = mlp_default_list_display+('thumbnail',)  # defaults plus thumbnail
     list_select_related = ['archaeology', 'biology', 'geology']
     list_filter = ['basis_of_record', 'item_type', 'field_season',
@@ -92,6 +97,16 @@ class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
         redirect_url = reverse("projects:mlp:mlp_change_xy")
         return HttpResponseRedirect(redirect_url + "?ids=%s" % (",".join(selected)))
     change_xy.short_description = "Manually change coordinates for a point"
+
+    # TODO fix broken imports from mlp.views.
+    def get_urls(self):
+        tool_item_urls = [
+            path(r'import_kmz/', mlp.views.ImportKMZ.as_view()),
+            # path(r'^summary/$',permission_required('mlp.change_occurrence',
+            #                         login_url='login/')(self.views.Summary.as_view()),
+            #     name="summary"),
+        ]
+        return tool_item_urls + super(OccurrenceAdmin, self).get_urls()
 
     def change_occurrence2biology(self, request, queryset):
         selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
@@ -201,6 +216,7 @@ class GeologyAdmin(OccurrenceAdmin):
     list_select_related = ['occurrence_ptr']  # required here b/c inherited values won't work
 
 
+
 ############################
 #  Register Admin Classes  #
 ############################
@@ -208,5 +224,5 @@ admin.site.register(Occurrence, OccurrenceAdmin)
 admin.site.register(Archaeology, ArchaeologyAdmin)
 admin.site.register(Biology, BiologyAdmin)
 admin.site.register(Geology, GeologyAdmin)
-admin.site.register(Taxon, projects.admin.TaxonomyAdmin)
+admin.site.register(Taxon, TaxonomyAdmin)
 
