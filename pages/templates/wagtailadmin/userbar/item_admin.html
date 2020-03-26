@@ -1,0 +1,12 @@
+{% extends "wagtailadmin/userbar/item_base.html" %}
+{% load i18n  %}
+
+{% block item_content %}
+    <div class="wagtail-action wagtail-icon wagtail-icon-wagtail">
+        <a href="{% url 'wagtailadmin_home' %}" target="_parent" class="">{% trans 'Go to Wagtail admin' %}</a>
+    </div>
+
+    <div class="wagtail-action wagtail-icon wagtail-icon-cogs">
+        <a href="{% url 'admin:index' %}" target="_parent" class="">{% trans 'Go to Django admin' %}</a>
+    </div>
+{% endblock %}
