@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.gis',
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.sitemaps',
@@ -75,6 +76,7 @@ INSTALLED_APPS = (
     'utils',
 
     'projects',  # projects app
+    'drp',
     'mlp',
     'lgrp',
     'eppe',

@@ -22,13 +22,6 @@ class Echo(object):
         return value
 
 
-class BingGeoAdmin(OSMGeoAdmin):
-    """
-    Modified Geographic Admin Class using Digital Globe default_projectmaps
-    GeoModelAdmin -> OSMGeoAdmin -> BingGeoAdmin
-    """
-    map_template = './bing.html'
-
 
 ####################################
 # PaleoCore Default Admin Settings #
@@ -130,56 +123,6 @@ class PaleoCoreOccurrenceAdmin(admin.ModelAdmin):
 
     class Media:
         js = ['admin/js/list_filter_collapse.js']
-
-
-class PaleoCoreLocalityAdmin(BingGeoAdmin):
-    list_display = ("collection_code", "paleolocality_number", "paleo_sublocality")
-    list_filter = ("collection_code",)
-    search_fields = ("paleolocality_number",)
-    field_mapping = {}
-
-    def export_csv(self, request, queryset):
-        mapping_dict = self.field_mapping
-        pseudo_buffer = Echo()
-        writer = csv.writer(pseudo_buffer)
-
-        def get_headers():
-            return mapping_dict.keys()
-
-        # Trick to get foreign key field values
-        # see https://stackoverflow.com/questions/20235807/how-to-get-foreign-key-values-with-getattr-from-models
-        def get_field_value(instance, field):
-            field_path = field.split('.')
-            attr = instance
-            for elem in field_path:
-                try:
-                    attr = getattr(attr, elem)
-                except AttributeError:
-                    return None
-            return attr
-
-        def get_row_data(o, md):
-            row_data = []
-            for key in md:
-                # for each item in the field mapping dict get the db value for that field
-                field_value = get_field_value(o, md[key])
-                if callable(field_value):  # method attribute
-                    row_data.append(field_value())
-                else:
-                    row_data.append(field_value)
-            # Return list without empty strings and Nulls.
-            return ['' if i in [None, False, 'None', 'False'] else i for i in row_data]
-
-        def get_rows(items):
-            yield writer.writerow(get_headers())
-            for item in items:
-                yield writer.writerow(get_row_data(item, mapping_dict))
-
-        response = StreamingHttpResponse(
-            streaming_content=(get_rows(queryset)),
-            content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="DwC_Export.csv"'
-        return response
 
 
 class PaleoCoreLocalityAdminGoogle(admin.ModelAdmin):
