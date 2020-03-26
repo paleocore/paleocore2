@@ -209,12 +209,12 @@ class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
     # Add to the admin urls
     def get_urls(self):
         return [path(r'import_kmz/',
-                    permission_required('lgrp.add_occurrence', login_url='login/')(lgrp.views.ImportKMZ.as_view()),
-                    name="import_kmz"),
+                     permission_required('lgrp.add_occurrence', login_url='login/')(lgrp.views.ImportKMZ.as_view()),
+                     name="import_kmz"),
                 path(r'change_xy/',
-                    permission_required('lgrp.change_occurrence', login_url='login/')(
-                        lgrp.views.ChangeCoordinates.as_view()),
-                    name="change_xy"),
+                     permission_required('lgrp.change_occurrence', login_url='login/')(
+                         lgrp.views.ChangeCoordinates.as_view()),
+                     name="change_xy"),
                 ] + super(OccurrenceAdmin, self).get_urls()
 
 
@@ -318,7 +318,7 @@ class StratigraphicUnitAdmin(admin.ModelAdmin):
     ordering = ['name']
 
 
-class HydrologyAdmin(projects.admin.BingGeoAdmin):
+class HydrologyAdmin(admin.ModelAdmin):
     list_display = ("id", "size")
     search_fields = ("id",)
     list_filter = ("size",)
