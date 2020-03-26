@@ -82,6 +82,7 @@ INSTALLED_APPS = (
     'lgrp',
     'eppe',
     'gdb',
+    'omo_mursi',
 
     'wagtail.contrib.routable_page',
     'wagtail.contrib.sitemaps',
