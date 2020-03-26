@@ -81,6 +81,7 @@ INSTALLED_APPS = (
     'hrp',
     'lgrp',
     'eppe',
+    'gdb',
 
     'wagtail.contrib.routable_page',
     'wagtail.contrib.sitemaps',
@@ -124,7 +125,7 @@ MIDDLEWARE = (
 
 ROOT_URLCONF = 'paleocore.urls'
 
-#Admins see https://docs.djangoproject.com/en/dev/ref/settings/#admins
+# Admins see https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
     ("""Denne Reed""", 'denne.reed@gmail.com'),
 )
@@ -134,7 +135,7 @@ MANAGERS = ADMINS
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ str(APPS_DIR.path('templates')),],
+        'DIRS': [str(APPS_DIR.path('templates')), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'debug': DEBUG,
