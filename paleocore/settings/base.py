@@ -84,6 +84,7 @@ INSTALLED_APPS = (
     'gdb',
     'omo_mursi',
     'cc',
+    'fc',
 
     'wagtail.contrib.routable_page',
     'wagtail.contrib.sitemaps',
