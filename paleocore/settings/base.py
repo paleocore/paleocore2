@@ -78,6 +78,7 @@ INSTALLED_APPS = (
     'projects',  # projects app
     'drp',
     'mlp',
+    'hrp',
     'lgrp',
     'eppe',
 
