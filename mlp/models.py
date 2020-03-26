@@ -1,11 +1,12 @@
+import os
 from django.contrib.gis.db import models
 from django.contrib.contenttypes.models import ContentType
-import os
-from mlp.ontologies import BASIS_OF_RECORD_VOCABULARY, ITEM_TYPE_VOCABULARY, COLLECTING_METHOD_VOCABULARY, \
-    COLLECTOR_CHOICES, SIDE_VOCABULARY
+from django.utils.html import mark_safe
 import projects.models
 import collections
-from django.utils.html import mark_safe
+
+from mlp.ontologies import BASIS_OF_RECORD_VOCABULARY, ITEM_TYPE_VOCABULARY, COLLECTING_METHOD_VOCABULARY, \
+    COLLECTOR_CHOICES, SIDE_VOCABULARY
 
 FIELD_SEASON_CHOICES = (('Jan 2014', 'Jan 2014'),
                         ('Nov 2014', 'Nov 2014'),
@@ -82,7 +83,6 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
             return None
     photo.short_description = 'Photo'
 
-
     def thumbnail(self):
         try:
             return mark_safe('<a href="%s"><img src="%s" style="width:100px" /></a>' \
@@ -113,7 +113,6 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
         except Geology.DoesNotExist:
             pass
         return result
-
 
     def get_subtype_generic(self):
         """
@@ -172,7 +171,6 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
 
     class Meta:
         managed = True
-        #db_table = 'mlp_occurrence'
         verbose_name = '01-MLP Occurrence'
         verbose_name_plural = '01-MLP Occurrences'
 
