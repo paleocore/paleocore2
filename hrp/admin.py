@@ -92,22 +92,19 @@ geological_context_fieldset = ('Geological Context', {
             ('analytical_unit_found', 'analytical_unit_likely', 'analytical_unit_simplified'),
             ('in_situ', 'ranked'),
             ('stratigraphic_member',),
-            ('locality', 'drainage_region')]
+            ('drainage_region')]
     })
 
 occurrence_fieldsets = (
     ('Record Details', {
         'fields': [('id', 'date_last_modified',)]
     }),
-    ('Item Details', {
+    ('Occurrence Details', {
         'fields': [('barcode', 'catalog_number',),
                    ('date_recorded', 'year_collected',),
-                   ("collection_code", "locality", "item_number", "item_part")]
-    }),
-
-    ('Occurrence Details', {
-        'fields': [('basis_of_record', 'item_type', 'disposition', 'preparation_status'),
-                   ('collecting_method', 'finder', 'collector', 'item_number'),
+                   ('basis_of_record', 'item_type', 'disposition', 'preparation_status'),
+                   ("collection_code", "locality", "item_number", "item_part"),
+                   ('collecting_method', 'finder', 'collector',),
                    ('item_description', 'item_scientific_name', 'image'),
                    ('problem', 'problem_comment'),
                    ('remarks',)]
@@ -138,7 +135,7 @@ class OccurrenceAdmin(DGGeoAdmin):
     list_display.insert(1, 'locality')
     list_display.insert(2, 'item_number')
     list_display.insert(3, 'item_part')
-    #fieldsets = occurrence_fieldsets
+    fieldsets = occurrence_fieldsets
     list_filter = default_list_filter
     default_search_fields = ('id', 'item_scientific_name', 'item_description', 'barcode', 'catalog_number')
     search_fields = list(default_search_fields) + ['id']
