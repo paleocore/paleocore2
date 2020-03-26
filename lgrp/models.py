@@ -415,13 +415,11 @@ class Image(models.Model):
 
     def thumbnail(self):
         try:
-            return '<a href="%s"><img src="%s" style="width:100px" /></a>' \
-                   % (os.path.join(self.image.url), os.path.join(self.image.url))
+            return mark_safe('<a href="%s"><img src="%s" style="width:100px" /></a>' \
+                   % (os.path.join(self.image.url), os.path.join(self.image.url)))
         except:
             return None
     thumbnail.short_description = 'Thumb'
-    thumbnail.allow_tags = True
-    thumbnail.mark_safe = True
 
 
 class File(models.Model):
