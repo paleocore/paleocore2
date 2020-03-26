@@ -77,6 +77,7 @@ INSTALLED_APPS = (
     'projects',  # projects app
     'mlp',
     'lgrp',
+    'eppe',
 
     'wagtail.contrib.routable_page',
     'wagtail.contrib.sitemaps',
