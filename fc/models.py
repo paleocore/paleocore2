@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 import os
 from django.db.models import Manager as GeoManager
+from django.utils.html import mark_safe
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -31,7 +32,7 @@ class Context(models.Model):
     exc_date = models.DateField('Date', blank=True, null=True)
     excavator = models.CharField(max_length=50, blank=True, null=True)
     points = models.GeometryField(dim=3, blank=True, null=True, srid=-1)
-    objects = models.GeoManager()
+    objects = GeoManager()
 
     class Meta:
         managed = True
@@ -125,7 +126,7 @@ class Small_Find(Context):
 
 class Small_Find_Weights(models.Model):
     smalls_id = models.AutoField('ID', primary_key=True)
-    context = models.ForeignKey(Context)
+    context = models.ForeignKey(Context, null=True, blank=True, on_delete=models.SET_NULL)
     weight = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
 
     class Meta:
@@ -136,7 +137,7 @@ class Small_Find_Weights(models.Model):
 
 class Granulometry(models.Model):
     grain_id = models.AutoField('ID', primary_key=True)
-    context = models.ForeignKey(Context)
+    context = models.ForeignKey(Context, null=True, blank=True, on_delete=models.SET_NULL)
     weight = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
 
     class Meta:
@@ -158,16 +159,16 @@ class Photo(Context):
     image01 = models.ImageField('Image', upload_to='fc/', null=True, blank=True)
 
     def thumb01(self):
-        return u'<a href="%s"><img src="%s" style="width:300px" /></a>' % (
-            os.path.join(self.image01.url), os.path.join(self.image01.url))
+        return mark_safe(u'<a href="%s"><img src="%s" style="width:300px" /></a>' % (
+            os.path.join(self.image01.url), os.path.join(self.image01.url)))
 
     thumb01.short_description = 'Image'
     thumb01.allow_tags = True
     thumb01.mark_safe = True
 
     def thumb02(self):
-        return u'<a href="%s"><img src="%s" style="width:100px" /></a>' % (
-            os.path.join(self.image01.url), os.path.join(self.image01.url))
+        return mark_safe(u'<a href="%s"><img src="%s" style="width:100px" /></a>' % (
+            os.path.join(self.image01.url), os.path.join(self.image01.url)))
 
     thumb02.short_description = 'Image'
     thumb02.allow_tags = True
