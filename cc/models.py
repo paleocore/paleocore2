@@ -1,7 +1,7 @@
 from django.contrib.gis.db import models
 import os
 from django.db.models import Manager as GeoManager
-from django.utils.html import mark_safe
+from django.utils.html import format_html
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -104,7 +104,7 @@ class Photo(Context):
     image01 = models.ImageField('Image', upload_to='cc/', null=True, blank=True)
 
     def thumb01(self):
-        return mark_safe('<a href="%s"><img src="%s" style="width:300px" /></a>' % (os.path.join(self.image01.url),
+        return format_html('<a href="%s"><img src="%s" style="width:300px" /></a>' % (os.path.join(self.image01.url),
                                                                            os.path.join(self.image01.url)))
     thumb01.short_description = 'Image'
 
