@@ -1,7 +1,7 @@
 from django.contrib.gis.db import models
 import os
 from django.db.models import Manager as GeoManager
-from django.utils.html import mark_safe
+from django.utils.html import format_html
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -159,20 +159,16 @@ class Photo(Context):
     image01 = models.ImageField('Image', upload_to='fc/', null=True, blank=True)
 
     def thumb01(self):
-        return mark_safe(u'<a href="%s"><img src="%s" style="width:300px" /></a>' % (
+        return format_html(u'<a href="%s"><img src="%s" style="width:300px" /></a>' % (
             os.path.join(self.image01.url), os.path.join(self.image01.url)))
 
     thumb01.short_description = 'Image'
-    thumb01.allow_tags = True
-    thumb01.mark_safe = True
 
     def thumb02(self):
-        return mark_safe(u'<a href="%s"><img src="%s" style="width:100px" /></a>' % (
+        return format_html(u'<a href="%s"><img src="%s" style="width:100px" /></a>' % (
             os.path.join(self.image01.url), os.path.join(self.image01.url)))
 
     thumb02.short_description = 'Image'
-    thumb02.allow_tags = True
-    thumb02.mark_safe = True
 
     class Meta:
         managed = True
