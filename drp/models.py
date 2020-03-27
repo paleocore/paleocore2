@@ -183,27 +183,6 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
         # call the normal drp_occurrence save method using alternate database
         super(Occurrence, self).save(*args, **kwargs)
 
-    def photo(self):
-        try:
-            return mark_safe('<a href="%s"><img src="%s" style="width:600px" /></a>' \
-                   % (os.path.join(self.image.url), os.path.join(self.image.url)))
-        except:
-            return None
-    photo.short_description = 'Photo'
-
-    def thumbnail(self):
-        try:
-            return mark_safe('<a href="%s"><img src="%s" style="width:100px" /></a>' \
-                   % (os.path.join(self.image.url), os.path.join(self.image.url)))
-        except:
-            return None
-    thumbnail.short_description = 'Thumb'
-
-    class Meta:
-        verbose_name = "DRP Occurrence"
-        verbose_name_plural = "DRP Occurrences"
-        ordering = ["collection_code", "paleolocality_number", "item_number", "item_part"]
-
 
 class Image(models.Model):
     occurrence = models.ForeignKey("Occurrence", related_name='drp_occurrences', on_delete=models.CASCADE)

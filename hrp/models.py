@@ -197,26 +197,6 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
         field_list = self._meta.get_fields()
         return [f.name for f in field_list if f.concrete]
 
-    def photo(self):
-        try:
-            return u'<a href="%s"><img src="%s" style="width:600px" /></a>' \
-                   % (os.path.join(self.image.url), os.path.join(self.image.url))
-        except:
-            return None
-    photo.short_description = 'Photo'
-    photo.allow_tags = True
-    photo.mark_safe = True
-
-    def thumbnail(self):
-        try:
-            return u'<a href="%s"><img src="%s" style="width:100px" /></a>' \
-                   % (os.path.join(self.image.url), os.path.join(self.image.url))
-        except:
-            return None
-    thumbnail.short_description = 'Thumb'
-    thumbnail.allow_tags = True
-    thumbnail.mark_safe = True
-
 
 class Biology(Occurrence):
     # Biology

@@ -102,22 +102,6 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
         """
         super(Occurrence, self).save(*args, **kwargs)
 
-    def photo(self):
-        try:
-            return mark_safe('<a href="%s"><img src="%s" style="width:600px" /></a>' \
-                   % (os.path.join(self.image.url), os.path.join(self.image.url)))
-        except:
-            return None
-    photo.short_description = 'Photo'
-
-    def thumbnail(self):
-        try:
-            return mark_safe('<a href="%s"><img src="%s" style="width:100px" /></a>' \
-                   % (os.path.join(self.image.url), os.path.join(self.image.url)))
-        except:
-            return None
-    thumbnail.short_description = 'Thumb'
-
     @staticmethod
     def fields_to_display():
         fields = ("id", "barcode")

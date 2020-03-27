@@ -1,7 +1,7 @@
 import os
 from django.contrib.gis.db import models
 from django.contrib.contenttypes.models import ContentType
-from django.utils.html import mark_safe
+
 import projects.models
 import collections
 
@@ -74,22 +74,6 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
             return self.catalog_number
         else:
             return "item "+str(self.id)
-
-    def photo(self):
-        try:
-            return mark_safe('<a href="%s"><img src="%s" style="width:600px" /></a>' \
-                   % (os.path.join(self.image.url), os.path.join(self.image.url)))
-        except:
-            return None
-    photo.short_description = 'Photo'
-
-    def thumbnail(self):
-        try:
-            return mark_safe('<a href="%s"><img src="%s" style="width:100px" /></a>' \
-                   % (os.path.join(self.image.url), os.path.join(self.image.url)))
-        except:
-            return None
-    thumbnail.short_description = 'Thumb'
 
     def get_subtype(self):
         """
