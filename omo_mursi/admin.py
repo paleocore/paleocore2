@@ -20,7 +20,7 @@ default_biology_inline_fieldsets = (
     }),
 )
 default_read_only_fields = ('id', 'point_x', 'point_y', 'easting', 'northing', 'date_last_modified')
-default_list_display = ('barcode', 'field_number', 'catalog_number', 'basis_of_record', 'item_type',
+default_list_display = ('barcode', 'date_recorded', 'catalog_number', 'basis_of_record', 'item_type',
                         'collecting_method', 'collector', 'item_scientific_name', 'item_description', 'year_collected',
                         'in_situ', 'problem', 'disposition', 'easting', 'northing')
 
@@ -52,7 +52,7 @@ class OccurrenceAdmin(OSMGeoAdmin):
     fieldsets = (
         ('Curatorial', {
             'fields': [('barcode', 'catalog_number', 'id'),
-                       ('field_number', 'year_collected', 'date_last_modified'),
+                       ('date_recorded', 'year_collected', 'date_last_modified'),
                        ('collection_code', 'item_number', 'item_part')]
         }),
 
