@@ -3,20 +3,15 @@ import os
 from django.contrib.gis.db import models
 
 from projects.models import PaleoCoreOccurrenceBaseClass
+from projects.models import TaxonRank as PaleoCoreTaxonRankBaseClass
 from .ontologies import BASIS_OF_RECORD_VOCABULARY, ITEM_TYPE_VOCABULARY, COLLECTING_METHOD_VOCABULARY, \
     COLLECTOR_CHOICES, SIDE_VOCABULARY
 
 
-class TaxonRank(models.Model):
-    name = models.CharField(null=False, blank=False, max_length=50, unique=True)
-    plural = models.CharField(null=False, blank=False, max_length=50, unique=True)
-    ordinal = models.IntegerField(null=False, blank=False, unique=True)
-
-    def __unicode__(self):
-        return str(self.name)
-
+class TaxonRank(PaleoCoreTaxonRankBaseClass):
     class Meta:
         verbose_name = "Taxon Rank"
+        verbose_name_plural = "Taxon Ranks"
 
 
 class Taxon(models.Model):
