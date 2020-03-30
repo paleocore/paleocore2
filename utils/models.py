@@ -55,6 +55,7 @@ class ContactFields(models.Model):
     city = models.CharField(max_length=255, blank=True)
     country = models.CharField(max_length=255, blank=True)
     post_code = models.CharField(max_length=10, blank=True)
+    state_province = models.CharField('State or Province', max_length=10, blank=True)
 
     panels = [
         FieldPanel('name_organization',
@@ -66,6 +67,7 @@ class ContactFields(models.Model):
         FieldPanel('address_1'),
         FieldPanel('address_2'),
         FieldPanel('city'),
+        FieldPanel('state_province'),
         FieldPanel('country'),
         FieldPanel('post_code'),
     ]
