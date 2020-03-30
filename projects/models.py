@@ -1,4 +1,5 @@
 # IMPORTS
+import os
 # Django imports
 from django.db.models import Manager as GeoManager
 from django.contrib.gis.db import models
@@ -8,6 +9,7 @@ from django.apps import apps
 from django.utils import timezone
 from django.contrib.gis.geos import Point
 from django_countries.fields import CountryField
+from django.utils.html import format_html
 
 # Python imports
 import math
@@ -57,6 +59,13 @@ class PaleoCoreBaseClass(models.Model):
             id_string = id_string+' '+self.name
         return id_string
 
+    def get_app_label(self):
+        """
+        Get the app label associated with an instance of this class.
+        returns the app label as a string, e.g. 'mlp'
+        """
+        return ContentType.objects.get_for_model(self).app_label
+
     def get_concrete_field_names(self):
         """
         Get field names that correspond to columns in the DB
@@ -80,6 +89,22 @@ class PaleoCoreBaseClass(models.Model):
         """
         field_list = self._meta.get_fields()  # produce a list of field objects
         return [f.name for f in field_list if f.is_relation]  # return a list of names for fk fields
+
+    def photo(self):
+        try:
+            return format_html('<a href="%s"><img src="%s" style="width:600px" /></a>' \
+                   % (os.path.join(self.image.url), os.path.join(self.image.url)))
+        except:
+            return None
+    photo.short_description = 'Photo'
+
+    def thumbnail(self):
+        try:
+            return format_html('<a href="%s"><img src="%s" style="width:100px" /></a>' \
+                   % (os.path.join(self.image.url), os.path.join(self.image.url)))
+        except:
+            return None
+    thumbnail.short_description = 'Thumb'
 
     class Meta:
         abstract = True
@@ -237,6 +262,9 @@ class IdentificationQualifier(PaleoCoreBaseClass):
     """
     name = models.CharField(null=False, blank=True, max_length=15, unique=True)
     qualified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         abstract = True
