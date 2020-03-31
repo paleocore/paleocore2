@@ -1,5 +1,6 @@
 # flake8: noqa
 from django.conf.urls import include, url
+from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
@@ -30,6 +31,9 @@ urlpatterns = [
     url('^sitemap.xml$', sitemap),
     url(r'^blog/feed/basic$', BasicFeed(), name='basic_feed'),
     url(r'^blog/feed/extended$', ExtendedFeed(), name='extended_feed'),
+
+    # Paleo Core Projects
+    path('projects/', include(('projects.urls', 'projects'), namespace='projects')),
 
     # JSON feed
     url(r'^blog/feed/basic.json$', BasicJsonFeed(), name='basic_json_feed'),
