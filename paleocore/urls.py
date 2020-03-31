@@ -21,12 +21,12 @@ admin.autodiscover()
 
 
 urlpatterns = [
-    url(r'^django-admin/', (admin.site.urls)),
-    url(r'^users/', include('users.urls')),
-    url(r'^accounts/', include('allauth.urls')),
-    url(r'^admin/', include(wagtailadmin_urls)),
-    url(r'^search/$', search_views.search, name='search'),
-    url(r'^documents/', include(wagtaildocs_urls)),
+    path('django-admin/', admin.site.urls),
+    path('users/', include('users.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('admin/', include(wagtailadmin_urls)),
+    path('search/', search_views.search, name='search'),
+    path('documents/', include(wagtaildocs_urls)),
 
     url('^sitemap.xml$', sitemap),
     url(r'^blog/feed/basic$', BasicFeed(), name='basic_feed'),
