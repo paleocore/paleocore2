@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'contact',
     'documents_gallery',
     'gallery',
+    'leaflet',
     'pages',
     'people',
     'products',
