@@ -67,6 +67,7 @@ INSTALLED_APPS = (
 
     'blog',
     'contact',
+    'djgeojson',
     'documents_gallery',
     'gallery',
     'leaflet',

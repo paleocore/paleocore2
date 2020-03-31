@@ -18,3 +18,4 @@ django-allauth==0.39.1
 django-braces==1.13.0
 django-mptt==0.11.0
 django-leaflet==0.26.0
+django-geojson==2.12.0
