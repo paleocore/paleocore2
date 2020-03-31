@@ -1,4 +1,3 @@
-import os
 from django.contrib.gis.db import models
 from django.contrib.contenttypes.models import ContentType
 
@@ -177,7 +176,6 @@ class Biology(Occurrence):
     infraspecific_rank = models.CharField(null=True, blank=True, max_length=50)
     author_year_of_scientific_name = models.CharField(null=True, blank=True, max_length=50)
     nomenclatural_code = models.CharField(null=True, blank=True, max_length=50)
-    #identification_qualifier = models.CharField(null=True, blank=True, max_length=50)
     identified_by = models.CharField(null=True, blank=True, max_length=100, choices=COLLECTOR_CHOICES)
     date_identified = models.DateTimeField(null=True, blank=True)
     identification_remarks = models.TextField(null=True, blank=True, max_length=64000)
