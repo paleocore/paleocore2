@@ -9,7 +9,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 from sys import path
-
+from django.core.exceptions import ImproperlyConfigured
 
 import environ
 env = environ.Env()
@@ -275,12 +275,23 @@ COMPRESS_OFFLINE = False
 GA_KEY_FILEPATH = env('GA_KEY_FILEPATH', default='/path/to/secure/directory/your-key.json')
 GA_VIEW_ID = env('GA_VIEW_ID', default='ga:xxxxxxxxxxxxx')
 
-
 # Google Maps Key
+try:
+    GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY')  # don't allow env variables to crash server!
+except ImproperlyConfigured:
+    GOOGLE_MAPS_API_KEY = ''
 
-GOOGLE_MAPS_KEY = ''
+# Configuration for  Wagtail Geo Widget
+GOOGLE_MAPS_V3_APIKEY = GOOGLE_MAPS_API_KEY
+
+# Configuration for map widgets
 DYNAMIC_MAP_URL = ''
 STATIC_MAP_URL = ''
+MAP_WIDGETS = {
+    "GooglePointFieldWidget": (),
+    "GOOGLE_MAP_API_KEY": GOOGLE_MAPS_API_KEY,
+}
+
 
 # Wagtail settings
 
