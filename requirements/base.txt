@@ -20,3 +20,4 @@ django-mptt==0.11.0
 django-leaflet==0.26.0
 django-geojson==2.12.0
 idigbio==0.8.5
+xlrd==1.2.0
