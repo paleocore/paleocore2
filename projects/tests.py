@@ -6,14 +6,9 @@ from sys import path
 import environ
 from django.contrib.gis.geos import Point, Polygon
 env = environ.Env(DEBUG=(bool, False),)  # create instance of an Env class
-# root = environ.Path(__file__) - 3  # save absolute filesystem path to the root path as as an Env.Path object=
-# PROJECT_ROOT = root()  # project path as string, e.g. '/Users/dnr266/Documents/pycharm/paleocore110'
-# environ.Env.read_env(root('.env'))  # locate the .env file in the project root directory
-# DJANGO_ROOT = '/Users/dnr266/Documents/pycharm/paleocore110'
-# DJANGO_ROOT = root.path('paleocore110')  # e.g. '/Users/dnr266/Documents/pycharm/paleocore110/paleocore110'
-environ.Env.read_env('/Users/dnr266/Documents/pycharm/paleocore110/.env')
-PROJECT_ROOT = '/Users/dnr266/Documents/pycharm/paleocore110'
-DJANGO_ROOT = '/Users/dnr266/Documents/pycharm/paleocore110/paleocore110'
+environ.Env.read_env('/Users/dnr266/Documents/pycharm/paleocore/.env')
+PROJECT_ROOT = '/Users/dnr266/Documents/pycharm/paleocore'
+DJANGO_ROOT = '/Users/dnr266/Documents/pycharm/paleocore/paleocore'
 path.append(DJANGO_ROOT)  # add DJANGO_ROOT to python path list
 
 

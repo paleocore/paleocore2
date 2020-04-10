@@ -1,28 +1,24 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags navigation_tags wagtailimages_tags paleocore_utils %}
-
-{% block breadcrumbs %}{% endblock %}
-
+{% load wagtailcore_tags navigation_tags wagtailimages_tags %}
+{% load paleocore_utils %}
 {% block content %}
-
-	{% include "pages/includes/feed_image_title.html" %}
-
-	<div id="content" class="grid-container">
-		<div class="grid-x grid-padding-x">
-	  		<div id="standard_page" class="medium-9 cell">
-	      		{% if self.feed_image %}
-	  			{% else %}
-	  		  		<center>
-	  		      		<h3>{{ self.title }}</h3>
-	  		  		</center>
-	  		  		<br>
-	  			{% endif %}
-	
-	      		{% include "pages/includes/intro.html" with intro=self.intro only %}
-	  		</div>
-			<div id="sidebar" class="hide-for-print hide-for-small-only medium-3 cell">
-	      		{% secondary_menu calling_page=self %}
-	    	</div>
-	    </div>
-	</div>
+<div id="content" class="row">
+{#    <div id="sidebar" class="hide-for-small-only medium-4 columns">#}
+{#         {% secondary_menu calling_page=self %}#}
+{#         {% include "pages/paleocore_sidebar.html" with intro=self.intro only %} #}
+{#    </div>#}
+    <div class="small-12 medium-8 columns">
+        <div class="small-12 columns">
+            <!-- <h4><strong>{{ self.title }}</strong></h4> -->
+            <!-- <h5 class="subheader">{{ self.subtitle }}</h5> -->
+            <!-- <hr> -->
+            {% include "pages/includes/intro.html" with intro=self.intro only %}
+        </div>
+    </div>
+    <div id="sidebar" class="show-for-small-only small-12 columns">
+{#        {% secondary_menu calling_page=self %}#}
+{#        {% include "pages/paleocore_sidebar.html" with intro=self.intro only %} #}
+{#        {% include "pages/paleocore_sidebar.html" %}#}
+    </div>
+</div>
 {% endblock %}
