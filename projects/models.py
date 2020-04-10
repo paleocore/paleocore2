@@ -531,6 +531,15 @@ class ProjectsIndexPage(Page):
         context['projects'] = projects
         return context
 
+    def total_record_count(self):
+        """
+        Function to tally the total number of occurrence records across all projects
+        """
+        total_record_count = 0
+        for project in self.projects:
+            total_record_count += project.record_count()
+        return total_record_count
+
 
 ProjectsIndexPage.content_panels = [
     FieldPanel('title', classname="full title"),
@@ -586,15 +595,18 @@ class ProjectPage(Page):
         """
         result = 0
         if apps.is_installed(self.slug):  # check if slug matches an installed app name
-            try:
-                content_type = ContentType.objects.get(app_label=self.slug, model='occurrence')
-            except ContentType.DoesNotExist:
+            if self.slug in ('cc', 'fc'):  # cc and fc use context as basic record
+                content_type = ContentType.objects.get(app_label=self.slug, model='context')
+            elif self.slug in ('eppe'):  # eppe uses find as basic record
+                content_type = ContentType.objects.get(app_label=self.slug, model='find')
+            else:  # all others use occurrence
                 try:
-                    content_type = ContentType.objects.get(app_label=self.slug, model='context')
+                    content_type = ContentType.objects.get(app_label=self.slug, model='occurrence')
                 except ContentType.DoesNotExist:
-                    content_type = ContentType.objects.get(app_label=self.slug, model='find')
-            model_class = content_type.model_class()
-            result = model_class.objects.all().count()
+                    content_type = None
+            if content_type:
+                model_class = content_type.model_class()
+                result = model_class.objects.all().count()
         return result
 
     @property
