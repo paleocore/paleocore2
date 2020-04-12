@@ -64,6 +64,7 @@ INSTALLED_APPS = (
     'ckeditor',  # projects app
     'mapwidgets',  # projects app
     'unicodecsv',  # mlp app
+    'import_export',  # projects app
 
     'blog',
     'contact',
