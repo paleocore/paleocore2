@@ -108,7 +108,7 @@ class Locality(projects.models.PaleoCoreLocalityBaseClass):
 
 # This is the DRP data model. It is only partly PaleoCore compliant.
 class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
-    date_last_modified = models.DateTimeField("Date Last Modified", auto_now=True)
+    # date_last_modified = models.DateTimeField("Date Last Modified", auto_now=True)
     basis_of_record = models.CharField("Basis of Record", max_length=50, blank=True, null=False,
                                        choices=BASIS_OF_RECORD_VOCABULARY)  # NOT NULL
     item_type = models.CharField("Item Type", max_length=255, blank=True, null=False,
@@ -120,7 +120,6 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
     catalog_number = models.CharField("Catalog #", max_length=255, blank=True, null=True)
     item_scientific_name = models.CharField("Sci Name", max_length=255, null=True, blank=True)
     item_description = models.CharField("Description", max_length=255, blank=True, null=True)
-    georeference_remarks = models.CharField(max_length=50, null=True, blank=True)
     collecting_method = models.CharField("Collecting Method", max_length=50,
                                          choices=COLLECTING_METHOD_VOCABULARY, null=False)
     related_catalog_items = models.CharField("Related Catalog Items", max_length=50, null=True, blank=True)
@@ -147,10 +146,6 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
     image = models.FileField(max_length=255, blank=True, upload_to="uploads/images/mlp", null=True)
     weathering = models.SmallIntegerField(blank=True, null=True)
     surface_modification = models.CharField(max_length=255, blank=True, null=True)
-    problem = models.BooleanField(default=False)
-    problem_comment = models.TextField(max_length=255, blank=True, null=True)
-    geom = models.GeometryField(srid=4326, blank=True, null=True)  # NOT NULL
-    objects = GeoManager()
 
     # DRP Specific Fields
     paleolocality_number = models.IntegerField("Locality #", null=True, blank=True)
