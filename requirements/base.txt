@@ -25,3 +25,4 @@ django-import-export==2.0.2
 django-ckeditor==5.9.0
 django-map-widgets==0.2.3
 unicodecsv==0.14.1
+wagtailgeowidget==5.0.2
