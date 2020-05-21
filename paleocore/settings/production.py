@@ -22,6 +22,7 @@ COMPRESS_CSS_FILTERS = [
 ALLOWED_HOSTS = [env("DJANGO_ALLOWED_HOST_NAME"), ]
 
 DATABASES['default'] = env.db('PROD_DATABASE_URL')
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 INSTALLED_APPS += (
     'wagtail.contrib.frontend_cache',
