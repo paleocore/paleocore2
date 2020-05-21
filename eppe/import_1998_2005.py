@@ -4,7 +4,7 @@ import xlrd
 from datetime import datetime
 import pytz
 import re
-from paleocore110.settings import PROJECT_ROOT
+from paleocore.settings import PROJECT_ROOT
 import collections
 import idigbio
 import requests
@@ -647,7 +647,7 @@ def update_locality():
 
     # iterate through all records
     for f in Fossil.objects.all():
-        ln = f.verbatim_locality     
+        ln = f.verbatim_locality
         if loc.match(ln):
             ln = ln.replace('Loc', 'Laetoli')  # If entry begins with Loc.
 
