@@ -82,13 +82,16 @@ class PaleoCoreBaseClass(models.Model):
         field_list = self._meta.get_fields()  # produce a list of field objects
         return [f.name for f in field_list]  # return a list of names from each field
 
-    def get_foreign_key_field_names(self):
+    def get_foreign_key_field_names(self, prepend_table_name=False):
         """
         Get foreign key fields
         :return: returns a list of for key field names
         """
         field_list = self._meta.get_fields()  # produce a list of field objects
-        return [f.name for f in field_list if f.is_relation]  # return a list of names for fk fields
+        if prepend_table_name:
+            return [f+'__'+f.name for f in field_list if f.is_relation]
+        else:
+            return [f.name for f in field_list if f.is_relation]  # return a list of names for fk fields
 
     def photo(self):
         try:
@@ -597,7 +600,7 @@ class ProjectPage(Page):
         if apps.is_installed(self.slug):  # check if slug matches an installed app name
             if self.slug in ('cc', 'fc'):  # cc and fc use context as basic record
                 content_type = ContentType.objects.get(app_label=self.slug, model='context')
-            elif self.slug in ('eppe'):  # eppe uses find as basic record
+            elif self.slug == 'eppe':  # eppe uses find as basic record
                 content_type = ContentType.objects.get(app_label=self.slug, model='find')
             else:  # all others use occurrence
                 try:

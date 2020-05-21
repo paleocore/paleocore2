@@ -5,6 +5,7 @@ from django.forms import TextInput, Textarea  # import custom form widgets
 from mapwidgets.widgets import GooglePointFieldWidget
 import csv
 from django.http import StreamingHttpResponse
+from import_export.admin import ImportExportActionModelAdmin
 
 
 class Echo(object):
@@ -22,11 +23,9 @@ class Echo(object):
         return value
 
 
-
 ####################################
 # PaleoCore Default Admin Settings #
 ####################################
-
 default_list_display = ('catalog_number',
                         'basis_of_record',
                         'item_type',
@@ -99,7 +98,7 @@ default_biology_admin_fieldsets = (
 )
 
 
-class PaleoCoreOccurrenceAdmin(admin.ModelAdmin):
+class PaleoCoreOccurrenceAdmin(ImportExportActionModelAdmin):
     save_as = True
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '25'})},
