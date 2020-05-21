@@ -8,6 +8,9 @@ from .models import *
 import lgrp.views
 import csv
 import projects.admin
+from import_export import resources
+from import_export.fields import Field
+from import_export.admin import ImportExportActionModelAdmin
 
 
 class Echo(object):
@@ -184,10 +187,17 @@ lgrp_biology_list_display = ('coll_code',
                              'thumbnail')
 
 
+class OccurrenceResource(resources.ModelResource):
+
+    class Meta:
+        model = Occurrence
+
+
 class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
     """
     OccurrenceAdmin <- PaleoCoreOccurrenceAdmin <- BingGeoAdmin <- OSMGeoAdmin <- GeoModelAdmin
     """
+    resource_class = OccurrenceResource
     list_display = lgrp_default_list_display  # use list() to clone rather than modify in place
     list_select_related = lgrp_default_list_select_related + ('archaeology', 'biology', 'geology')
     list_display_links = ['coll_code', 'barcode', 'basis_of_record']
@@ -196,9 +206,9 @@ class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
     readonly_fields = lgrp_readonly_fields
     search_fields = lgrp_search_fields
     inlines = (ImagesInline, FilesInline)
-    change_list_template = 'admin/lgrp/occurrence/change_list.html'
+    # change_list_template = 'admin/lgrp/occurrence/change_list.html'
     list_per_page = 500
-    actions = ['change_xy']
+    # actions = ['change_xy', 'export']
 
     def change_xy(self, request, queryset):
         selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
@@ -222,12 +232,19 @@ class ArchaeologyAdmin(OccurrenceAdmin):
     list_select_related = lgrp_default_list_select_related
 
 
+class BiologyResource(resources.ModelResource):
+
+    class Meta:
+        model = Biology
+
+
 class BiologyAdmin(OccurrenceAdmin):
+    resource_class = BiologyResource
     list_display = list(lgrp_biology_list_display)
     list_select_related = lgrp_default_list_select_related
     fieldsets = biology_fieldsets
     search_fields = lgrp_search_fields + ('taxon__name',)
-    actions = ['create_data_csv']
+    # actions = ['create_data_csv']
 
     def create_data_csv(self, request, queryset):
         """
@@ -304,8 +321,15 @@ class GeologyAdmin(OccurrenceAdmin):
     list_select_related = lgrp_default_list_select_related
 
 
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ['name']
+class PersonResource(resources.ModelResource):
+
+    class Meta:
+        model = Person
+
+
+class PersonAdmin(ImportExportActionModelAdmin):
+    resource_class = PersonResource
+    list_display = ['id', 'name']
     ordering = ['name']
 
 
