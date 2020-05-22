@@ -8,11 +8,26 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
+def get_projects_summary(context):
+    try:
+        project_vals = ContactPage.objects.values(
+            'name_organization', 'address_1',
+            'address_2', 'city', 'state_province', 'country', 'telephone', 'telephone_2', 'post_code',
+            'email', 'email_2'
+        )[0]
+        return project_vals
+
+    except IndexError:
+        return {}
+
+
+@register.simple_tag(takes_context=True)
 def get_contact_fields(context):
     try:
         contact_vals = ContactPage.objects.values(
             'name_organization', 'address_1',
-            'address_2', 'city', 'country', 'telephone', 'telephone_2', 'post_code', 'email', 'email_2'
+            'address_2', 'city', 'state_province', 'country', 'telephone', 'telephone_2', 'post_code',
+            'email', 'email_2'
         )[0]
         return contact_vals
 

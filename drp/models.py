@@ -103,8 +103,10 @@ class Locality(projects.models.PaleoCoreLocalityBaseClass):
         ordering = ("collection_code", "paleolocality_number", "paleo_sublocality")
 
     def __str__(self):
-        return str(self.collection_code) + " " + str(self.paleolocality_number)
-
+        name_string = ''
+        if self.name:
+            name_string = self.name
+        return name_string
 
 # This is the DRP data model. It is only partly PaleoCore compliant.
 class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):

@@ -44,6 +44,18 @@ The paleocore_utils custom tags are defined in utils/templatetags/paleocore_util
 					</center>
   			</div>
   		</div>
+
+      {% comment %}}
+      <div class="grid-x grid-padding-x align-center">
+  			<div class="medium-9 cells">
+					<center>
+	  				<h3>{{ self.title_text|richtext }}</h3>
+	  				{{ self.body|richtext }}
+					</center>
+  			</div>
+  		</div>
+      {% endcomment %}}
+
 	</div>
 
 	{% adverts %}

@@ -1,7 +1,8 @@
 from .models import *
 from django.contrib import admin
 import projects.admin
-
+from import_export import resources
+from import_export.fields import Field
 
 drp_search_fields = ('id',
                      'catalog_number',
@@ -68,7 +69,7 @@ occurrence_fieldsets = (
 )
 
 biology_fieldsets = (
-    ('Taxonomy', {'fields': (('taxon',), 'id')
+    ('Taxonomy', {'fields': (('taxon',),)
                   }),
 )
 
@@ -101,11 +102,22 @@ class PaleoCoreLocalityAdmin(projects.admin.PaleoCoreLocalityAdminGoogle):
     search_fields = ("paleolocality_number",)
 
 
+class OccurrenceResource(resources.ModelResource):
+    locality = Field(attribute='locality')
+
+    class Meta:
+        model = Occurrence
+        fields = ('id', 'catalog_number', 'barcode')
+        # fields = Occurrence().get_all_field_names()
+
+
 class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
     """
     OccurrenceAdmin <- PaleoCoreOccurrenceAdmin <- BingGeoAdmin <- OSMGeoAdmin <- GeoModelAdmin
     """
-    actions = ['create_data_csv', 'change_xy', 'get_nearest_locality']
+    # change_list_template = 'admin/projects/projects_change_list.html'
+    # actions = ['create_data_csv', 'change_xy', 'get_nearest_locality']
+    resource_class = OccurrenceResource
     default_read_only_fields = ('id', 'point_x', 'point_y', 'easting', 'northing', 'date_last_modified')
     readonly_fields = default_read_only_fields + ('photo',)
     default_list_display = ('barcode', 'date_recorded', 'catalog_number', 'basis_of_record', 'item_type',
@@ -152,9 +164,61 @@ class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
                                                                                 closest_locality_key))
 
 
+class BiologyResource(resources.ModelResource):
+
+    class Meta:
+        model = Biology
+        # fields = ('id', 'catalog_number', 'barcode', 'taxon__name', 'taxon__rank__name')
+        fields = ('id', 'barcode', 'field_number', 'field_number_orig',
+                  'catalog_number', 'collection_code', 'item_number', 'item_part',
+                  'date_recorded', 'year_collected',
+                  'basis_of_record', 'item_type',
+                  'individual_count',
+                  'item_description', 'side', 'element', 'element_modifier',
+                  'item_scientific_name', 'taxon__name', 'taxon__rank__name', 'identification_qualifier__name',
+                  'fauna_notes',
+                  'problem', 'problem_comment',
+                  'remarks',
+                  'geom', 'georeference_remarks',
+
+                  'collecting_method', 'related_catalog_items',
+                  'collector', 'finder', 'disposition',  'preparation_status',
+                  'stratigraphic_marker_upper', 'distance_from_upper',
+                  'stratigraphic_marker_lower', 'distance_from_lower',
+                  'stratigraphic_marker_found', 'distance_from_found',
+                  'stratigraphic_marker_likely', 'distance_from_likely',
+                  'stratigraphic_member',
+                  'analytical_unit', 'analytical_unit_2', 'analytical_unit_3',
+                  'in_situ', 'ranked', 'image',
+                  'weathering', 'surface_modification',
+                  'paleolocality_number', 'paleo_sublocality',
+                  'locality_text', 'verbatim_coordinates', 'verbatim_coordinate_system',
+                  'geodetic_datum', 'collection_remarks', 'stratigraphic_section',
+                  'stratigraphic_height_in_meters', 'locality', 'occurrence_ptr',
+                  'infraspecific_epithet', 'infraspecific_rank', 'author_year_of_scientific_name',
+                  'nomenclatural_code', 'identified_by', 'date_identified', 'type_status', 'sex',
+                  'life_stage', 'preparations', 'morphobank_number',
+                  'attributes',
+                  'tooth_upper_or_lower', 'tooth_number', 'tooth_type',
+                  'um_tooth_row_length_mm', 'um_1_length_mm', 'um_1_width_mm',
+                  'um_2_length_mm', 'um_2_width_mm', 'um_3_length_mm', 'um_3_width_mm',
+                  'lm_tooth_row_length_mm', 'lm_1_length', 'lm_1_width', 'lm_2_length',
+                  'lm_2_width', 'lm_3_length', 'lm_3_width',
+
+                  'uli1', 'uli2', 'uli3', 'uli4', 'uli5', 'uri1', 'uri2', 'uri3', 'uri4',
+                  'uri5', 'ulc', 'urc', 'ulp1', 'ulp2', 'ulp3', 'ulp4', 'urp1', 'urp2', 'urp3',
+                  'urp4', 'ulm1', 'ulm2', 'ulm3', 'urm1', 'urm2', 'urm3', 'lli1', 'lli2', 'lli3',
+                  'lli4', 'lli5', 'lri1', 'lri2', 'lri3', 'lri4', 'lri5', 'llc', 'lrc', 'llp1',
+                  'llp2', 'llp3', 'llp4', 'lrp1', 'lrp2', 'lrp3', 'lrp4', 'llm1', 'llm2', 'llm3',
+                  'lrm1', 'lrm2', 'lrm3',
+                  )
+        export_order =  fields
+
+
 class BiologyAdmin(OccurrenceAdmin):
     model = Biology
-
+    resource_class = BiologyResource
+    fieldsets = occurrence_fieldsets + biology_fieldsets
 
 ##########################
 # Register Admin Classes #
