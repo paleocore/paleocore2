@@ -67,7 +67,6 @@ class OccurrenceAdmin(PaleoCoreOccurrenceAdmin):
         }),
         ('Verbatim Data', {
             'fields': ['verbatim_kml_data'],
-            #'classes': ['collapse']
         }),
         ('Photos', {
             'fields': [('photo', 'image')],
