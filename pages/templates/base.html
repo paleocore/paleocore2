@@ -9,7 +9,7 @@
     	<title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
     	<meta name="description" content="{% if self.search_description %}{{ self.search_description }}{% endif %}">
     	<meta name="viewport" content="width=device-width, initial-scale=1" />
-    	<link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}"/>
+    	<link rel="icon" type="image/x-icon" href="{% static 'favicon.png' %}"/>
     	{% block canonical_url %}{% endblock %}
 
 		{% block cdn_css %}
