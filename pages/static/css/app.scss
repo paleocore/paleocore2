@@ -222,12 +222,13 @@ hr {border-color: $light-gray;}
   margin-top: 30px;
 }
 
+// Intro controls style for home page.
 #intro, #testimonials {
   padding: 40px 0 30px;
   background: #5E9CD1;
 
   h3, p {color: $white;}
-
+  // h3, p {color: darkslategray}  //invert text to dark
   h3 {font-weight: 500;line-height: 1;}
 }
 
