@@ -24,7 +24,7 @@ The paleocore_utils custom tags are defined in utils/templatetags/paleocore_util
   			        		</div>
   			        		<div class="medium-6 cell caption">
   					            <h3>{{ block.title}}</h3>
-  					            {{ block.content|richtext }}
+                            {{ block.content|richtext }}
   					            <a href="{{ block.link }}" class="button secondary" target="_blank"><strong>Learn More</strong></a>
   					        </div>
   					    </div>
@@ -39,6 +39,7 @@ The paleocore_utils custom tags are defined in utils/templatetags/paleocore_util
   		<div class="grid-x grid-padding-x align-center">
   			<div class="medium-9 cells">
 					<center>
+            <!-- Title and text below slider. Currently reads "Welcome to Paleo Core -->
 	  				<h3>{{ self.title_text|richtext }}</h3>
 	  				{{ self.body|richtext }}
 					</center>

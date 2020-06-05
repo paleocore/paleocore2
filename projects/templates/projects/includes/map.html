@@ -1,0 +1,29 @@
+{% load leaflet_tags %}
+
+{% leaflet_map "main" callback="main_map_init" %}
+
+<script type="text/javascript">
+
+  function onEachFeature(feature, layer) {
+    layer.bindPopup(feature.properties.title);
+    layer.on("dblclick", function () {
+      var stringappname = String(feature.properties.slug)
+      window.open(stringappname);
+    });
+  }
+
+  function main_map_init(map, options) {
+
+    var dataurl = '{% url "projects:projects_geojson" %}';
+    // Download GeoJSON via Ajax
+    $.getJSON(dataurl, function (data) {
+      // Add GeoJSON layer
+      L.geoJson(data, {
+        onEachFeature: onEachFeature
+      }).addTo(map);
+    });
+
+    map.setView([30, 31], 2);
+    map.scrollWheelZoom.disable();
+  }
+</script>
