@@ -21,11 +21,15 @@
 
     <div class="top-bar" id="menu">
       	<div class="top-bar-left hide-for-small-only">
+
         	<ul class="dropdown menu">
-              <li class="menu-text">{% image settings.pages.SiteBranding.logo width-50 %}</li>
-          		{% comment %}
-              <li class="menu-text"><a href="{% pageurl site_root %}" style="padding: 0;">Paleo Core</a></li>
-              {% endcomment %}
+              <!-- Paleo Core logo/link upper left corner -->
+              <li class="menu-text">
+                <a href="{% pageurl site_root %}" style="padding: 0;">
+                  {% image settings.pages.SiteBranding.logo width-50 %}
+                </a>
+              </li>
+              <!-- Paleo Core title upper left corner-->
               <li class="menu-text"><a href="{% pageurl site_root %}" style="padding-left: 0;">Paleo Core</a></li>
         	</ul>
       	</div>
@@ -34,7 +38,12 @@
           		<li class="{% if calling_page.url == site_root %} is-active{% endif %}"><a href="{% pageurl site_root %}">Home</a></li>
           		{% for menuitem in menuitems %}
           			<li class="{% if menuitem.show_dropdown %}has-submenu{% endif %}">
-            			<a href="{% pageurl menuitem %}">{{ menuitem.title }}</a>
+                  <!--
+                  Show the shorter SEO title in the menu. The SEO title appears as the Page Title under the
+                  Promote tab in the Wagtail admin. This is also what is added as the <title> tag in the HTML header
+                  and what appears in the browser tab.
+                  -->
+            			<a href="{% pageurl menuitem %}">{{ menuitem.seo_title }}</a>
             				{% if menuitem.show_dropdown %}
             					<ul class="submenu menu vertical" data-submenu>
             						<li class="show-for-small-only">
