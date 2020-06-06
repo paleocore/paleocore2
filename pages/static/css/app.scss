@@ -397,6 +397,13 @@ hr {border-color: $light-gray;}
   input.button{border-top-right-radius: 5px; border-bottom-right-radius: 5px;color: $white;padding-top: 11px;}
 }
 
+#summary{
+  h2 {
+    padding-top: 30px;
+    text-align: center;
+  }
+}
+
 select {
   -webkit-appearance: none !important;
   -moz-appearance: none !important;

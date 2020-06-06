@@ -510,6 +510,20 @@ class ProjectsIndexPage(Page):
 
         return projects
 
+    @property
+    def total_record_count(self):
+        """
+        Function to tally the total number of occurrence records across all projects
+        """
+        total_record_count = 0
+        for project in self.projects:
+            total_record_count += project.record_count()
+        return total_record_count
+
+    @property
+    def total_site_count(self):
+        return self.projects.count()
+
     def get_context(self, request):
         # Get projects
         projects = self.projects
@@ -532,16 +546,9 @@ class ProjectsIndexPage(Page):
         # Update template context
         context = super(ProjectsIndexPage, self).get_context(request)
         context['projects'] = projects
+        context['total_record_count'] = self.total_record_count
+        context['total_site_count'] = self.total_site_count
         return context
-
-    def total_record_count(self):
-        """
-        Function to tally the total number of occurrence records across all projects
-        """
-        total_record_count = 0
-        for project in self.projects:
-            total_record_count += project.record_count()
-        return total_record_count
 
 
 ProjectsIndexPage.content_panels = [

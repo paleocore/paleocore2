@@ -1,6 +1,7 @@
 {% extends "projects/projects_base.html" %}
 {% load wagtailcore_tags %}
 {% load leaflet_tags %}
+{% load humanize %}
 
 {% block extra_css %}{% leaflet_css %}{% endblock %}
 {% block extra_js %}{% leaflet_js %}{% endblock %}
@@ -57,11 +58,17 @@
             </div>
         </div>
 
-        <div class="row">
+      <div class="row">
+            <div id="summary" class="small-10 small-centered column">
+              <h2>{{ total_record_count | intcomma }} Occurrences from {{ total_site_count }} sites</h2>
+            </div>
+        </div>
+      <div class="row">
             <div class="small-10 small-centered column">
                 <hr/>
             </div>
         </div>
+
 
 
         <div id="projects_list" class="row">
