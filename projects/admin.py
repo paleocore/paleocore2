@@ -196,5 +196,3 @@ class CollectionCodeAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'drainage_region']
     list_display_links = ['id']
     list_editable = ['name', 'drainage_region']
-
-

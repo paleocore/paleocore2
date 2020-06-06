@@ -638,4 +638,5 @@ ProjectPage.content_panels = [
 ProjectPage.promote_panels = Page.promote_panels + [
     ImageChooserPanel('feed_image'),
     FieldPanel('tags'),
+    FieldPanel('is_public')
 ]
