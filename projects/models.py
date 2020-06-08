@@ -580,7 +580,8 @@ def app_choices():
     ignore = ['wagtail', 'django', 'allauth', 'users', 'debug_toolbar', 'django_extensions', 'copmressor',
               'taggit', 'modelcluster', 'foundation_formtags', 'wagtail_feeds', 'joyous', 'ckeditor',
               'mapwidgets', 'unicodecsv', 'import_export', 'blog', 'contact', 'djgeojson', 'documents_gallery',
-              'gallery', 'leaflet', 'pages', 'people', 'products', 'search', 'utils', 'wagalytics', 'wagtailgeowidget'
+              'gallery', 'leaflet', 'pages', 'people', 'products', 'search', 'utils', 'wagalytics', 'wagtailgeowidget',
+              'gunicorn'
               ]
     projects_list = [(app.label, app.label) for app in myapps if app.name.split('.')[0] not in ignore]
     return projects_list
