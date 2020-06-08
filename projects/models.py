@@ -54,9 +54,9 @@ class PaleoCoreBaseClass(models.Model):
 
     # TODO make sure the str method on this class is optimized and producing unnecessary queries
     def __str__(self):
-        id_string = '['+str(self.id)+']'
+        id_string = '[' + str(self.id) + ']'
         if self.name:
-            id_string = id_string+' '+self.name
+            id_string = id_string + ' ' + self.name
         return id_string
 
     def get_app_label(self):
@@ -89,24 +89,26 @@ class PaleoCoreBaseClass(models.Model):
         """
         field_list = self._meta.get_fields()  # produce a list of field objects
         if prepend_table_name:
-            return [f+'__'+f.name for f in field_list if f.is_relation]
+            return [f + '__' + f.name for f in field_list if f.is_relation]
         else:
             return [f.name for f in field_list if f.is_relation]  # return a list of names for fk fields
 
     def photo(self):
         try:
             return format_html('<a href="%s"><img src="%s" style="width:600px" /></a>' \
-                   % (os.path.join(self.image.url), os.path.join(self.image.url)))
+                               % (os.path.join(self.image.url), os.path.join(self.image.url)))
         except:
             return None
+
     photo.short_description = 'Photo'
 
     def thumbnail(self):
         try:
             return format_html('<a href="%s"><img src="%s" style="width:100px" /></a>' \
-                   % (os.path.join(self.image.url), os.path.join(self.image.url)))
+                               % (os.path.join(self.image.url), os.path.join(self.image.url)))
         except:
             return None
+
     thumbnail.short_description = 'Thumb'
 
     class Meta:
@@ -207,7 +209,7 @@ class Taxon(PaleoCoreBaseClass):
         if self.parent.parent is None:
             return [self]
         else:
-            return self.parent.full_lineage()+[self]
+            return self.parent.full_lineage() + [self]
 
     def biology_usages(self):
         """
@@ -277,6 +279,7 @@ class Person(PaleoCoreBaseClass):
     """
     A person or agent.
     """
+
     def __str__(self):
         return self.name
 
@@ -572,6 +575,20 @@ class ProjectPageTag(TaggedItemBase):
     content_object = ParentalKey('projects.ProjectPage', related_name='tagged_items')
 
 
+def app_choices():
+    myapps = apps.get_app_configs()
+    ignore = ['wagtail', 'django', 'allauth', 'users', 'debug_toolbar', 'django_extensions', 'copmressor',
+              'taggit', 'modelcluster', 'foundation_formtags', 'wagtail_feeds', 'joyous', 'ckeditor',
+              'mapwidgets', 'unicodecsv', 'import_export', 'blog', 'contact', 'djgeojson', 'documents_gallery',
+              'gallery', 'leaflet', 'pages', 'people', 'products', 'search', 'utils', 'wagalytics', 'wagtailgeowidget'
+              ]
+    projects_list = [(app.label, app.label) for app in myapps if app.name.split('.')[0] not in ignore]
+    return projects_list
+
+
+APP_CHOICES = app_choices()
+
+
 class ProjectPage(Page):
     intro = RichTextField()
     body = StreamField([
@@ -594,6 +611,14 @@ class ProjectPage(Page):
         index.SearchField('body'),
     ]
     is_public = models.BooleanField(default=False)
+    app_label = models.CharField(max_length=100, null=True, blank=True, choices=APP_CHOICES)
+
+    def get_related_app(self):
+        try:
+            project_app = apps.get_app_config(self.app_label)
+        except LookupError:
+            project_app = None
+        return project_app
 
     def record_count(self):
         """
@@ -624,6 +649,20 @@ class ProjectPage(Page):
         # Find closest ancestor which is a project index
         return self.get_ancestors().type(ProjectsIndexPage).last()
 
+    def has_fossils(self):
+        result = False
+        related_app = self.get_related_app()
+        if related_app:
+            result = 'biology' or 'fossil' in related_app.models
+        return result
+
+    def has_artifacts(self):
+        result = False
+        related_app = self.get_related_app()
+        if related_app:
+            result = 'archaeology' in related_app.models
+        return result
+
 
 ProjectPage.content_panels = [
     FieldPanel('title', classname="full title"),
@@ -636,7 +675,9 @@ ProjectPage.content_panels = [
 ]
 
 ProjectPage.promote_panels = Page.promote_panels + [
+    FieldPanel('app_label'),
+    FieldPanel('is_public'),
     ImageChooserPanel('feed_image'),
     FieldPanel('tags'),
-    FieldPanel('is_public')
+
 ]

@@ -28,19 +28,33 @@
               {% endif %}
               {% if project.is_public %}
               <img src="{% static 'unlocked.png' %}"
-                   alt="private"
+                   alt="public"
                    width="14px"
                    style="vertical-align: baseline">
-              Public data
+              Public &emsp; &emsp;
               {% else %}
               <img src="{% static 'locked.png' %}"
                    alt="private"
                    width="14px"
                    style="vertical-align: baseline">
-              Private data
+              Private &emsp; &emsp;
               {% endif %}
               {% if project.record_count %}
-              {{ project.record_count }} records
+              {{ project.record_count }} records &emsp; &emsp;
+              {% endif %}
+              {% if project.has_fossils %}
+              <img src="{% static 'img/skull.png' %}"
+                   alt="fossils"
+                   width="18px"
+                   style="vertical-align: baseline">
+              &emsp;
+              {% endif %}
+              {% if project.has_artifacts %}
+              <img src="{% static 'img/artifact.png' %}"
+                   alt="fossils"
+                   width="22px"
+                   style="vertical-align: baseline">
+              &emsp;
               {% endif %}
             </a>
           </div>
