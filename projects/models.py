@@ -615,11 +615,49 @@ class ProjectPage(Page):
     app_label = models.CharField(max_length=100, null=True, blank=True, choices=APP_CHOICES)
 
     def get_related_app(self):
+        """
+        Each project page is uniquely associated  to a project app. General information about the project is stored
+        with the project page while specimen details and data are stored in the app. Each project page
+        has a 'related_app' field that stores the app name and links the page to the app and its models.
+        returns: a string value with the name of the related app (e.g. 'hrp', 'drp' etc.)
+        """
         try:
             project_app = apps.get_app_config(self.app_label)
         except LookupError:
             project_app = None
         return project_app
+
+    def has_fossils(self):
+        """
+        This method indicates if the app associated with the page includes a model class for tracking fossil
+        occurrences, which is an indication of whether the project has recovered fossils at the site. This
+        method is used to test whether the skull/fossil icon appears in the project's card on the project
+        index page.
+        returns: True or False depending on tests for specific model names in the app
+        """
+        result = False
+        related_app = self.get_related_app()
+        if related_app:
+            # related_app.models is an ordered dict
+            tests = ['biology' in related_app.models, 'fossil' in related_app.models]
+            result = any(tests)
+        return result
+
+    def has_artifacts(self):
+        """
+        This method indicates if the app associated with the page includes a model class for tracking artifact/lithic
+        occurrences, which is an indication of whether the project has recovered stone tools at the site. This
+        method is used to test whether the stone tool/lithic icon appears in the project's card on the project
+        index page.
+        returns: True or False depending on tests for specific model names in the app
+        """
+        result = False
+        # related_app.models is an ordered dict
+        related_app = self.get_related_app()
+        if related_app:
+            tests = ['archaeology' in related_app.models, 'lithic' in related_app.models]
+            result = any(tests)
+        return result
 
     def record_count(self):
         """
@@ -650,23 +688,7 @@ class ProjectPage(Page):
         # Find closest ancestor which is a project index
         return self.get_ancestors().type(ProjectsIndexPage).last()
 
-    def has_fossils(self):
-        result = False
-        related_app = self.get_related_app()
-        if related_app:
-            # related_app.models is an ordered dict
-            tests = ['biology' in related_app.models, 'fossil' in related_app.models]
-            result = any(tests)
-        return result
 
-    def has_artifacts(self):
-        result = False
-        # related_app.models is an ordered dict
-        related_app = self.get_related_app()
-        if related_app:
-            tests = ['archaeology' in related_app.models, 'lithic' in related_app.models]
-            result = any(tests)
-        return result
 
 
 ProjectPage.content_panels = [
