@@ -22,7 +22,7 @@
           </div>
           <div class="small-8 column">
             <a href="{% pageurl project %}">
-              <h5><strong>{{ project.title }}</strong></h5>
+              <h5><strong>{{ project.title }} ({{project.app_label}})</strong></h5>
               {% if project.intro %}
               {{ project.intro|richtext|truncatewords:25 }}
               {% endif %}
@@ -51,7 +51,7 @@
               {% endif %}
               {% if project.has_artifacts %}
               <img src="{% static 'img/artifact.png' %}"
-                   alt="fossils"
+                   alt="artifacts"
                    width="22px"
                    style="vertical-align: baseline">
               &emsp;

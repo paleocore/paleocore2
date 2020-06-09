@@ -654,14 +654,18 @@ class ProjectPage(Page):
         result = False
         related_app = self.get_related_app()
         if related_app:
-            result = 'biology' or 'fossil' in related_app.models
+            # related_app.models is an ordered dict
+            tests = ['biology' in related_app.models, 'fossil' in related_app.models]
+            result = any(tests)
         return result
 
     def has_artifacts(self):
         result = False
+        # related_app.models is an ordered dict
         related_app = self.get_related_app()
         if related_app:
-            result = 'archaeology' in related_app.models
+            tests = ['archaeology' in related_app.models, 'lithic' in related_app.models]
+            result = any(tests)
         return result
 
 
