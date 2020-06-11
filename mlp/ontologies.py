@@ -1,35 +1,16 @@
+import projects.ontologies as ontologies
+
 # Basis of Record Vocabulary
-fossil_specimen = 'FossilSpecimen'  # corresponding to Darwin Core clases
-human_observation = 'HumanObservation'
-BASIS_OF_RECORD_VOCABULARY = ((fossil_specimen, "Fossil"), (human_observation, "Observation"))
+BASIS_OF_RECORD_VOCABULARY = ontologies.BASIS_OF_RECORD_VOCABULARY
 
 # Item Type Vocabulary
-artifactual = 'Artifactual'
-faunal = 'Faunal'
-floral = 'Floral'
-geological = 'Geological'
-ITEM_TYPE_VOCABULARY = ((artifactual, "Artifactual"),
-                        (faunal, "Faunal"),
-                        (floral, "Floral"),
-                        (geological, "Geological"))
+ITEM_TYPE_VOCABULARY = ontologies.ITEM_TYPE_VOCABULARY
 
-# Collecting Method Vocabulary
-surface_standard = 'Surface Standard'
-surface_intensive = 'Surface Intensive'
-surface_complete = "Surface Complete"
-exploratory_survey = "Exploratory Survey"
-dry_screen_5mm = "Dry Screen 5mm"
-dry_screen_2mm = "Dry Screen 2mm"
-dry_screen_1mm = "Wet Screen 1mm"
-excavation = "Excavation"
-COLLECTING_METHOD_VOCABULARY = ((surface_standard, "Surface Standard"),
-                                (surface_intensive, "Surface Intensive"),
-                                (surface_complete, "Surface Complete"),
-                                (exploratory_survey, "Exploratory Survey"),
-                                (dry_screen_5mm, "Dry Screen 5mm"),
-                                (dry_screen_2mm, "Dry Screen 2mm"),
-                                (dry_screen_1mm, "Wet Screen 1mm"),
-                                (excavation, "Excavation"))
+# Collection Method Vocabulary
+COLLECTING_METHOD_VOCABULARY = ontologies.COLLECTING_METHOD_VOCABULARY
+
+# Anatomical Side Vocabulary
+SIDE_VOCABULARY = ontologies.SIDE_VOCABULARY
 
 # Collector Vocabulary
 zeresenay_alemseged = 'Zeresenay Alemseged'
@@ -43,26 +24,32 @@ shannon_mcpherron = "Shannon McPherron"
 denne_reed = "Denne Reed"
 peter_stamos = "Peter Stamos"
 jonathan_wynn = "Jonathan Wynn"
-COLLECTOR_CHOICES = ((zeresenay_alemseged, "Zeresenay Alemseged"),
-                     (yared_asseffa, "Yared Assefa"),
-                     (andrew_barr, "Andrew Barr"),
-                     (rene_bobe, "Rene Bobe"),
-                     (denis_geraads, "Denis Geraads"),
-                     (tomas_getachew, "Tomas Getachew"),
-                     (weldeyared_hailu, "Waldeyared Hailu"),
-                     (shannon_mcpherron, "Shannon McPherron"),
-                     (denne_reed, "Denne Reed"),
-                     (peter_stamos, "Peter Stamos"),
-                     (jonathan_wynn, "Jonathan Wynn"))
+COLLECTOR_CHOICES = (
+    (zeresenay_alemseged, "Zeresenay Alemseged"),
+    (yared_asseffa, "Yared Assefa"),
+    (andrew_barr, "Andrew Barr"),
+    (rene_bobe, "Rene Bobe"),
+    (denis_geraads, "Denis Geraads"),
+    (tomas_getachew, "Tomas Getachew"),
+    (weldeyared_hailu, "Waldeyared Hailu"),
+    (shannon_mcpherron, "Shannon McPherron"),
+    (denne_reed, "Denne Reed"),
+    (peter_stamos, "Peter Stamos"),
+    (jonathan_wynn, "Jonathan Wynn")
+)
 
-# Anatomical Side Vocabulary
-left = "Left"
-right = "Right"
-both = "Both"
-axial = "Axial"
-unknown = "Unknown"
-SIDE_VOCABULARY = ((left, "Left"),
-                   (right, "Right"),
-                   (both, "Both"),
-                   (axial, "Axial"),  # a median, unsided element
-                   (unknown, "Unknown"))
+# Field Season Vocabulary
+jan2014 = 'January 2014'
+nov2014 = 'Nov 2014'
+nov2015 = 'Nov 2015'
+jan2018 = 'Jan 2018'
+jan2019 = 'Jan 2019'
+jan2020 = 'Jan 2020'
+FIELD_SEASON_CHOICES = (
+    (jan2014, 'Jan 2014'),
+    (nov2014, 'Nov 2014'),
+    (nov2015, 'Nov 2015'),
+    (jan2018, 'Jan 2018'),
+    (jan2019, 'Jan 2019'),
+    (jan2020, 'Jan 2020')
+)

@@ -1,14 +1,122 @@
+# Vocabularies used in model choice lists
+# The tuples for choice lists have two values (value, display_text)
+# We define the values using variables so that they can also be called in code
+# and a change in the value here will propagate in the code
 
-BASIS_OF_RECORD_VOCABULARY = (("FossilSpecimen", "Fossil"), ("HumanObservation", "Observation"))
-HRP_BASIS_OF_RECORD_VOCABULARY = (("Collection", "Collection"), ("Observation", "Observation"))
-ITEM_TYPE_VOCABULARY = (("Artifactual", "Artifactual"), ("Faunal", "Faunal"), ("Floral", "Floral"), ("Geological", "Geological"))
-COLLECTING_METHOD_VOCABULARY = (("Surface Standard", "Surface Standard"),
-                                ("Surface Intensive", "Surface Intensive"),
-                                ("Surface Complete", "Surface Complete"),
-                                ("Exploratory Survey", "Exploratory Survey"),
-                                ("Dry Screen 5mm", "Dry Screen 5mm"),
-                                ("Dry Screen 2mm", "Dry Screen 2mm"),
-                                ("Wet Screen 1mm", "Wet Screen 1mm"))
+# Basis of Record Vocabulary
+fossil_specimen = 'FossilSpecimen'  # corresponding to Darwin Core classes
+human_observation = 'HumanObservation'
+BASIS_OF_RECORD_VOCABULARY = ((fossil_specimen, "Fossil"), (human_observation, "Observation"))
+
+# HRP modified Basis of Record Vocabulary
+collection = "Collection"
+observation = "Observation"
+HRP_BASIS_OF_RECORD_VOCABULARY = ((collection, "Collection"), (observation, "Observation"))
+
+# Item Type Vocabulary
+artifactual = 'Artifactual'
+faunal = 'Faunal'
+floral = 'Floral'
+geological = 'Geological'
+cast = 'Cast'
+ITEM_TYPE_VOCABULARY = (
+    (artifactual, "Artifactual"),
+    (faunal, "Faunal"),
+    (floral, "Floral"),
+    (geological, "Geological"),
+    (cast, 'Cast')
+)
+
+# Collecting Method Vocabulary
+surface_standard = 'Surface Standard'
+surface_intensive = 'Surface Intensive'
+surface_complete = "Surface Complete"
+exploratory_survey = "Exploratory Survey"
+dry_screen_5mm = "Dry Screen 5mm"
+dry_screen_2mm = "Dry Screen 2mm"
+dry_screen_1mm = "Wet Screen 1mm"
+excavation = "Excavation"
+COLLECTING_METHOD_VOCABULARY = ((surface_standard, "Surface Standard"),
+                                (surface_intensive, "Surface Intensive"),
+                                (surface_complete, "Surface Complete"),
+                                (exploratory_survey, "Exploratory Survey"),
+                                (dry_screen_5mm, "Dry Screen 5mm"),
+                                (dry_screen_2mm, "Dry Screen 2mm"),
+                                (dry_screen_1mm, "Wet Screen 1mm"),
+                                (excavation, "Excavation"))
+
+# Anatomical Side Vocabulary
+left = "Left"
+right = "Right"
+both = "Both"
+axial = "Axial"
+unknown = "Unknown"
+SIDE_VOCABULARY = ((left, "Left"),
+                   (right, "Right"),
+                   (both, "Both"),
+                   (axial, "Axial"),  # a median, unsided element
+                   (unknown, "Unknown"))
+
+# North American Land Mammal Ages (NALMA)
+bridgerian = 'Bridgerian'
+wasatchian = 'Wasatchian'
+clarkforkian = 'Clarkforkian'
+
+NALMA_CHOICES = (
+    (bridgerian, 'Bridgerian'),
+    (wasatchian, 'Wasatchian'),
+    (clarkforkian, 'Clarkforkian'))
+
+# NALMA Sub Age Vocabulary
+cf1, cf2, cf3 = ['Cf'+str(x) for x in range(1,4)]
+wa0, wa1, wa2, wa3, wa4, wa5, wa6, wa7 = ['Wa'+str(x) for x in range(0,8)]
+br0, br1a, br1b, br2, br3 = ['Br0', 'Br1a', 'Br1b', 'Br2', 'Br3']
+clarkforkian_subages = [cf1, cf2, cf3]
+wasatchian_subages = [wa0, wa1, wa2, wa3, wa4, wa5, wa6, wa7]
+bridgerian_subages = [br0, br1a, br1b, br2, br3]
+NALMA_SUB_AGE_CHOICES = (
+    (cf1, 'Cf1'),
+    (cf2, 'Cf2'),
+    (cf3, 'Cf3'),
+    (wa0, 'Wa0'),
+    (wa1, 'Wa1'),
+    (wa2, 'Wa2'),
+    (wa3, 'Wa3'),
+    (wa4, 'Wa4'),
+    (wa5, 'Wa5'),
+    (wa6, 'Wa6'),
+    (wa7, 'Wa7'),
+    (br0, 'Br0'),
+    (br1a, 'Br1a'),
+    (br1b, 'Br1b'),
+    (br2, 'Br2'),
+    (br3, 'Br3'),
+)
+CLARKFORKIAN_SUB_AGE_CHOICES = (
+    (cf1, 'Cf1'),
+    (cf2, 'Cf2'),
+    (cf3, 'Cf3'),
+)
+WASATCHIAN_SUB_AGE_CHOICES = (
+    (wa0, 'Wa0'),
+    (wa1, 'Wa1'),
+    (wa2, 'Wa2'),
+    (wa3, 'Wa3'),
+    (wa4, 'Wa4'),
+    (wa5, 'Wa5'),
+    (wa6, 'Wa6'),
+    (wa7, 'Wa7'),
+)
+BRIDGERIAN_SUB_AGE_CHOICES = (
+    (br0, 'Br0'),
+    (br1a, 'Br1a'),
+    (br1b, 'Br1b'),
+    (br2, 'Br2'),
+    (br3, 'Br3'),
+)
+
+# Project Specific Vocabularies
+HRP_COLLECTION_CODES = (("A.L.", "A.L."),)
 
 HRP_COLLECTING_METHOD_VOCABULARY = (("Survey", "Survey"),
                                 ("dryscreen5mm", "dryscreen5mm"),
@@ -34,15 +142,6 @@ HRP_COLLECTOR_CHOICES = (("C.J. Campisano", "C.J. Campisano"),
                          ("HFS Student", "HFS Student"),
                          ("HRP Team", "HRP Team")
                          )
-
-
-HRP_COLLECTION_CODES = (("A.L.", "A.L."),)
-
-SIDE_VOCABULARY = (("Left", "Left"),
-                   ("Right", "Right"),
-                   ("Both", "Both"),
-                   ("Axial", "Axial"),  # a median, unsided element
-                   ("Unknown", "Unknown"))
 
 SKULL_BONES = (("complete skull", "complete skull"),
                    ("partial skull", "partial skull"),
@@ -173,8 +272,7 @@ GNATHIC = (("mandible with teeth", "mandible with teeth"),
                    ("mandibular symphysis", "mandibular symphysis"),
                    ("mandibular condyle", "mandibular condyle"))
 
-NALMA_CHOICES = (("Wasatchian", "Wasatchian"),
-                ("Clarkforkian", "Clarkforkian"))
+
 
 CONTINENT_CHOICES = (("Africa", "Africa"), ("Europe", "Europe"), ("Asia", "Asia"), ("North America", "North America"),
                      ("South America", "South America"), ("Australia", "Australia"), ("Antarctica", "Antarctica"))
@@ -425,9 +523,14 @@ COUNTRY_CHOICES = (
 
 EPOCH_CHOICES = (("Pliocene", "Pliocene"), ("Pleistocene", "Pleistocene"), ("Holocene", "Holocene"))
 
-MATERIAL_CHOICES = (("basketry", "basketry"), ("building material", "building material"), ("ceramic", "ceramic"), ("chipped stone", "chipped stone"), ("dating sample", "dating sample"),
-                   ("fauna", "fauna"), ("fire-cracked rock", "fire-cracked rock"), ("glass", "glass"), ("ground stone", "ground stone"), ("hide", "hide"), ("human remains", "human remains"),
-                   ("macrobotanical", "macrobotanical"), ("metal", "metal"), ("mineral", "mineral"), ("pollen", "pollen"), ("shell", "shell"), ("textile", "textile"), ("wood", "wood")) #Choice list comes from tDAR"
+# Raw Material Choices - Derived from tDAR
+MATERIAL_CHOICES = (("basketry", "basketry"), ("building material", "building material"), ("ceramic", "ceramic"),
+                    ("chipped stone", "chipped stone"), ("dating sample", "dating sample"),
+                   ("fauna", "fauna"), ("fire-cracked rock", "fire-cracked rock"), ("glass", "glass"),
+                    ("ground stone", "ground stone"), ("hide", "hide"), ("human remains", "human remains"),
+                   ("macrobotanical", "macrobotanical"), ("metal", "metal"), ("mineral", "mineral"),
+                    ("pollen", "pollen"), ("shell", "shell"), ("textile", "textile"),
+                    ("wood", "wood")) #Choice list comes from tDAR"
 
 SETTING_CHOICES = (("open-air", "open-air"), ("cave", "cave"), ("rockshelter", "rockshelter"))
 
