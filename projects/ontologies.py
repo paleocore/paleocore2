@@ -273,9 +273,21 @@ GNATHIC = (("mandible with teeth", "mandible with teeth"),
                    ("mandibular condyle", "mandibular condyle"))
 
 
-
-CONTINENT_CHOICES = (("Africa", "Africa"), ("Europe", "Europe"), ("Asia", "Asia"), ("North America", "North America"),
-                     ("South America", "South America"), ("Australia", "Australia"), ("Antarctica", "Antarctica"))
+africa = "Africa"
+europe = "Europe"
+asia = "Asia"
+north_america = "North America"
+south_america = "South America "
+australia = "Australia "
+antarctica = "Antarctica"
+CONTINENT_CHOICES = (
+    (africa, "Africa"),
+    (europe, "Europe"),
+    (asia, "Asia"),
+    (north_america, "North America"),
+    (south_america, "South America"),
+    (australia, "Australia"), (antarctica, "Antarctica")
+)
 
 REGION_CHOICES = (("southern_africa", "southern Africa"), ("eastern_africa", "eastern Africa"),
                  ("northern_africa", "northern Africa"), ("", ""), ("", ""))
@@ -521,18 +533,73 @@ COUNTRY_CHOICES = (
     ('Zimbabwe', ('Zimbabwe')),
 )
 
-EPOCH_CHOICES = (("Pliocene", "Pliocene"), ("Pleistocene", "Pleistocene"), ("Holocene", "Holocene"))
+# Epochs of the Cenozooic
+holocene = 'Holocene'
+pleistocene = 'Pleistocene'
+pliocene = 'Pliocene'
+miocene = 'Miocene'
+oligocene = 'Oligocene'
+eocene = 'Eocene'
+paleocene = 'Paleocene'
+
+EPOCH_CHOICES = (
+    (holocene, "Holocene"),
+    (pleistocene, "Pleistocene"),
+    (pliocene, "Pliocene"),
+    (miocene, "Miocene"),
+    (oligocene, "Oligocene"),
+    (eocene, "Eocene"),
+    (paleocene, "Paleocene")
+)
 
 # Raw Material Choices - Derived from tDAR
-MATERIAL_CHOICES = (("basketry", "basketry"), ("building material", "building material"), ("ceramic", "ceramic"),
-                    ("chipped stone", "chipped stone"), ("dating sample", "dating sample"),
-                   ("fauna", "fauna"), ("fire-cracked rock", "fire-cracked rock"), ("glass", "glass"),
-                    ("ground stone", "ground stone"), ("hide", "hide"), ("human remains", "human remains"),
-                   ("macrobotanical", "macrobotanical"), ("metal", "metal"), ("mineral", "mineral"),
-                    ("pollen", "pollen"), ("shell", "shell"), ("textile", "textile"),
-                    ("wood", "wood")) #Choice list comes from tDAR"
+basketry = 'basketry'
+building_material = "building material"
+ceramic = "ceramic"
+chipped_stone = "chipped stone "
+dating_sample = "dating sample"
+fauna = "fauna "
+fire_cracked_rock = "fire-cracked rock "
+glass = "glass "
+ground_stone = "ground stone "
+hide = "hide "
+human_remains = "human remains "
+macrobotanical = "macrobotanical "
+metal = "metal "
+mineral = "mineral "
+pollen = "pollen "
+shell = "shell "
+textile = "textile "
+wood = "wood"
+MATERIAL_CHOICES = (
+    (basketry, "basketry"),
+    (building_material, "building material"),
+    (ceramic, "ceramic"),
+    (chipped_stone, "chipped stone"),
+    (dating_sample, "dating sample"),
+    (fauna, "fauna"),
+    (fire_cracked_rock, "fire-cracked rock"),
+    (glass, "glass"),
+    (ground_stone, "ground stone"),
+    (hide, "hide"),
+    (human_remains, "human remains"),
+    (macrobotanical, "macrobotanical"),
+    (metal, "metal"),
+    (mineral, "mineral"),
+    (pollen, "pollen"),
+    (shell, "shell"),
+    (textile, "textile"),
+    (wood, "wood")
+)  # Choice list comes from tDAR"
 
-SETTING_CHOICES = (("open-air", "open-air"), ("cave", "cave"), ("rockshelter", "rockshelter"))
+open_air = "open-air"
+cave = "cave"
+rockshelter = "rockshelter"
+SETTING_CHOICES = (
+    (open_air, "open-air"),
+    (cave, "cave"),
+    (rockshelter, "rockshelter")
+)
 
 
 
