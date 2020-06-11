@@ -689,8 +689,6 @@ class ProjectPage(Page):
         return self.get_ancestors().type(ProjectsIndexPage).last()
 
 
-
-
 ProjectPage.content_panels = [
     FieldPanel('title', classname="full title"),
     FieldPanel('date'),
