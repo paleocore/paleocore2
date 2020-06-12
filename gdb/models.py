@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 import gdb.ontologies
 import projects.models
+import projects.ontologies
 from ckeditor.fields import RichTextField as CKRichTextField
 
 

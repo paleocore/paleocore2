@@ -1,9 +1,16 @@
 import projects.ontologies as ontologies
 
 # Basis of Record Vocabulary
+fossil = ontologies.fossil_specimen
+observation = ontologies.human_observation
 BASIS_OF_RECORD_VOCABULARY = ontologies.BASIS_OF_RECORD_VOCABULARY
 
 # Item Type Vocabulary
+artifactual = ontologies.artifactual
+faunal = ontologies.faunal
+floral = ontologies.floral
+geological = ontologies.geological
+cast = ontologies.cast
 ITEM_TYPE_VOCABULARY = ontologies.ITEM_TYPE_VOCABULARY
 
 # Collecting Method Vocabulary
