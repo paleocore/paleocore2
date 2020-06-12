@@ -82,6 +82,7 @@ INSTALLED_APPS = (
     # The following apps are interrelated.
     # The individual project apps inherit model classes from the projects app
     'projects',  # projects app
+    'standard',  # data standard app
     'drp',  # Dikika Research Project
     'mlp',  # Mille-Logya Project
     'hrp',  # Hadar Research Project

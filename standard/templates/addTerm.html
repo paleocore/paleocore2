@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+
+{% block page_content %}
+
+<div id="main-wrapper" class="subpage">
+    <div class="container">
+        <div class="row">
+                <div class="8u">
+                    {% if messages %}
+                        {% for message in messages %}
+                           <p class="alertText">{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form action={% url "standard:addTerm" referringCategory.id %} method="post">{% csrf_token %}
+                        <h2>Add a Term to the '{{ referringCategory.name }}' category</h2>
+                        {{ form.as_p }}
+                        <input type="submit" value="Submit" />
+                    </form>
+
+                </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

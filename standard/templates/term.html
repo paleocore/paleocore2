@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block main_content %}
+{% load diagrams%}
+    <h2><strong>{{ t.name }}</strong> - {{ t.project }}</h2>
+
+    <a href={% url "standard:ontologyClass" t.category.id %}>Return to {{ t.category }} terms</a> or <a href="/admin/standard/term/{{ t.id }}/">Edit "{{ t.name }}" in the admin site.</a>
+
+    <table id="terms" style="margin-top:25px;">
+        <tr>
+            <td style="font-weight: bold;">Field Name</td>
+            <td>{{ t.name }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Project</td>
+            <td>{{ t.project }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Definition</td>
+            <td>{{ t.definition }}</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight: bold;">Examples</td>
+            <td>{{ t.example }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Controlled Vocabulary</td>
+            <td>{{ t.controlled_vocabulary }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Controlled Vocabulary Url</td>
+            <td>{{ t.controlled_vocabulary_url }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Data Type</td>
+            <td>{{ t.data_type.name }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Category</td>
+            <td>{{ t.category }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Status</td>
+            <td>{{ t.status }}</td>
+        </tr>
+{#        <tr>#}
+{#            <td style="font-weight: bold;">Projects with Related Terms</td>#}
+{#            <td>{{ t.relatedProjectCount }} out of {{ pCount }}</td>#}
+{#        </tr>#}
+{#        <tr>#}
+{#           <td style="font-weight: bold;">Related to:</td>#}
+{#            <td>#}
+{#                <table>#}
+{#                {% for termRelationship in t.term_relationships.all %}#}
+{#                    {% with rt=termRelationship.related_term %}#}
+{#                        <tr>#}
+{#                            <td colspan="4" style="background-color: {{ termRelationship.related_term.project.id|colorPicker }}"><strong>{{ termRelationship.relationship_type.name }}</strong> {{ termRelationship.relationship_type.preposition }} <a class="highlight" href="/term/{{ rt.id }}/">{{ rt.name }}</a> in project <strong>{{ rt.project.name }}</strong></td>#}
+{#                        </tr>#}
+{#                        <tr>#}
+{#                            <th>Definition</th>#}
+{#                            <th>data type</th>#}
+{#                            <th>Category</th>#}
+{#                            <th>Status</th>#}
+{#                        </tr>#}
+{#                        <tr>#}
+{#                            <td>{{ rt.definition }}</td>#}
+{#                            <td>{{ rt.data_type.name }}</td>#}
+{#                            <td>{{ rt.category }}</td>#}
+{#                            <td>{{ rt.status }}</td>#}
+{#                        </tr>#}
+{#                    {% endwith %}#}
+{#                    <tr><td style="border: none; padding: 3px"></td></tr>#}
+{#                {% endfor %}#}
+{#                </table>#}
+{#            </td>#}
+{#        </tr>#}
+    </table>
+    <h3 style="padding-top: 20px;">Join the Discussion about "{{ t.name }}"</h3>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'paleocore'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+{% endblock %}

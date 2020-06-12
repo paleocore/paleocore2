@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block page_content %}
+<div id="main-wrapper" class="subpage">
+    <div class="container">
+        <div class="row">
+            <div class="12u">
+                <h2>Double click to see the terms in a class (or <a href={% url 'standard:addClass' %}>add a new class</a>.)</h2>
+            </div>
+        </div>
+        <div class="row">
+                <div class="12u">
+                    {% if messages %}
+                        {% for message in messages %}
+                           <p>{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                   <iframe width="110%" height="1500" scrolling="no" src={% url "standard:ontologyTreeNoParameter" %}>
+                   </iframe>
+
+                </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

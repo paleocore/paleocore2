@@ -34,6 +34,7 @@ urlpatterns = [
 
     # Paleo Core Projects
     path('projects/', include(('projects.urls', 'projects'), namespace='projects')),
+    path('standard/', include(('standard.urls', 'standard'), namespace='standard')),
 
     # JSON feed
     url(r'^blog/feed/basic.json$', BasicJsonFeed(), name='basic_json_feed'),

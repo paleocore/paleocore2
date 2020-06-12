@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div id="content" class="row">
+  <div class="body"></div>
+    <h2>{{ project.full_name }}</h2>
+    <p>Namespace URI: </p>
+    <p>Namespace abbreviation: {{project.name}}</p>
+
+    <hr/>
+
+    <h3>Class Index </h3>
+    <p>
+    {% for class in classes %}
+        <a href="#{{ class.name }}">{{ class.name }}</a> |
+    {% endfor %}
+    </p>
+
+    <hr>
+
+    <h3>Terms Index</h3>
+    {% regroup terms by category as terms_list %}
+    {% for category in terms_list %}
+        {% if category.grouper.name == 'Find' %}
+        <p>
+          <strong>
+            <a href="#{{ category.grouper }}">{{ category.grouper }}</a> |
+            <a href="#MaterialSample">MaterialSample</a> |
+            <a href="#FossilSpecimen">FossilSpecimen</a>
+          </strong>
+          <br/>
+
+        {% elif category.grouper.name == 'Event' %}
+        <p>
+          <strong>
+            <a href="#{{ category.grouper }}">{{ category.grouper }}</a> |
+            <a href="#HumanObservation">HumanObservation</a>
+          </strong>
+          <br/>
+
+        {% elif category.grouper.name == 'Record' %}
+        <p>
+          <strong>{{ category.grouper }} |
+            <a href="#Dataset">Dataset</a>
+          </strong>
+          <br/>
+
+        {% else %}
+        <p>
+          <strong>
+            <a href="#{{ category.grouper }}">{{ category.grouper }}</a>
+          </strong>
+          <br/>
+
+        {% endif %}
+
+    {% for term in category.list %}
+      <a href='#{{ term.name }}'>{{ term.name }}</a>
+      {% if not forloop.last %} | {% endif %}
+      {% endfor %}
+      </p>
+
+    {% endfor %}
+
+    <hr>
+
+    <h3>Class Descriptions</h3>
+        {% for class in classes %}
+        <table class="term">
+
+            <tbody>
+
+
+                <tr><td colspan="2" class="term-label" id="{{ class.name }}"><strong>Term Name: {{ class.name }}</strong></td></tr>
+
+                    <tr>
+                        <td class="term-body">Source</td>
+                        <td class="term-body">{{ class.native_project }}</td>
+                    </tr>
+                    <tr>
+                        <td>URI</td><td> <a href="{{ class.uri }}">{{ class.uri }}</a></td>
+                    </tr>
+                    <tr>
+                        <td>Definition</td><td>{{ class.definition }}</td>
+                    </tr>
+                    <tr>
+                        <td>Comment</td><td>{{ class.example }}</td>
+                    </tr>
+
+            </tbody>
+        </table>
+        {% endfor %}
+
+
+    <hr>
+
+    <h3>Term Descriptions</h3>
+        {% for term in terms %}
+        <table class="term">
+
+            <tbody>
+
+                <tr><td colspan="2" class="term-label" id="{{ term.name }}"><strong>Term Name: {{ term.name }}</strong></td></tr>
+                <tr>
+                    <td>Source</td>
+                    <td>{{ term.native_project }}</td>
+                </tr>
+                <tr>
+                    <td>URI</td><td> <a href="{{ term.uri }}">{{ term.uri }}</a></td>
+                </tr>
+            <tr>
+                <td>Definition</td><td>{{ term.definition }}</td>
+            </tr>
+            <tr>
+                <td>Comment</td><td>{{ term.example }}</td></tr>
+
+            </tbody>
+        </table>
+        {% endfor %}
+
+
+
+    </div>
+    {% comment %}
+    {% for term in terms %}
+        <h3><a href="term/{{ term.id }}">{{ term.name }}</a></h3>
+        <p>{{ term.definition|safe }}</p>
+        {% if term.uri %}
+            <p>URI: <a href="{{ term.uri }}" target="_blank">{{ term.uri }}</a></p>
+        {% endif %}
+        {% if term.uses_controlled_vocabulary %}
+            <p>Controlled Vocabulary: {{ term.controlled_vocabulary }}
+            {% if term.controlled_vocabulary_url %}
+                <br/>Controlled Vocabulary URL: <a href="{{ term.controlled_vocabulary_url }}" target="_blank">{{ term.controlled_vocabulary_url }}</a>
+            {% endif %}
+            </p>
+        {% endif %}
+    {% endfor %}
+    {% endcomment %}
+{% endblock %}
+</div>
