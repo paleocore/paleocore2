@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.decorators import permission_required
 from django.conf.urls import url
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, path
 
@@ -9,11 +10,6 @@ from projects.admin import PaleoCoreOccurrenceAdmin, TaxonomyAdmin
 # TODO Why does the line below raise an error!
 import mlp.views  # This line raises exception!
 import unicodecsv
-
-from django.core.exceptions import ObjectDoesNotExist
-
-
-
 
 mlp_default_list_display = ('barcode', 'date_recorded', 'catalog_number', 'basis_of_record', 'item_type',
                             'collecting_method', 'collector', 'item_scientific_name', 'item_description',
