@@ -24,6 +24,7 @@ COLLECTING_METHOD_VOCABULARY = (
                                 )
 
 # NALMA Vocabulary
+wasatchian = ontologies.wasatchian
 NALMA_CHOICES = ontologies.NALMA_CHOICES
 
 # sub_age Vocabulary
