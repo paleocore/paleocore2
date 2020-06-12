@@ -61,34 +61,37 @@ INSTALLED_APPS = (
 
     'foundation_formtags',
     'wagtail_feeds',
-    'ls.joyous',
-    'ckeditor',  # projects app
-    'mapwidgets',  # projects app
-    'unicodecsv',  # mlp app
-    'import_export',  # projects app
+    'ls.joyous',  # calendar app
+    'ckeditor',  # enhanced editing - used by projects app
+    'mapwidgets',  # geom editing widgets - used by projects app
+    'unicodecsv',  # unicode encoding for csv - used by mlp app
+    'import_export',  # generic import-export - used by projects app
+    'djgeojson',  # Django geojson
+    'leaflet',  # leaflet mapping
 
-    'blog',
-    'contact',
-    'djgeojson',
-    'documents_gallery',
-    'gallery',
-    'leaflet',
-    'pages',
-    'people',
-    'products',
+    'blog',  # generic blog app
+    'contact',  # contact information app
+    'documents_gallery',  # documents app
+    'gallery',  # image gallery app
+    'pages',  # app that contains the site page models
+    'people',  # people app
+    'products',  # products app
     'search',
     'utils',
 
+    # The following apps are interrelated.
+    # The individual project apps inherit model classes from the projects app
     'projects',  # projects app
-    'drp',
-    'mlp',
-    'hrp',
-    'lgrp',
-    'eppe',
-    'gdb',
-    'omo_mursi',
-    'cc',
-    'fc',
+    'drp',  # Dikika Research Project
+    'mlp',  # Mille-Logya Project
+    'hrp',  # Hadar Research Project
+    'lgrp',  # Ledi-Geraru Research Project
+    'eppe',  # Eyasi Plateau Paleontology Project
+    'gdb',  # Greate Divide Basin
+    'omo_mursi',  # Omo Mursi
+    'cc',  # Combe Capelle
+    'fc',  # Fontechevad
+    'wtap',  # West Turkana Archaeology Project
 
     'wagtail.contrib.routable_page',
     'wagtail.contrib.sitemaps',
@@ -108,8 +111,8 @@ INSTALLED_APPS = (
     'wagtail.admin',
     'wagtail.core',
     'wagalytics',
-    'wagtailgeowidget',  # projects app
-    'allauth',
+    'wagtailgeowidget',  # geom editing widget - used by projects app
+    'allauth',  # universal user authentication app
     'allauth.account',
     'allauth.socialaccount',
     'users',
