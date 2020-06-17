@@ -7,10 +7,18 @@
 
 	<div id="social_bar">
   		<div class="grid-container" style="max-width: 100%;">
+        {% comment %}
+        {% if request.user.is_authenticated %}
+        <a href="#">Hi Denné!</a>
+        {% else %}
+        <a href="#">Login</a>
+        {% endif %}
+        {% endcomment %}
+
     		{% include "contact/includes/social.html" %}
-				{% comment %}
+
 				{% include "utils/tags/navigation/account.html" %}
-				{% endcomment %}
+
   		</div>
 	</div>
 
