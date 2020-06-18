@@ -19,7 +19,11 @@ COMPRESS_CSS_FILTERS = [
     'compressor.filters.cssmin.CSSMinFilter',
 ]
 
-ALLOWED_HOSTS = [env("DJANGO_ALLOWED_HOST_NAME"), env("DJANGO_PRODUCTION_IP")]
+ALLOWED_HOSTS = [
+    env("DJANGO_ALLOWED_HOST_NAME"),
+    'www.' + env("DJANGO_ALLOWED_HOST_NAME"),
+    env("DJANGO_PRODUCTION_IP")
+]
 
 DATABASES['default'] = env.db('PROD_DATABASE_URL')
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
