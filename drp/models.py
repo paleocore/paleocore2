@@ -108,6 +108,7 @@ class Locality(projects.models.PaleoCoreLocalityBaseClass):
             name_string = self.name
         return name_string
 
+
 # This is the DRP data model. It is only partly PaleoCore compliant.
 class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
     # date_last_modified = models.DateTimeField("Date Last Modified", auto_now=True)
