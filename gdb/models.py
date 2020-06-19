@@ -40,6 +40,12 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
     def __str__(self):
         return str(self.catalog_number)
 
+    def nalma(self):
+        return self.locality.NALMA
+
+    def sub_age(self):
+        return self.locality.sub_age
+
     @staticmethod
     def method_fields_to_export():
         """

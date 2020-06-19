@@ -5,48 +5,46 @@ import unicodecsv
 import os
 import projects.admin
 
-default_admin_fieldsets = (
-    ('Curatorial', {
+curatorial_fields = ('Curatorial', {
         'fields': [('catalog_number',),
                    ('cm_catalog_number',),
                    ('date_collected', 'date_time_collected', 'date_last_modified')]
-    }),
+    })
 
-    ('Occurrence Details', {
+occurrence_fields = ('Occurrence Details', {
         'fields': [('basis_of_record', 'item_type',),
                    ('collecting_method',),
                    ('item_description', 'item_scientific_name', 'image'),
                    ('on_loan', 'loan_date', 'loan_recipient'),
                    ('problem', 'problem_comment'),
-                   ('remarks', )],
-    }),
-    ('Locality', {
-        'fields': [
-                   ('locality',), ('nalma',), ('sub_age',),
-                   ],
+                   ('remarks',)],
     })
-)
 
-biology_default_admin_fieldsets = (
-    ('Curatorial', {
-        'fields': [('catalog_number',),
-                   ('cm_catalog_number',),
-                   ('date_collected', 'date_time_collected', 'date_last_modified')]
-    }),
-
-    ('Occurrence Details', {
+occurrence_fields_biology = ('Occurrence Details', {
         'fields': [('basis_of_record', 'item_type',),
                    ('collecting_method',),
                    ('item_description', 'item_scientific_name', 'image'),
                    ('on_loan', 'loan_date', 'loan_recipient'),
                    ('problem', 'problem_comment'),
                    ('remarks', 'notes')],
-    }),
-    ('Locality', {
+    })
+
+locality_fields = ('Locality', {
         'fields': [
-                   ('locality',), ('nalma',), ('sub_age',),
+                    ('locality',), ('nalma', 'sub_age',),
                    ],
     })
+
+default_admin_fieldsets = (
+    curatorial_fields,
+    occurrence_fields,
+    locality_fields
+)
+
+biology_default_admin_fieldsets = (
+    curatorial_fields,
+    occurrence_fields_biology,
+    locality_fields,
 )
 
 description_fieldsets = ('Description', {
@@ -120,10 +118,13 @@ locality_fieldsets = (('Record', {
     }),
 )
 
+default_search_fields = ['item_scientific_name', 'catalog_number', 'cm_catalog_number']
+biology_search_fields = ['tax_class', 'tax_order', 'family', 'tribe', 'genus', 'specific_epithet']
+
 
 class OccurrenceAdmin(admin.ModelAdmin):
     # readonly_fields = ['catalog_number', 'latitude', 'longitude', 'easting', 'northing']
-    readonly_fields = ['catalog_number']
+    readonly_fields = ['catalog_number', 'nalma', 'sub_age']
     fieldsets = default_admin_fieldsets
     list_display = ['catalog_number', 'cm_catalog_number', 'item_scientific_name', 'item_description', 'locality',
                     'date_collected', 'on_loan', 'date_last_modified']
@@ -131,6 +132,7 @@ class OccurrenceAdmin(admin.ModelAdmin):
     list_filter = ['date_collected', 'on_loan', 'date_last_modified']
 
     list_per_page = 1000
+    search_fields = default_search_fields
 
 
 class LocalityAdmin(projects.admin.PaleoCoreLocalityAdminGoogle):
@@ -145,8 +147,8 @@ class LocalityAdmin(projects.admin.PaleoCoreLocalityAdminGoogle):
     actions = ['export_csv']
 
 
-class LocalityInline(admin.TabularInline):
-    model = Locality
+# class LocalityInline(admin.TabularInline):
+#     model = Locality
 
 
 class BiologyAdmin(admin.ModelAdmin):
@@ -162,17 +164,10 @@ class BiologyAdmin(admin.ModelAdmin):
     list_display = ['catalog_number', 'cm_catalog_number', 'item_scientific_name', 'taxon', 'item_description',
                     'locality', 'date_collected', 'nalma']
     list_per_page = 1000
-    list_filter = ['taxon', 'locality']
-    search_fields = ['tax_class', 'tax_order', 'family', 'tribe', 'genus', 'specific_epithet', 'item_scientific_name',
-                     'catalog_number', 'cm_catalog_number']
+    list_filter = ['taxon', 'locality', 'locality__NALMA']
+    search_fields = default_search_fields + biology_search_fields
     actions = ['create_data_csv', 'generate_specimen_labels']
     list_select_related = ['locality', 'taxon', 'occurrence_ptr']
-
-    def nalma(self, obj):
-        return obj.locality.NALMA
-
-    def sub_age(self, obj):
-        return obj.locality.sub_age
 
     def create_data_csv(self, request, queryset):
         """
