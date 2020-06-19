@@ -8,7 +8,7 @@ import projects.admin
 curatorial_fields = ('Curatorial', {
         'fields': [('catalog_number',),
                    ('cm_catalog_number',),
-                   ('date_collected', 'date_time_collected', 'date_last_modified')]
+                   ('year_collected', 'date_collected', 'date_time_collected', 'date_last_modified')]
     })
 
 occurrence_fields = ('Occurrence Details', {
@@ -127,9 +127,9 @@ class OccurrenceAdmin(admin.ModelAdmin):
     readonly_fields = ['catalog_number', 'nalma', 'sub_age']
     fieldsets = default_admin_fieldsets
     list_display = ['catalog_number', 'cm_catalog_number', 'item_scientific_name', 'item_description', 'locality',
-                    'date_collected', 'on_loan', 'date_last_modified']
+                    'date_collected', 'year_collected', 'on_loan', 'date_last_modified']
     list_select_related = ['locality']  # improves performance, causes server to conduct 4 queries instead of 1004
-    list_filter = ['date_collected', 'on_loan', 'date_last_modified']
+    list_filter = ['date_collected', 'year_collected', 'on_loan', 'date_last_modified']
 
     list_per_page = 1000
     search_fields = default_search_fields
@@ -164,7 +164,7 @@ class BiologyAdmin(admin.ModelAdmin):
     list_display = ['catalog_number', 'cm_catalog_number', 'item_scientific_name', 'taxon', 'item_description',
                     'locality', 'date_collected', 'nalma']
     list_per_page = 1000
-    list_filter = ['taxon', 'locality', 'locality__NALMA']
+    list_filter = ['year_collected', 'taxon', 'locality', 'locality__NALMA']
     search_fields = default_search_fields + biology_search_fields
     actions = ['create_data_csv', 'generate_specimen_labels']
     list_select_related = ['locality', 'taxon', 'occurrence_ptr']
