@@ -78,9 +78,19 @@ class Context(projects.models.PaleoCoreBaseClass):
 
 class Find(projects.models.PaleoCoreOccurrenceBaseClass):
     """
+    A class used to represent a Find or Occurrence.
+
     Find <- PaleoCoreOccurrenceBaseClass <- PaleoCoreGeomBaseClass <- PaleoCoreBaseClass
     name, created*, date_last_modified*, problem*, problem_comment*, remarks, last_import, georeference_remarks,
     geom, date_recorded*, year, barcode, field_number
+
+    Attributes
+    ----------
+    catalog_number : str
+        A unique alphanumeric value identifying the item.
+
+
+
     """
     catalog_number = models.CharField('Cat. No.', max_length=255, null=True, blank=True)
     locality_name = models.CharField('Locality', max_length=255, null=True, blank=True)
