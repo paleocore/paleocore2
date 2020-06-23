@@ -26,6 +26,7 @@
               {% if project.intro %}
               {{ project.intro|richtext|truncatewords:25 }}
               {% endif %}
+              <!-- public or private -->
               {% if project.is_public %}
               <img src="{% static 'unlocked.png' %}"
                    alt="public"
@@ -39,22 +40,29 @@
                    style="vertical-align: baseline">
               Private &emsp; &emsp;
               {% endif %}
+              <!-- occurrence count -->
               {% if project.record_count %}
               {{ project.record_count }} records &emsp; &emsp;
               {% endif %}
-              {% if project.has_fossils %}
+              <!-- if project has biology add skull logo -->
+              {% if project.has_biology %}
               <img src="{% static 'img/skull.png' %}"
                    alt="fossils"
                    width="18px"
                    style="vertical-align: baseline">
-              &emsp;
+              <!-- biology count
+               ({{project.biology_count}})
+               -->
               {% endif %}
-              {% if project.has_artifacts %}
+              <!-- if project has archaeology add lithic logo -->
+              {% if project.has_archaeology %}
               <img src="{% static 'img/artifact.png' %}"
                    alt="artifacts"
                    width="22px"
                    style="vertical-align: baseline">
-              &emsp;
+              <!-- archaeology count
+               ({{project.archaeology_count}})&emsp;
+               -->
               {% endif %}
             </a>
           </div>
