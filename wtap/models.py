@@ -72,17 +72,54 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
         verbose_name_plural = app_name.upper()+" Occurrences"
 
 
-class Archaeology(Occurrence):
+class Artifact(Occurrence):
     find_type = models.CharField(null=True, blank=True, max_length=255)
-    length_mm = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
-    width_mm = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
+    length_mm = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    width_mm = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+
+    # dataclass = models.CharField(max_length=20, blank=True, null=True)
+    cortex = models.CharField(max_length=10, blank=True, null=True)
+    technique = models.CharField(max_length=20, blank=True, null=True)
+    alteration = models.CharField(max_length=20, blank=True, null=True)
+    edge_damage = models.CharField(max_length=20, blank=True, null=True)
+    fb_type = models.IntegerField('Bordes Type', blank=True, null=True)
+    fb_type_2 = models.IntegerField('Bordes Type 2', blank=True, null=True)
+    fb_type_3 = models.IntegerField('Bordes Type 3', blank=True, null=True)
+    platform_surface = models.CharField(max_length=20, blank=True, null=True)
+    platform_exterior = models.CharField(max_length=20, blank=True, null=True)
+    form = models.CharField(max_length=20, blank=True, null=True)
+    scar_morphology = models.CharField(max_length=20, blank=True, null=True)
+    retouched_edges = models.IntegerField(blank=True, null=True)
+    retouch_intensity = models.CharField(max_length=20, blank=True, null=True)
+    reprise = models.CharField(max_length=20, blank=True, null=True)
+    maximum_width = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    thickness = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    platform_width = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    platform_thickness = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    raw_material = models.CharField(max_length=20, blank=True, null=True)
+    exterior_surface = models.CharField(max_length=20, blank=True, null=True)
+    exterior_type = models.CharField(max_length=20, blank=True, null=True)
+    weight = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    platform_technique = models.CharField(max_length=20, blank=True, null=True)
+    platform_angle = models.DecimalField(decimal_places=0, max_digits=3, null=True, blank=True)
+    multiple = models.NullBooleanField(default=False, blank=True, null=True)
+    epa = models.IntegerField(blank=True, null=True)
+    core_shape = models.CharField(max_length=20, blank=True, null=True)
+    core_blank = models.CharField(max_length=20, blank=True, null=True)
+    core_surface_percentage = models.DecimalField(decimal_places=0, max_digits=3, blank=True, null=True)
+    proximal_removals = models.IntegerField(blank=True, null=True)
+    prepared_platforms = models.IntegerField(blank=True, null=True)
+    flake_direction = models.CharField(max_length=20, blank=True, null=True)
+    scar_length = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    scar_width = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    artifact_remarks = models.TextField(blank=True, null=True)
 
     class Meta:
-        verbose_name = app_name.upper()+" Archaeology"
-        verbose_name_plural = app_name.upper()+" Archaeology"
+        verbose_name = app_name.upper()+" Artifact"
+        verbose_name_plural = app_name.upper()+" Artifacts"
 
 
-class Biology(Occurrence):
+class Fossil(Occurrence):
     """
     Biology <- Occurrence <- PaleoCoreOccurrenceBaseClass <- PaleoCoreGeomBaseClass <- PaleoCoreBaseClass
     """
@@ -194,11 +231,11 @@ class Biology(Occurrence):
         return result_tuple
 
     class Meta:
-        verbose_name = "WTAP Biology"
-        verbose_name_plural = "WTAP Biology"
+        verbose_name = app_name.upper()+" Fossil"
+        verbose_name_plural = app_name.upper()+" Fossils"
 
 
-class Geology(Occurrence):
+class Rock(Occurrence):
     find_type = models.CharField(null=True, blank=True, max_length=255)
     dip = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
     strike = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
@@ -206,8 +243,8 @@ class Geology(Occurrence):
     texture = models.CharField(null=True, blank=True, max_length=255)
 
     class Meta:
-        verbose_name = app_name.upper()+" Geology"
-        verbose_name_plural = app_name.upper()+" Geology"
+        verbose_name = app_name.upper()+" Rock"
+        verbose_name_plural = app_name.upper()+" Rocks"
 
 
 class TaxonRank(projects.models.TaxonRank):
