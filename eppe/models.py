@@ -88,9 +88,6 @@ class Find(projects.models.PaleoCoreOccurrenceBaseClass):
     ----------
     catalog_number : str
         A unique alphanumeric value identifying the item.
-
-
-
     """
     catalog_number = models.CharField('Cat. No.', max_length=255, null=True, blank=True)
     locality_name = models.CharField('Locality', max_length=255, null=True, blank=True)
