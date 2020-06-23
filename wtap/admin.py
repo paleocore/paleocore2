@@ -160,11 +160,11 @@ class OccurrenceAdmin(PaleoCoreOccurrenceAdmin):
     create_data_csv.short_description = "Download Selected to .csv"
 
 
-class ArchaeologyAdmin(OccurrenceAdmin):
+class ArtifactAdmin(OccurrenceAdmin):
     list_select_related = ['occurrence_ptr']  # required here b/c inherited values won't work
 
 
-class BiologyAdmin(OccurrenceAdmin):
+class FossilAdmin(OccurrenceAdmin):
     biology_fieldsets = list(OccurrenceAdmin.fieldsets)  # creates a separate copy of the fieldset list
     taxonomy_fieldsets = ('Identification', {'fields': [('taxon', 'identification_qualifier', 'identified_by')]})
     element_fieldsets = ('Detailed Description', {'fields': [('element', 'element_modifier')]})
@@ -174,7 +174,7 @@ class BiologyAdmin(OccurrenceAdmin):
     list_select_related = ['occurrence_ptr', 'taxon']  # required here b/c inherited values won't work
 
 
-class GeologyAdmin(OccurrenceAdmin):
+class RockAdmin(OccurrenceAdmin):
     list_select_related = ['occurrence_ptr']  # required here b/c inherited values won't work
 
 
@@ -182,7 +182,7 @@ class GeologyAdmin(OccurrenceAdmin):
 #  Register Admin Classes  #
 ############################
 admin.site.register(Occurrence, OccurrenceAdmin)
-admin.site.register(Archaeology, ArchaeologyAdmin)
-admin.site.register(Biology, BiologyAdmin)
-admin.site.register(Geology, GeologyAdmin)
+admin.site.register(Artifact, ArtifactAdmin)
+admin.site.register(Fossil, FossilAdmin)
+admin.site.register(Rock, RockAdmin)
 admin.site.register(Taxon, TaxonomyAdmin)
