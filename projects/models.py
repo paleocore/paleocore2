@@ -6,6 +6,7 @@ from django.contrib.gis.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.apps import apps
+from django.apps.config import AppConfig
 from django.utils import timezone
 from django.contrib.gis.geos import Point
 from django_countries.fields import CountryField
@@ -614,26 +615,33 @@ class ProjectPage(Page):
     is_public = models.BooleanField(default=False)
     app_label = models.CharField(max_length=100, null=True, blank=True, choices=APP_CHOICES)
 
-    def get_related_app(self):
+    def get_related_app(self) -> AppConfig:
         """
+        Return the apps.AppConfig instance associated with the project.
+
         Each project page is uniquely associated  to a project app. General information about the project is stored
         with the project page while specimen details and data are stored in the app. Each project page
         has a 'related_app' field that stores the app name and links the page to the app and its models.
-        returns: a string value with the name of the related app (e.g. 'hrp', 'drp' etc.)
+
+        :return: apps.config.AppConfig
         """
+        # Get the AppConfig object using the page's app_label attribute.
         try:
             project_app = apps.get_app_config(self.app_label)
         except LookupError:
             project_app = None
         return project_app
 
-    def has_fossils(self):
+    def has_biology(self) -> bool:
         """
+        Check if the page's associated app has biology(fossil) occurrences.
+
         This method indicates if the app associated with the page includes a model class for tracking fossil
         occurrences, which is an indication of whether the project has recovered fossils at the site. This
         method is used to test whether the skull/fossil icon appears in the project's card on the project
         index page.
-        returns: True or False depending on tests for specific model names in the app
+
+        returns: bool
         """
         result = False
         related_app = self.get_related_app()
@@ -643,13 +651,16 @@ class ProjectPage(Page):
             result = any(tests)
         return result
 
-    def has_artifacts(self):
+    def has_archaeology(self) -> bool:
         """
+        Check if the page's associated app has archaeology(artifact) occurrences.
+
         This method indicates if the app associated with the page includes a model class for tracking artifact/lithic
         occurrences, which is an indication of whether the project has recovered stone tools at the site. This
         method is used to test whether the stone tool/lithic icon appears in the project's card on the project
         index page.
-        returns: True or False depending on tests for specific model names in the app
+
+        returns: bool
         """
         result = False
         # related_app.models is an ordered dict
@@ -659,13 +670,29 @@ class ProjectPage(Page):
             result = any(tests)
         return result
 
-    def record_count(self):
+    def has_geology(self) -> bool:
         """
+        Check if the page's associated app has geology(rock) occurrences.
+
+        :return: bool
+        """
+        result = False
+        related_app = self.get_related_app()
+        if related_app:
+            tests = ['biology' in related_app.models, 'rock' in related_app.models]
+            result = any(tests)
+        return result
+
+    def record_count(self) -> int:
+        """
+        Return the total number of occurrences in the page's associated app.
+
         Function to tabulate the number of Finds in a project database. Counts are based on the number of
         records in the occurrence table for most projects, or the context table for cc and fc. This function
         assumes that base finds are stored in an occurrence table or a context table. Ideally all these should
         be changed to a Find table which will provide a standardized structure.
-        :return: Returns an integer record count.
+
+        :return: int
         """
         result = 0
         if apps.is_installed(self.slug):  # check if slug matches an installed app name
@@ -683,8 +710,99 @@ class ProjectPage(Page):
                 result = model_class.objects.all().count()
         return result
 
+    def archaeology_count(self) -> int:
+        """
+        Return the total number of archaeology occurrences in the page's associated app.
+
+        :return: int
+        """
+        result = 0
+        if apps.is_installed(self.app_label):  # check if app_label matches an installed app name
+            if self.app_label in ('cc', 'fc'):  # cc and fc use lithic to record archaeology occurrences
+                content_type = ContentType.objects.get(app_label=self.app_label, model='lithic')
+            elif self.app_label == 'eppe':
+                content_type = None  # eppe has no archaeology
+            else:  # all others use archaeology
+                try:
+                    content_type = ContentType.objects.get(app_label=self.app_label, model='archaeology')
+                except ContentType.DoesNotExist:
+                    content_type = None
+            if content_type:
+                model_class = content_type.model_class()
+                result = model_class.objects.all().count()
+        return result
+
+    def biology_count(self) -> int:
+        """
+        Return the total number of biology occurrences in the page's associated app.
+
+        :return: int
+        """
+        # Initialize biology_count variable
+        biology_count = 0
+        if apps.is_installed(self.app_label):  # check if app_label matches an installed app name
+            # eppe has not biology(fossil) model. Return None
+            if self.app_label in ('cc', 'fc'):
+                content_type = None  # cc and fc have no fossil occurrences
+            # use the Fossil model for eppe
+            elif self.app_label == 'eppe':
+                content_type = ContentType.objects.get(app_label=self.app_label, model='fossil')
+            # all others use Biology model
+            else:
+                try:
+                    content_type = ContentType.objects.get(app_label=self.app_label, model='biology')
+                except ContentType.DoesNotExist:
+                    content_type = None
+            if content_type:
+                model_class = content_type.model_class()
+                biology_count = model_class.objects.all().count()
+        return biology_count
+
+    def geology_count(self) -> int:
+        """
+        Return the total number of geology occurrences in the page's associated app.
+
+        :return: int
+        """
+        # Initialize geology_count variable
+        geology_count = 0
+        # check if app_label matches an installed app name
+        if apps.is_installed(self.app_label):
+            # test if it has geology
+            if self.has_geology():
+                # get the app, check for the model and count records
+                app_config = self.get_related_app()
+                # get the name of the geology model, intersect possible names with list of app models.
+                geo_model = set(['geology', 'rock']).intersection(set(app_config.models))
+                content_type = ContentType.objects.get(app_label=self.app_label, model=geo_model)
+                model_class = content_type.model_class()
+                geology_count = model_class.objects.count()
+            else:
+                pass  # leave default count
+        else:
+            pass
+
+        return geology_count
+
+    def summary_counts(self) -> dict:
+        """
+        Return a dict containing occurrence counts for archaeology, biology, geology occurrences.
+
+        :return: dict
+        """
+        # initialize a dictionary
+        summary_dict = {}
+        archaeology_count = self.archaeology_count()
+        summary_dict['archaeology'] = archaeology_count
+
+        return summary_dict
+
     @property
     def project_index(self):
+        """
+        Return the containing Projects Index Page
+        :return: ProjectsIndexPage
+        """
         # Find closest ancestor which is a project index
         return self.get_ancestors().type(ProjectsIndexPage).last()
 
