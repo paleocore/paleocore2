@@ -105,7 +105,7 @@ class PersonRole(models.Model):
         FieldPanel('name')
     ]
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
