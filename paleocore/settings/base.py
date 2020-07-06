@@ -90,7 +90,7 @@ INSTALLED_APPS = (
     'eppe',  # Eyasi Plateau Paleontology Project
     'gdb',  # Greate Divide Basin
     'omo_mursi',  # Omo Mursi
-    'origins',
+    'origins',  # Origins
     'cc',  # Combe Capelle
     'fc',  # Fontechevad
     'wtap',  # West Turkana Archaeology Project
