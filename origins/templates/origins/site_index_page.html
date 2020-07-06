@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+{% comment %}{% extends "origins/sites_base.html" %}{% endcomment %}
+{% load wagtailcore_tags %}
+
+{% block extra_css %}
+  <!-- openlayers css -->
+  <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+  <!-- datatables css for foundation -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.foundation.min.css">
+{% endblock %}
+
+{% block content %}
+  <!-- start row -->
+  <div class="row">
+    <!-- Tags -->
+    {% if request.GET.tag|length %}
+    <h4>Showing projects tagged as {{ request.GET.tag|safe }} <a href=" {% pageurl self %} ">Show all</a></h4>
+    {% endif %}
+
+    <!-- Title -->
+    <div class="row">
+      <div class="small-12 columns">
+        <h1>Origins Sites</h1>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="small-12 columns">
+      <div id="map" class="map"></div>
+    </div>
+
+    <!-- Map Layer Selector -->
+    <div class="columns small-4">
+      <select id="layer-select">
+        <option value="Aerial">Satellite</option>
+        <option value="AerialWithLabels" selected>Satellite with labels</option>
+        <option value="Road">Road</option>
+        <!--
+        <option value="RoadOnDemand">Road (dynamic)</option>
+        -->
+      </select>
+    </div>
+
+    <!-- Horizontal Rule -->
+    <div class="small-10 small-centered column">
+      <hr/>
+    </div>
+  </div>
+  <!-- endrow -->
+
+  <!-- start row -->
+  <div class="row">
+  {% include "origins/includes/site_list_item.html" %}
+  </div>
+  <!-- end row -->
+{% endblock %}
+
+{% block extra_js %}
+  <!-- map js -->
+  <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+  <script type="text/javascript">
+
+      let styles = {
+        'Point': new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 5,
+            fill: new ol.style.Fill({color: 'rgba(255, 0, 0, 0.1)'}),
+            stroke: new ol.style.Stroke({color: 'red', width: 1})
+          }),
+        text: new ol.style.Text({
+          text: 'test',
+        }),
+        })};
+
+      // Start Label Test
+      let myDom = {
+          points: {
+            text: 'Normal'
+          },
+        };
+
+      let getText = function(feature, resolution, dom) {
+          var type = 'Normal';
+          // var type = dom.text.value;
+          var maxResolution = '1200'
+          // var maxResolution = dom.maxreso.value;
+          var text = feature.get('title');
+          //var text = feature.get('name');
+
+          if (resolution > maxResolution) {
+            text = '';
+          } else if (type == 'hide') {
+            text = '';
+          //} else if (type == 'shorten') {
+          //  text = text.trunc(12);
+          } else if (type == 'wrap' && (!dom.placement || dom.placement.value != 'line')) {
+            text = stringDivider(text, 16, '\n');
+          }
+
+          return text;
+      };
+
+      let createTextStyle = function(feature, resolution, dom) {
+          return new ol.style.Text({
+            textAlign: 'left',
+            textBaseline: 'middle',
+            font: 'normal 14px Arial',
+            text: getText(feature, resolution, dom),
+            fill: new ol.style.Fill({color: 'red'}),
+            stroke: new ol.style.Stroke({color: '#ffffff', width: 3}),
+            offsetX: 10,
+            offsetY: -10,
+            placement: 'point',
+            overflow: 'false',
+          });
+      };
+
+      // Points
+      let red_transparent_fill = new ol.style.Fill({color: 'rgba(255, 0, 0, 0.5)'})
+      let red_solid_fill = new ol.style.Fill({color: 'red'})
+      let red_solid_stroke = new ol.style.Stroke({color: 'red', width: 1})
+
+      function pointStyleFunction(feature, resolution) {
+        return new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 5,
+            fill: red_transparent_fill,
+            stroke: red_solid_stroke
+          }),
+        });
+      }
+
+      function pointSelectedStyleFunction(feature, resolution) {
+        return new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 5,
+            fill: red_solid_fill,
+            stroke: red_solid_stroke
+          }),
+          text: createTextStyle(feature, resolution, myDom.points)
+        });
+      }
+
+      let styleFunction = function(feature) {
+        return styles[feature.getGeometry().getType()];
+      };
+
+      // Get site locations from geoJSON
+      let siteSource = new ol.source.Vector({
+        url:'http://localhost:8000/origins/origins.geojson',
+        format: new ol.format.GeoJSON(),
+        projection: 'EPSG:4326'
+      });
+
+      let country_vector = new ol.layer.Vector({
+          source: new ol.source.Vector({
+            url: 'http://localhost:8000/origins/countries.geojson',
+            format: new ol.format.GeoJSON()
+          })
+        });
+
+      let siteLayer = new ol.layer.Vector({
+        source: siteSource,
+        //style: styleFunction
+        style: pointStyleFunction
+      });
+
+      let osmLayer = new ol.layer.Tile({source: new ol.source.OSM()});
+
+      let omtLayer = new ol.layer.Tile({
+        source: new ol.source.OSM({
+          url: 'http://localhost:32769/styles/klokantech-basic/{z}/{x}/{y}.png'
+        })
+      })
+
+      let layer_styles = [
+        'Road',
+        'RoadOnDemand',
+        'Aerial',
+        'AerialWithLabels',
+      ];
+
+      // Satellite tiles
+      let bingLayers = [];
+      let i, ii;
+      for (i = 0, ii = layer_styles.length; i < ii; ++i) {
+        bingLayers.push(new ol.layer.Tile({
+          visible: false,
+          preload: Infinity,
+          source: new ol.source.BingMaps({
+            key: 'Ar53nx2qnSFcrZZZ4nh6Q_mGb_1BVl3jNP3tldp5lJ8SeUgAnMZGnTCNsTQ7O72e',
+            imagerySet: layer_styles[i]  // load image tiles depending on selected layer.
+            // use maxZoom 19 to see stretched tiles instead of the BingMaps
+            // "no photos at this zoom level" tiles
+            // maxZoom: 19
+          })
+        }));
+      }
+
+      let map = new ol.Map({
+        target: 'map',
+        //layers: [omtLayer, siteLayer],
+        //layers: [country_vector],
+        //layers: [country_vector, siteLayer],
+        layers: bingLayers.concat(siteLayer),  // overlay vector layers on tiles
+        loadTilesWhileInteracting: true,
+        view: new ol.View({
+          projection: 'EPSG:4326',
+          center: [37.41,8.82],
+          zoom: 4
+        })
+      });
+
+      // Change Bing Layer Visibility
+      var bing_layer_select = document.getElementById('layer-select');
+      function onChange() {
+        var style = bing_layer_select.value;
+        for (var i = 0, ii = bingLayers.length; i < ii; ++i) {
+          bingLayers[i].setVisible(layer_styles[i] === style);
+        }
+      }
+      bing_layer_select.addEventListener('change', onChange);
+      onChange();
+
+      // String truncation function
+      /**
+       * @param {number} n The max number of characters to keep.
+       * @return {string} Truncated string.
+       */
+      String.prototype.trunc = String.prototype.trunc ||
+          function(n) {
+            return this.length > n ? this.substr(0, n - 1) + '...' : this.substr(0);
+          };
+
+
+      // http://stackoverflow.com/questions/14484787/wrap-text-in-javascript
+      function stringDivider(str, width, spaceReplacer) {
+        if (str.length > width) {
+          var p = width;
+          while (p > 0 && (str[p] != ' ' && str[p] != '-')) {
+            p--;
+          }
+          if (p > 0) {
+            var left;
+            if (str.substring(p, p + 1) == '-') {
+              left = str.substring(0, p + 1);
+            } else {
+              left = str.substring(0, p);
+            }
+            var right = str.substring(p + 1);
+            return left + spaceReplacer + stringDivider(right, width, spaceReplacer);
+          }
+        }
+        return str;
+      }
+
+      // select interaction working on "click"
+      let selectClick = new ol.interaction.Select({
+        condition: ol.events.condition.click,
+        style: pointSelectedStyleFunction,
+      });
+
+        // select interaction working on "pointermove"
+        let selectPointerMove = new ol.interaction.Select({
+          condition: ol.events.condition.pointerMove,
+          style: pointSelectedStyleFunction,
+        });
+
+        let selectAltClick = new ol.interaction.Select({
+          condition: function(mapBrowserEvent) {
+            return click(mapBrowserEvent) && ol.events.condition.altKeyOnly(mapBrowserEvent);
+          }
+        });
+
+        let selectElement = document.getElementById('type');
+
+
+      map.addInteraction(selectPointerMove)
+    </script>
+
+  <!-- datatable js -->
+  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.foundation.min.js"></script>
+	<script type="text/javascript" class="init">
+    $(document).ready(function() {
+      $('#sites').DataTable(
+        {
+          {#"columns":[#}
+          {#  null,#}
+          {#  {"type": "num"},#}
+          {#  null,#}
+          {#  null#}
+          {#],#}
+           "lengthMenu": [25, 50, 75, 100 ],
+        }
+      );
+    } );
+	</script>=
+{% endblock %}
+
