@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Term, ProjectTerm, TermCategory
+from .models import Term, Project, ProjectTerm, TermCategory
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,12 +15,12 @@ class ProjectTermInline(admin.TabularInline):
 
 class TermAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'term_ordering', 'definition', 'native_project',
-                    'category', 'iri_link', 'is_class',
+                    'category','class_category', 'iri_link', 'is_class',
                     'status')
     list_display_links = ['name']
-    list_filter = ['projects', 'category', 'is_class', 'status']
-    list_editable = ['term_ordering', 'category']
-    list_select_related = ['data_type', 'category', 'status']
+    list_filter = ['projects', 'class_category', 'is_class', 'status']
+    list_editable = ['term_ordering', 'category', 'class_category']
+    list_select_related = ['data_type', 'category', 'class_category', 'status']
     read_only_fields = ['get_projects', ]
     ordering = ['term_ordering',]
     search_fields = ['name', 'projectterm__mapping' ]
@@ -70,3 +70,4 @@ class TermMappingAdmin(admin.ModelAdmin):
 admin.site.register(Term, TermAdmin)
 admin.site.register(TermCategory, TermCategoryAdmin)
 admin.site.register(ProjectTerm, TermMappingAdmin)
+admin.site.register(Project)

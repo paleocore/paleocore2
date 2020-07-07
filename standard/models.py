@@ -252,6 +252,8 @@ class Term(models.Model):
     # automatically updated FK fields
     status = models.ForeignKey(TermStatus, null=True, blank=True, on_delete=models.SET_NULL)
     category = models.ForeignKey('TermCategory', blank=True, null=True, on_delete=models.SET_NULL)
+    class_category = models.ForeignKey('Term', blank=True, null=True, on_delete=models.SET_NULL,
+                                       related_name='class_terms')
 
     # Internal fields
     term_ordering = models.IntegerField(null=True, blank=True)
