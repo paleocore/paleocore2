@@ -5,7 +5,12 @@ from django.apps import apps
 from .ontologies import *
 from django.db.models import Manager
 
+# Wagtail Imports
+from wagtail.core.models import Page, Orderable
+from wagtail.core.fields import RichTextField, StreamField
 
+name_help_text = "A short (one to two word) name for the project, e.g. Hadar"
+full_name_help_text = "The full name for the project, e.g. Hadar Research Project"
 abstract_help_text = "A  description of the project, its importance, etc."
 attribution_help_text = "A description of the people / institutions responsible for collecting the data."
 occurrence_table_name_help_text = "The name of the main occurrence table in the models.py file of the associated app"
@@ -15,8 +20,8 @@ display_filter_fields_help_text = "A list of fields to filter on in the public v
 
 
 class Project(models.Model):
-    name = models.CharField(max_length=20, null=True, blank=True)
-    appname = models.CharField(max_length=200, null=True)
+    name = models.CharField(max_length=20, null=True, blank=True, help_text=name_help_text)
+    app_name = models.CharField(max_length=200, null=True)
     full_name = models.CharField(max_length=300, unique=True, db_index=True)
 
     namespace_abbreviation = models.TextField(max_length=255, null=True, blank=True)
@@ -62,18 +67,18 @@ class Project(models.Model):
         if self.is_standard:
             return 0
         else:
-            model = apps.get_model(self.appname, self.occurrence_table_name)
+            model = apps.get_model(self.app_name, self.occurrence_table_name)
             return model.objects.count()
 
     def get_terms(self):
         """
-        Get a list of all the terms associated with the project.
+        Return a queryset of term objects associated with the project.
         To get a list of the term names as used by the project use,
-        [term.get_mapping(self.appname) for term in project_terms]
+        [term.get_mapping(self.app_name) for term in project_terms]
         :return: returns a queryset of term objects
         """
         return Term.objects.filter(projects=self)  # get a queryset of all terms for a project
-        # [term.get_mapping(self.appname) for term in project_terms]
+        # [term.get_mapping(self.app_name) for term in project_terms]
 
     def get_properties(self):
         """
@@ -82,7 +87,7 @@ class Project(models.Model):
         """
         # get a queryset of all terms for a project that are not classes, i.e. get all properties
         return Term.objects.filter(projects=self).exclude(is_class=True)
-        # [term.get_mapping(self.appname) for term in project_terms]
+        # [term.get_mapping(self.app_name) for term in project_terms]
 
     def get_verbatim_categories(self):
         """
@@ -92,14 +97,13 @@ class Project(models.Model):
         # get a queryset of all terms for a project that are classes
         return Term.objects.filter(projects=self).filter(is_class=True).order_by('term_ordering')
 
-
     def get_term_names(self):
         """
         Get a list of the term names as used by the project
         :return: returns a list of term names
         """
         term_qs = self.get_terms()
-        return [term.get_mapping(self.appname) for term in term_qs]
+        return [term.get_mapping(self.app_name) for term in term_qs]
 
     def map_terms(self, proj):
         """
@@ -239,10 +243,10 @@ class Term(models.Model):
     # Automatically updated fields
     name = models.CharField(max_length=255)
     definition = models.TextField(null=True, blank=True)
-    example = models.TextField(null=True, blank=True)
+    examples = models.TextField(null=True, blank=True)
     comments = models.TextField(null=True, blank=True)
-    version_iri = models.URLField(null=True, blank=True)
-    iri = models.URLField(null=True, blank=True)
+    version_iri = models.URLField(null=True, blank=True)  # IRI that includes the version number
+    iri = models.URLField(null=True, blank=True)  # reference IRI
     issued = models.DateField(null=True, blank=True)
     rdf_type = models.URLField(null=True, blank=True)
     abcd = models.TextField(null=True, blank=True)
@@ -253,7 +257,8 @@ class Term(models.Model):
     status = models.ForeignKey(TermStatus, null=True, blank=True, on_delete=models.SET_NULL)
     category = models.ForeignKey('TermCategory', blank=True, null=True, on_delete=models.SET_NULL)
     class_category = models.ForeignKey('Term', blank=True, null=True, on_delete=models.SET_NULL,
-                                       related_name='class_terms')
+                                       limit_choices_to={'is_class': True},
+                                       related_name='categories')
 
     # Internal fields
     term_ordering = models.IntegerField(null=True, blank=True)
@@ -292,18 +297,37 @@ class Term(models.Model):
             return None
     native_project.admin_order_field = 'projects__full_name'
 
-    def get_mapping(self, appname):
+    def get_mapping(self, app_name):
         """
         Get the version of the term name associated with the project from the projectterm table mapping
-        :param appname:
+        :param app_name:
         :return: Returns a string with the project version of the term
         """
         # Find the matching record in the ProjectTerm table, should be unique for term-project pair
-        project_term = ProjectTerm.objects.get(term=self, project=Project.objects.get(name=appname))
+        project_term = ProjectTerm.objects.get(term=self, project=Project.objects.get(name=app_name))
         if not project_term.mapping:  # If the mapping is empty then use the term name
             project_term.mapping=project_term.term.name
         return project_term.mapping
 
+    def get_definition(self):
+        """
+        Return a dictionary of term data for html rendering
+        :return: dict
+        """
+        term_data = {
+            "label": self.name,
+            "iri": self.iri,
+            "version_iri": self.version_iri,
+            "uri": self.uri,
+            "class": self.category,
+            "definition": self.definition,
+            "comments": self.comments,
+            "examples": self.examples,
+            "rdf_type": self.rdf_type,
+            "namespace": self.iri,
+            "is_class": self.is_class
+        }
+        return term_data
 
     class Meta:
         ordering = ["name"]
@@ -402,7 +426,37 @@ class RelateProjectTerms:
     firstProject = Project
     secondProject = Project
 
-#class TermRelationshipView():
-#    type = ""
-#    termProject = ProjectView
-#    relatedTermProject = ProjectView
+
+# Wagtail Models
+class TermsIndexPage(Page):
+    intro = RichTextField(blank=True)
+
+    def get_context(self, request):
+        pc = Project.objects.get(app_name='pc')
+        terms = Term.objects.filter(project=pc).order_by('term_ordering')
+        classes = terms.filter(is_class=True).order_by('term_ordering')
+
+        # Intitialize template data
+        template_data = []
+        # Initialize first class group
+        class_group = classes[0].get_definition()
+        class_group["terms"] = []
+        # Skip first term and proceed with processing
+        for term in terms[1:]:
+            term_data = term.get_definition()
+            if term_data["is_class"]:
+                template_data.append(class_group)  # close out previous class group and append to template data
+                class_group = term_data  # Initialize a new class group
+                class_group["terms"] = []
+            else:
+                class_group['terms'].append(term_data)
+
+        # An alternate solution
+        class_groups = []
+
+        # Update template context
+        context = super(TermsIndexPage, self).get_context(request)
+        context['terms'] = terms
+        context['classes'] = classes
+        context['class_groups'] = template_data
+        return context
