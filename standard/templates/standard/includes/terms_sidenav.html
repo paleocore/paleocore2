@@ -1,0 +1,13 @@
+<!-- Side Navigation -->
+<div id="nav" class="vertical menu" data-magellan data-offset="80">
+  <nav>
+    {% for class in classes %}
+    {% if forloop.first %}
+    <li class="is-active"><a href="#{{ class.name}}" class="active">{{ class.name }}</a></li>
+    {% else %}
+    <li><a href="#{{ class.name}}">{{ class.name }}</a></li>
+    {% endif %}
+    {% endfor %}
+  </nav>
+</div>
+

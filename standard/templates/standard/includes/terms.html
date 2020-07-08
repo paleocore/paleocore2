@@ -1,0 +1,69 @@
+{% for class_group in class_groups %}
+<div class="sections" data-magellan-target="{{class_group.label}}">
+  <div class="target" id="{{class_group.label}}">
+    <h3>{{ class_group.label }}</h3>
+
+    <!-- button links for each term in the class -->
+    {% for term in class_group.terms %}
+    <a class="small hollow button primary" href="#{{ term.namespace }}:{{ term.label }}">{{ term.label }}</a>
+    {% endfor %}
+
+    <!-- Class Definition Table -->
+    <table class="table-primary">
+      <tbody>
+      <tr>
+        <th colspan="2">{{ class_group.label }}<span class="label float-right">Class</span></th>
+      </tr>
+      <tr>
+        <td width="150">Identifier</td>
+        <td><a href="{{ class_group.iri }}">{{ class_group.iri }}</a></td>
+      </tr>
+      <tr>
+        <td>Definition</td>
+        <td>{{ class_group.definition }}</td>
+      </tr>
+      <tr>
+        <td>Comments</td>
+        <td>{{ class_group.comments }}</td>
+      </tr>
+      <tr>
+        <td>Examples</td>
+        <td>{{ class_group.examples }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- Term Definition Tables -->
+    {% for term in class_group.terms %}
+    <!-- inivisible anchor has css to offset position below sticky top nav -->
+    <a class="anchor" id="{{ term.namespace }}:{{ term.label }}"></a>
+    <table class="table-secondary">
+      <tbody>
+      <tr>
+        <th colspan="2">{{ term.label }}
+          <span class="label float-right">Property</span></th>
+      </tr>
+      <tr>
+        <td width="150">Identifier</td>
+        <td><a href="{{ term.iri }}">{{ term.iri }}</a></td>
+      </tr>
+      <tr>
+        <td>Definition</td>
+        <td>{{ term.definition }}</td>
+      </tr>
+      <tr>
+        <td>Comments</td>
+        <td>{{ term.comments }}</td>
+      </tr>
+      <tr>
+        <td>Examples</td>
+        <td>{{ term.examples }}</td>
+      </tr>
+      </tbody>
+    </table>
+    {% endfor %} <!-- endfor for terms in class group -->
+  </div>
+</div>
+{% endfor %}  <!-- endfor for class groups -->
+
+
