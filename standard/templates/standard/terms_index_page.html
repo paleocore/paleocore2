@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags navigation_tags humanize static  %}
+
+{% block breadcrumbs %}{% breadcrumbs %}{% endblock %}
+
+{% block content %}
+
+{% include "pages/includes/feed_image_title.html" %}
+
+<div id="content" class="grid-container">
+  <div class="grid-x grid-padding-x align-center">
+    <div id="standard_page" class="medium-9 cells">
+      {% include "standard/includes/terms.html" %}
+    </div>
+    <div class="medium-3 cells" data-sticky-container>
+      <div class="stick" data-sticky data-margin-top="15">
+        {% include "standard/includes/terms_sidenav.html" %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+<!-- js to highlight side nav menu items on click and scroll -->
+{% block extra_js %}
+<script>
+  $("#nav nav a").on("click", function (event) {
+  $(this).parent().find("li").removeClass("is-active");
+  $(this).addClass("is-active");
+});
+
+$(window).on("scroll", function () {
+  $(".target").each(function () {
+    if ($(window).scrollTop() >= $(this).offset().top -140) {
+      var id = $(this).attr("id");
+      $("#nav nav li").removeClass("is-active");
+      $('#nav nav a[href="#' + id + '"]').parent().addClass("is-active");
+    }
+  });
+});
+$(document).foundation();
+</script>
+{% endblock %}
+
+
