@@ -404,6 +404,32 @@ hr {border-color: $light-gray;}
   }
 }
 
+.anchor {
+  display: block;
+  position: relative;
+  top: -100px;
+  visibility: hidden;
+}
+.table-primary {
+  th {
+    background: $secondary;
+    text-align: left;
+  }
+  td {
+    text-align: left;
+  }
+}
+
+.table-secondary {
+  th {
+    background: lightgrey;
+    text-align: left;
+  }
+  td {
+    text-align: left;
+  }
+}
+
 select {
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
