@@ -68,9 +68,13 @@ class DwcManager:
 
     def terms_iter(self):
         """
+        Yield an iterator that returns term dictionaries
+
         Iterator that provides the active (i.e. recommended) terms from the term versions source file.
         The term is returned as a dictionary object. An index value is added to the dictionary to
         help with sorting the terms in their original order.
+
+        :return dict
         """
         with DwcReader(self.terms_source) as terms_source:
             term_index = 10
