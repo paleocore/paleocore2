@@ -1,13 +1,23 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags navigation_tags humanize static  %}
-
-{% block breadcrumbs %}{% breadcrumbs %}{% endblock %}
+{% load wagtailcore_tags %}
+{% load navigation_tags %}
+{% load humanize %}
+{% load static %}
 
 {% block content %}
 
 {% include "pages/includes/feed_image_title.html" %}
 
 <div id="content" class="grid-container">
+  {% if request.GET.tag|length %}
+        <h4>Showing projects tagged as {{ request.GET.tag|safe }} <a href=" {% pageurl self %} ">Show all</a></h4>
+        {% endif %}
+  <div class="grid-x grid-padding-x align-center">
+            <div class="cell">
+                    <h3>{{page.title}}</h3>
+            </div>
+        </div>
+
   <div class="grid-x grid-padding-x align-center">
     <div id="standard_page" class="medium-9 cells">
       {% include "standard/includes/terms.html" %}
