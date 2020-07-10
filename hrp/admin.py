@@ -1,12 +1,14 @@
-from .models import *  # import database models from models.py
-import unicodecsv
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.contrib.gis import admin
-from django.contrib.gis.admin import OSMGeoAdmin
-from projects.admin import TaxonomyAdmin, TaxonRankAdmin
-from import_export import resources
 
+
+from import_export import resources
+import unicodecsv
+
+from .models import *  # import database models from models.py
+import projects.admin
+from projects.admin import TaxonomyAdmin, TaxonRankAdmin
 ###############
 # Media Admin #
 ###############
@@ -24,19 +26,19 @@ class FilesInline(admin.TabularInline):
     readonly_fields = ("id",)
 
 
-class DGGeoAdmin(OSMGeoAdmin):
-    """
-    Modified Geographic Admin Class using Digital Globe basemaps
-    GeoModelAdmin -> OSMGeoAdmin -> DGGeoAdmin
-    """
-    # turban - removed for now till this can be comprehensively added back in.
-    map_template = 'hrp/digital_globe.html'
+# class DGGeoAdmin(OSMGeoAdmin):
+#     """
+#     Modified Geographic Admin Class using Digital Globe basemaps
+#     GeoModelAdmin -> OSMGeoAdmin -> DGGeoAdmin
+#     """
+#     # turban - removed for now till this can be comprehensively added back in.
+#     map_template = 'hrp/digital_globe.html'
 
 
 ###################
 # Hydrology Admin #
 ###################
-class HydrologyAdmin(DGGeoAdmin):
+class HydrologyAdmin(admin.GeoModelAdmin):
     list_display = ("id", "size")
     search_fields = ("id",)
     list_filter = ("size",)
@@ -73,7 +75,7 @@ locality_fieldsets = (
 )
 
 
-class LocalityAdmin(DGGeoAdmin):
+class LocalityAdmin(projects.admin.PaleoCoreLocalityAdminGoogle):
     list_display = ('id', 'collection_code', 'locality_number', 'sublocality')
     list_filter = ('collection_code',)
     readonly_fields = ('point_x', 'point_y', 'longitude', 'latitude', 'easting', 'northing')
