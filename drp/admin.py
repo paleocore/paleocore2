@@ -1,8 +1,11 @@
-from .models import *
 from django.contrib import admin
-import projects.admin
+
 from import_export import resources
 from import_export.fields import Field
+
+from .models import *
+import projects.admin
+
 
 drp_search_fields = ('id',
                      'catalog_number',
