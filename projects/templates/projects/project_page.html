@@ -1,4 +1,4 @@
-{% extends "projects/projects_base.html" %}
+{% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags %}
 {% load leaflet_tags %}
 
@@ -7,16 +7,16 @@
     {% leaflet_css %}
 {% endblock %}
 
-{% block article_content %}
-<article>
+{% block content %}
+<div id="content" class="grid-container">
     <!--{% include "utils/includes/social_share.html" %}-->
     {% include "projects/includes/project_header.html" %}
 
     <!-- Start Logo Map Row -->
-    <div class="row">
+    <div class="grid-x grid-margin-x">
 
       <!-- Project Image -->
-      <div class="medium-5 columns">
+      <div class="cell large-4 show-for-large cell">
           {% if self.feed_image %}
               {% image self.feed_image fill-300x300 %}
           {% endif %}
@@ -25,40 +25,10 @@
       <!-- End Image -->
 
       <!-- Project Area Map -->
-      <div class="medium-7 columns">
+      <div class="cell large-8 cell">
           {% leaflet_map "main" callback="main_map_init" %}
+          {% include "projects/includes/project_map.html" %}
 
-          <script type="text/javascript">
-
-              function filterFeatures(feature, layer){
-                  var currentProjectID = {{ self.id }}
-                  if(feature.id === currentProjectID) return true
-              }
-
-              function onEachFeature(feature, layer) {
-                  layer.bindPopup(feature.properties.title);
-              }
-
-              function main_map_init (map, options) {
-
-              var dataurl = '{% url "projects:projects_geojson" %}';
-              // Download GeoJSON via Ajax
-              $.getJSON(dataurl, function (data) {
-                  // Add GeoJSON layer
-                  L.geoJson(data, {
-                  onEachFeature: onEachFeature,
-                  filter: filterFeatures
-                  }).addTo(map);
-              });
-
-              map.setView([{{ self.location.coords.1 }}, {{ self.location.coords.0 }}], 6);
-              // map.scrollWheelZoom.disable();
-              map.eachLayer(function(marker) {
-                  marker.openPopup()
-              });
-
-              }
-          </script>
       </div>
       <!-- End Map -->
 
@@ -66,13 +36,13 @@
     <!-- End Logo Map Row -->
 
     <!-- HR -->
-    <div class="row"><hr/></div>
+    <div class="grid-x"><hr/></div>
 
     <!-- Start Content Row -->
-    <div class="row">
+    <div class="grid-x">
 
       <!-- Start Column -->
-      <div class="column">
+      <div class="cell">
 
         <!-- Tab List -->
         <ul class="tabs" data-tabs id="example-tabs">
@@ -103,5 +73,5 @@
     <!-- End Content Row -->
 
 
-</article>
+</div>
 {% endblock %}
