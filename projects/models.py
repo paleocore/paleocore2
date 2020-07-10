@@ -1,5 +1,6 @@
-# IMPORTS
+# Python imports
 import os
+import math
 # Django imports
 from django.db.models import Manager as GeoManager
 from django.contrib.gis.db import models
@@ -11,10 +12,6 @@ from django.utils import timezone
 from django.contrib.gis.geos import Point
 from django_countries.fields import CountryField
 from django.utils.html import format_html
-
-# Python imports
-import math
-
 # Wagtail imports
 from wagtail.core import blocks
 from wagtail.core.models import Page, Orderable
