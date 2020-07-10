@@ -1,4 +1,4 @@
-from django.db import models
+from django.contrib.gis.db import models
 import projects.models
 from django.db.models import Manager as GeoManager
 
