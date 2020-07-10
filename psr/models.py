@@ -10,8 +10,8 @@ class Person(projects.models.Person):
     first_name = models.CharField("First Name", null=True, blank=True, max_length=256)
 
     class Meta:
-        verbose_name = "HRP Person"
-        verbose_name_plural = "HRP People"
+        verbose_name = f"{app_label.upper()} Person"
+        verbose_name_plural = f"{app_label.upper()} People"
         ordering = ["last_name", "first_name"]
 
     def __str__(self):
@@ -33,14 +33,14 @@ class Taxon(projects.models.Taxon):
     rank = models.ForeignKey(TaxonRank, null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
-        verbose_name = "{app_label.upper()} Taxon"
-        verbose_name_plural = "{app_label.upper()} Taxa"
+        verbose_name = f"{app_label.upper()} Taxon"
+        verbose_name_plural = f"{app_label.upper()} Taxa"
 
 
 class IdentificationQualifier(projects.models.IdentificationQualifier):
     class Meta:
-        verbose_name = "{app_label.upper()} ID Qualifier"
-        verbose_name_plural = "{app_label.upper()} ID Qualifiers"
+        verbose_name = f"{app_label.upper()} ID Qualifier"
+        verbose_name_plural = f"{app_label.upper()} ID Qualifiers"
 
 
 # Locality Class
@@ -64,8 +64,8 @@ class Locality(projects.models.PaleoCoreLocalityBaseClass):
         return nice_name.replace("None", "").replace("--", "")
 
     class Meta:
-        verbose_name = "{app_label.upper()} Locality"
-        verbose_name_plural = "{app_label.upper()} Localities"
+        verbose_name = f"{app_label.upper()} Locality"
+        verbose_name_plural = f"{app_label.upper()} Localities"
         ordering = ("locality_number", "sublocality")
 
 
@@ -125,8 +125,8 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
     image = models.FileField(max_length=255, blank=True, upload_to="uploads/images/hrp", null=True)
 
     class Meta:
-        verbose_name = "HRP Occurrence"
-        verbose_name_plural = "HRP Occurrences"
+        verbose_name = f"{app_label.upper()} Occurrence"
+        verbose_name_plural = f"{app_label.upper()} Occurrences"
         ordering = ["collection_code", "locality", "item_number", "item_part"]
 
     def catalog_number(self):
@@ -198,13 +198,10 @@ class Biology(Occurrence):
     # Taxon
     taxon = models.ForeignKey(Taxon,
                               default=0, on_delete=models.SET_DEFAULT,  # prevent deletion when taxa deleted
-                              related_name='hrp_taxon_bio_occurrences')
+                              related_name='bio_occurrences')
     identification_qualifier = models.ForeignKey(IdentificationQualifier, null=True, blank=True,
                                                  on_delete=models.SET_NULL,
-                                                 related_name='hrp_id_qualifier_bio_occurrences')
-    qualifier_taxon = models.ForeignKey(Taxon, null=True, blank=True,
-                                        on_delete=models.SET_NULL,
-                                        related_name='hrp_qualifier_taxon_bio_occurrences')
+                                                 related_name='bio_occurrences')
     verbatim_taxon = models.CharField(null=True, blank=True, max_length=1024)
     verbatim_identification_qualifier = models.CharField(null=True, blank=True, max_length=255)
     taxonomy_remarks = models.TextField(max_length=500, null=True, blank=True)
@@ -239,3 +236,16 @@ class Geology(Occurrence):
     class Meta:
         verbose_name = f"{app_label.upper()} Geology"
         verbose_name_plural = f"{app_label.upper()} Geology"
+
+
+# Media Classes
+class Image(models.Model):
+    occurrence = models.ForeignKey("Occurrence", related_name='psr_occurrences', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="uploads/images", null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
+
+class File(models.Model):
+    occurrence = models.ForeignKey("Occurrence", on_delete=models.CASCADE)
+    file = models.FileField(upload_to="uploads/files", null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
