@@ -410,6 +410,17 @@ hr {border-color: $light-gray;}
   top: -100px;
   visibility: hidden;
 }
+
+div.divider {
+  border-left-style: solid;
+  border-left-color: white;
+  border-width: 2px;
+}
+
+div.grey {
+  background:$light-gray;
+}
+
 .table-primary {
   th {
     background: $secondary;
