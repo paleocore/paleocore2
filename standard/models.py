@@ -309,7 +309,7 @@ class Term(models.Model):
             project_term.mapping=project_term.term.name
         return project_term.mapping
 
-    def get_definition(self):
+    def get_definition(self, app_name='pc'):
         """
         Return a dictionary of term data for html rendering
         :return: dict
@@ -325,7 +325,8 @@ class Term(models.Model):
             "examples": self.examples,
             "rdf_type": self.rdf_type,
             "namespace": self.iri,
-            "is_class": self.is_class
+            "is_class": self.is_class,
+            "mapping": self.get_mapping(app_name)
         }
         return term_data
 
