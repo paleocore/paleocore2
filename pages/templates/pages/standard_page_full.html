@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags navigation_tags wagtailimages_tags paleocore_utils %}
 
+{% comment - breadcrumbs added as default in base.html, uncomment to remove %}
 {% block breadcrumbs %}{% endblock %}
+{% endcomment %}
 
 {% block content %}
 
 	{% include "pages/includes/feed_image_title.html" %}
 
 	<div id="content" class="grid-container">
-		<div class="grid-x grid-padding-x align-center">
-			<div id="standard_page" class="medium-10 cell">
-		    	{% breadcrumbs %}
-		    
+    <div class="grid-x grid-margin-x">
+		{# <div class="grid-x grid-padding-x align-center"> #}
+			<div id="standard_page" class="cell">
 		    	{% if self.feed_image %}{% else %}
-		        	<center>
-		            	<h3>{{ self.title }}</h3>
-		        	</center>
+
+          <h1>{{ self.title }}</h1>
 		    	{% endif %}
-		    
+
 		    	{% include "pages/includes/orbit_carousel.html" with image_items=self.image_items.all only %}
-		
+
 		    	{% include "pages/includes/body.html" with body=self.body only %}
 		  	</div>
 		</div>
