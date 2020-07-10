@@ -1,8 +1,14 @@
-from django.contrib import admin
-from .models import *
-import projects
-from projects.admin import TaxonomyAdmin, TaxonRankAdmin
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
+from django.contrib.gis import admin
+
+
 from import_export import resources
+import unicodecsv
+
+from .models import *  # import database models from models.py
+import projects.admin
+from projects.admin import TaxonomyAdmin, TaxonRankAdmin
 
 
 class ImagesInline(admin.TabularInline):
