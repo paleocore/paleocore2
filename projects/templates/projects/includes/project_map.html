@@ -1,0 +1,30 @@
+<script type="text/javascript">
+  function filterFeatures(feature, layer){
+      var currentProjectID = {{ self.id }}
+      if(feature.id === currentProjectID) return true
+  }
+
+  function onEachFeature(feature, layer) {
+      layer.bindPopup(feature.properties.title);
+  }
+
+  function main_map_init (map, options) {
+
+  var dataurl = '{% url "projects:projects_geojson" %}';
+  // Download GeoJSON via Ajax
+  $.getJSON(dataurl, function (data) {
+      // Add GeoJSON layer
+      L.geoJson(data, {
+      onEachFeature: onEachFeature,
+      filter: filterFeatures
+      }).addTo(map);
+  });
+
+  map.setView([{{ self.location.coords.1 }}, {{ self.location.coords.0 }}], 6);
+  // map.scrollWheelZoom.disable();
+  map.eachLayer(function(marker) {
+      marker.openPopup()
+  });
+
+  }
+</script>
