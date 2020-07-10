@@ -3,24 +3,22 @@
 <!--
 <div class="small-12 columns">-->
 {% for project in projects %}
-
-<div class="row">
-
-
-  <div class="column">
-    <div class="card">
-      <div class="card-section" style="padding: 12px;">
-
-        <div class="row">
-
-          <div class="small-2 column">
+<!-- container for project cards -->
+<div class="grid-x grid-padding-x align-center">
+  <div class="cell">
+    <!-- card -->
+    <div class="card" style="padding: 12px;">
+      <!-- each card is divided into three cells 2-8-2 -->
+      <div class="card-section">
+        <div class="grid-x grid-padding-x align-center">
+          <div class="medium-2 hide-for-small-only cells">
             {% if project.feed_image %}
-            <a href="{% pageurl project %}">
+            <a href="{% pageurl project %}" class="float-left">
               {% image project.feed_image fill-100x100 %}
             </a>
             {% endif %}
           </div>
-          <div class="small-8 column">
+          <div class="small-10 medium-8 cells ">
             <a href="{% pageurl project %}">
               <h5><strong>{{ project.title }} ({{project.app_label}})</strong></h5>
               {% if project.intro %}
@@ -67,18 +65,17 @@
             </a>
           </div>
 
-          <div class="small-2 column">
+          <div class="small-2 cells">
             {% url 'admin:app_list' project.slug as admin_url %}
             {% if admin_url %}
-            <a class="button small" href="{%  pageurl project %}">Details &raquo;</a>
-            <a class="button warning small" href="{{ admin_url }}">Admin &raquo;</a>
+            <a class="button small float-right" href="{%  pageurl project %}">Details &raquo;</a>
+            <a class="button warning small float-right" href="{{ admin_url }}">Admin &raquo;</a>
             {% endif %}
           </div>
         </div>
       </div>
     </div>
   </div>
-
 </div>
 
 {% empty %}
