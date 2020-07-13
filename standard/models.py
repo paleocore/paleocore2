@@ -6,8 +6,15 @@ from .ontologies import *
 from django.db.models import Manager
 
 # Wagtail Imports
+from wagtail.core import blocks
 from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import RichTextField, StreamField
+from wagtail.images.blocks import ImageChooserBlock
+from wagtail.admin.edit_handlers import (
+    FieldPanel, MultiFieldPanel, InlinePanel, PageChooserPanel,
+    StreamFieldPanel)
+from wagtail.search import index
+
 
 name_help_text = "A short (one to two word) name for the project, e.g. Hadar"
 full_name_help_text = "The full name for the project, e.g. Hadar Research Project"
@@ -252,6 +259,7 @@ class Term(models.Model):
     abcd = models.TextField(null=True, blank=True)
     flags = models.CharField(null=True, blank=True, max_length=100)
     is_class = models.BooleanField(default=False)
+    is_subclass = models.BooleanField(default=False)
 
     # automatically updated FK fields
     status = models.ForeignKey(TermStatus, null=True, blank=True, on_delete=models.SET_NULL)
@@ -430,7 +438,11 @@ class RelateProjectTerms:
 
 # Wagtail Models
 class TermsIndexPage(Page):
+    subtitle = models.CharField(max_length=255, blank=True)
     intro = RichTextField(blank=True)
+    search_fields = Page.search_fields + [
+        index.SearchField('intro'),
+    ]
 
     def get_context(self, request):
         pc = Project.objects.get(app_name='pc')
@@ -461,3 +473,10 @@ class TermsIndexPage(Page):
         context['classes'] = classes
         context['class_groups'] = template_data
         return context
+
+
+TermsIndexPage.content_panels = [
+    FieldPanel('title', classname="full title"),
+    FieldPanel('subtitle', classname="full title"),
+    FieldPanel('intro', classname="full"),
+]
