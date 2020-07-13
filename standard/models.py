@@ -448,6 +448,7 @@ class TermsIndexPage(Page):
         pc = Project.objects.get(app_name='pc')
         terms = Term.objects.filter(project=pc).order_by('term_ordering')
         classes = terms.filter(is_class=True).order_by('term_ordering')
+        subclasses = classes.filter(is_subclass=True)
 
         # Intitialize template data
         template_data = []
@@ -471,6 +472,7 @@ class TermsIndexPage(Page):
         context = super(TermsIndexPage, self).get_context(request)
         context['terms'] = terms
         context['classes'] = classes
+        context['subclasses'] = subclasses
         context['class_groups'] = template_data
         return context
 
