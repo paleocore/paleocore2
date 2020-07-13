@@ -13,13 +13,14 @@
         <h4>Showing projects tagged as {{ request.GET.tag|safe }} <a href=" {% pageurl self %} ">Show all</a></h4>
         {% endif %}
   <div class="grid-x grid-padding-x align-center">
-            <div class="cell">
-                    <h3>{{page.title}}</h3>
-            </div>
-        </div>
+    <div class="small-9 cell">
+    </div>
+  </div>
 
   <div class="grid-x grid-padding-x align-center">
-    <div id="standard_page" class="medium-9 cells">
+    <div id="standard_page" class="medium-9 cell">
+      <h1>{{page.title}}</h1>
+      {% include "pages/includes/intro.html" with intro=self.intro only %}
       {% include "standard/includes/terms.html" %}
     </div>
     <div class="medium-3 cells" data-sticky-container>

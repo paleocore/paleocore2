@@ -1,18 +1,18 @@
-{% for class_group in class_groups %}
+{% for class_group in terms %}
 <div class="sections" data-magellan-target="{{class_group.label}}">
   <div class="target" id="{{class_group.label}}">
-    <h3>{{ class_group.label }}</h3>
+    <h3>{{ class_group.mapping }}</h3>
 
     <!-- button links for each term in the class -->
     {% for term in class_group.terms %}
-    <a class="small hollow button primary" href="#{{ term.namespace }}:{{ term.label }}">{{ term.label }}</a>
+    <a class="small hollow button primary" href="#{{ term.namespace }}:{{ term.label }}">{{ term.mapping }}</a>
     {% endfor %}
 
     <!-- Class Definition Table -->
     <table class="table-primary">
       <tbody>
       <tr>
-        <th colspan="2">{{ class_group.label }}<span class="label float-right">Class</span></th>
+        <th colspan="2">{{ class_group.mapping }}<span class="label float-right">Class</span></th>
       </tr>
       <tr>
         <td width="150">Identifier</td>
@@ -40,7 +40,8 @@
     <table class="table-secondary">
       <tbody>
       <tr>
-        <th colspan="2">{{ term.label }}
+        <!-- term.mapping gives the term in the form used by the project -->
+        <th colspan="2">{{ term.mapping }}
           <span class="label float-right">Property</span></th>
       </tr>
       <tr>

@@ -334,6 +334,7 @@ class Term(models.Model):
             "rdf_type": self.rdf_type,
             "namespace": self.iri,
             "is_class": self.is_class,
+            "is_subclass": self.is_subclass,
             "mapping": self.get_mapping(app_name)
         }
         return term_data
@@ -440,40 +441,49 @@ class RelateProjectTerms:
 class TermsIndexPage(Page):
     subtitle = models.CharField(max_length=255, blank=True)
     intro = RichTextField(blank=True)
+    project = models.ForeignKey(Project, null=True, blank=True, on_delete=models.SET_NULL)
     search_fields = Page.search_fields + [
         index.SearchField('intro'),
     ]
 
     def get_context(self, request):
-        pc = Project.objects.get(app_name='pc')
-        terms = Term.objects.filter(project=pc).order_by('term_ordering')
-        classes = terms.filter(is_class=True).order_by('term_ordering')
-        subclasses = classes.filter(is_subclass=True)
+        project = self.project
+        usewithiri = Term.objects.get(name='UseWithIRI')
+        terms = Term.objects.filter(project=project).exclude(class_category=usewithiri).order_by('term_ordering')
 
         # Intitialize template data
-        template_data = []
-        # Initialize first class group
-        class_group = classes[0].get_definition()
-        class_group["terms"] = []
-        # Skip first term and proceed with processing
-        for term in terms[1:]:
-            term_data = term.get_definition()
-            if term_data["is_class"]:
-                template_data.append(class_group)  # close out previous class group and append to template data
-                class_group = term_data  # Initialize a new class group
-                class_group["terms"] = []
-            else:
-                class_group['terms'].append(term_data)
+        terms_data = []  #
+        class_data = []
+        subclass_data = []
 
-        # An alternate solution
-        class_groups = []
+        # Initialize first class group, assuming first term is class (or class like)
+        group = terms[0].get_definition(app_name=project.app_name)
+        group["terms"] = []
+        if group['is_class']:
+            class_data.append(group)
+        elif group['is_subclass']:
+            subclass_data.append(group)
+        # Skip first term and proceed with processing
+        for term in terms[1:]:  # iterate through all the terms sequentially
+            term_definition = term.get_definition(app_name=project.app_name)  # for each term create a definition dict
+            if term_definition["is_class"]:  # if the term is a class...
+                terms_data.append(group)  # close out previous group and append to template data
+                group = term_definition  # Initialize a new class group
+                group["terms"] = []
+                if term_definition["is_subclass"]:
+                    subclass_data.append(group)
+                else:
+                    class_data.append(group)  # add to the list of classes
+                # add data to class list or subclass list exclusively.
+
+            else:
+                group['terms'].append(term_definition)  # if not a class, append the term data to the class dict
 
         # Update template context
         context = super(TermsIndexPage, self).get_context(request)
-        context['terms'] = terms
-        context['classes'] = classes
-        context['subclasses'] = subclasses
-        context['class_groups'] = template_data
+        context['terms'] = terms_data
+        context['classes'] = class_data
+        context['subclasses'] = subclass_data
         return context
 
 
@@ -481,4 +491,5 @@ TermsIndexPage.content_panels = [
     FieldPanel('title', classname="full title"),
     FieldPanel('subtitle', classname="full title"),
     FieldPanel('intro', classname="full"),
+    FieldPanel('project')
 ]
