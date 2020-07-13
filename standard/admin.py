@@ -15,10 +15,10 @@ class ProjectTermInline(admin.TabularInline):
 
 class TermAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'term_ordering', 'definition', 'native_project',
-                    'category','class_category', 'iri_link', 'is_class',
+                    'category','class_category', 'iri_link', 'is_class', 'is_subclass',
                     'status')
     list_display_links = ['name']
-    list_filter = ['projects', 'class_category', 'is_class', 'status']
+    list_filter = ['projects', 'class_category', 'is_class', 'is_subclass', 'status']
     list_editable = ['term_ordering', 'category', 'class_category']
     list_select_related = ['data_type', 'category', 'class_category', 'status']
     read_only_fields = ['get_projects', ]
