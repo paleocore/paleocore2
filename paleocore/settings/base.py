@@ -95,7 +95,6 @@ INSTALLED_APPS = (
     'cc',  # Combe Capelle
     'fc',  # Fontechevad
     'wtap',  # West Turkana Archaeology Project
-    'psr', #PALAEOSILKROAD Project
 
     'wagtail.contrib.routable_page',
     'wagtail.contrib.sitemaps',
