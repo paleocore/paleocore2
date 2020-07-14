@@ -16,3 +16,5 @@ pages/static/node_modules
 pages/static/package-lock.json
 /media/
 /static/
+
+notes.txt
