@@ -1,4 +1,3 @@
-
 from django.contrib.gis.db import models
 import projects.models
 from django.db.models import Manager as GeoManager
@@ -250,4 +249,3 @@ class File(models.Model):
     occurrence = models.ForeignKey("Occurrence", on_delete=models.CASCADE)
     file = models.FileField(upload_to="uploads/files", null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-
