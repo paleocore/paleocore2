@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.contrib.gis import admin
 
 from import_export import resources
@@ -73,3 +74,8 @@ admin.site.register(Locality)
 admin.site.register(Occurrence, OccurrenceAdmin)
 admin.site.register(Taxon, projects.admin.TaxonomyAdmin)
 
+=======
+from django.contrib import admin
+
+# Register your models here.
+>>>>>>> 262335f6ec021f5c59e27ac6842fe49ec96307fa

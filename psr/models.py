@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 from django.contrib.gis.db import models
 import projects.models
@@ -251,3 +252,8 @@ class File(models.Model):
     file = models.FileField(upload_to="uploads/files", null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
+=======
+from django.db import models
+
+# Create your models here.
+>>>>>>> 262335f6ec021f5c59e27ac6842fe49ec96307fa
