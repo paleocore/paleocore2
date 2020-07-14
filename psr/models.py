@@ -217,9 +217,12 @@ class Biology(Occurrence):
 
 
 class Archaeology(Occurrence):
-    find_type = models.CharField(null=True, blank=True, max_length=255)
+    archaeology_type = models.CharField(null=True, blank=True, max_length=255)
     length_mm = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
     width_mm = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
+    period = models.CharField(null=True, blank=True, max_length=255)
+    archaeology_preparation = models.CharField(null=True, blank=True, max_length=255)
+    archaeology_remarks = models.TextField(null=True, blank=True, max_length=64000)
 
     class Meta:
         verbose_name = f"{app_label.upper()} Archaeology"
@@ -236,6 +239,16 @@ class Geology(Occurrence):
     class Meta:
         verbose_name = f"{app_label.upper()} Geology"
         verbose_name_plural = f"{app_label.upper()} Geology"
+
+class Aggregate(Occurrence):
+    screen_size = models.CharField(null=True, blank=True, max_length=255)
+    counts = models.IntegerField(null=True, blank=True)
+    weights = models.IntegerField(null=True, blank=True)
+    bull_find_remarks = models.TextField(null=True, blank=True, max_length=64000)
+
+    class Meta:
+        verbose_name = f"{app_label.upper()} Bulk Find"
+        verbose_name_plural = f"{app_label.upper()} Bulk Finds"
 
 
 # Media Classes
