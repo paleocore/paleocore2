@@ -72,4 +72,3 @@ admin.site.register(Geology, GeologyAdmin)
 admin.site.register(Locality)
 admin.site.register(Occurrence, OccurrenceAdmin)
 admin.site.register(Taxon, projects.admin.TaxonomyAdmin)
-
