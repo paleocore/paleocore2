@@ -102,6 +102,9 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
     # TODO rename collection remarks to find remarks
     collection_remarks = models.TextField("Collection Remarks", null=True, blank=True, max_length=255)
 
+    problem = models.BooleanField(default=False)
+    problem_remarks = models.TextField(null=True, blank=True, max_length=64000)
+
     # Geological Context
     stratigraphic_formation = models.CharField("Formation", max_length=255, blank=True, null=True)
     stratigraphic_member = models.CharField("Member", max_length=255, blank=True, null=True)
@@ -235,6 +238,15 @@ class Geology(Occurrence):
     strike = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
     color = models.CharField(null=True, blank=True, max_length=255)
     texture = models.CharField(null=True, blank=True, max_length=255)
+    height = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
+    width = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
+    depth = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
+    slope_character = models.TextField(null=True, blank=True, max_length=64000)
+    sediment_presence = models.BooleanField(default=False)
+    sediment_character = models.TextField(null=True, blank=True, max_length=64000)
+    cave_mouth_character = models.TextField(null=True, blank=True, max_length=64000)
+    rockfall_character = models.TextField(null=True, blank=True, max_length=64000)
+    speleothem_character = models.TextField(null=True, blank=True, max_length=64000)
 
     class Meta:
         verbose_name = f"{app_label.upper()} Geology"
