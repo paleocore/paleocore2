@@ -110,6 +110,7 @@ class PersonRole(models.Model):
 
 
 class PersonPage(Page, ContactFields):
+    orcid = models.URLField(null=True, blank=True)
     role = models.ForeignKey(
         PersonRole, blank=True,
         null=True, related_name='+', on_delete=models.SET_NULL
@@ -140,6 +141,7 @@ PersonPage.content_panels = [
     SnippetChooserPanel('role'),
     FieldPanel('intro', classname="full"),
     FieldPanel('biography', classname="full"),
+    FieldPanel('orcid'),
     ImageChooserPanel('image'),
     FieldPanel('tags'),
     MultiFieldPanel(ContactFields.panels, "Contact"),
