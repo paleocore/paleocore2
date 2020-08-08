@@ -22,33 +22,35 @@ class Person(projects.models.Person):
         return name
 
 
-#class TaxonRank(projects.models.TaxonRank):
-#    class Meta:
-#        verbose_name = f"{app_label.upper()} Taxon Rank"
-#        verbose_name_plural = f"{app_label.upper()} Taxon Ranks"
+class TaxonRank(projects.models.TaxonRank):
+   class Meta:
+       verbose_name = f"{app_label.upper()} Taxon Rank"
+       verbose_name_plural = f"{app_label.upper()} Taxon Ranks"
 
-#class Taxon(projects.models.Taxon):
-    #parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
-    #rank = models.ForeignKey(TaxonRank, null=True, blank=True, on_delete=models.SET_NULL)
+class Taxon(projects.models.Taxon):
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+    rank = models.ForeignKey(TaxonRank, null=True, blank=True, on_delete=models.SET_NULL)
 
-    #class Meta:
-        #verbose_name = f"{app_label.upper()} Taxon"
-        #verbose_name_plural = f"{app_label.upper()} Taxa"
+    class Meta:
+        verbose_name = f"{app_label.upper()} Taxon"
+        verbose_name_plural = f"{app_label.upper()} Taxa"
 
-#class IdentificationQualifier(projects.models.IdentificationQualifier):
-    #class Meta:
-        #verbose_name = f"{app_label.upper()} ID Qualifier"
-        #verbose_name_plural = f"{app_label.upper()} ID Qualifiers"
+class IdentificationQualifier(projects.models.IdentificationQualifier):
+    class Meta:
+        verbose_name = f"{app_label.upper()} ID Qualifier"
+        verbose_name_plural = f"{app_label.upper()} ID Qualifiers"
 
 # Locality Class and Subclasses
 class Locality(projects.models.PaleoCoreLocalityBaseClass):
     id = models.CharField(primary_key=True, max_length=255)
+    name = models.TextField(null=True, blank=True, max_length=255)
+    find_type = models.CharField(null=True, blank=True, max_length=255)
     collection_code = models.CharField(null=True, blank=True, max_length=10)
     locality_number = models.IntegerField(null=True, blank=True)
     sublocality = models.CharField(null=True, blank=True, max_length=50)
     description = models.TextField(null=True, blank=True, max_length=255)
     stratigraphic_section = models.CharField(null=True, blank=True, max_length=50)
-    upper_limit_in_section = models.IntegerField(null=True, blank=True)
+    upper_limit_in_section = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
     lower_limit_in_section = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
     error_notes = models.CharField(max_length=255, null=True, blank=True)
     notes = models.CharField(max_length=254, null=True, blank=True)
@@ -66,7 +68,6 @@ class Locality(projects.models.PaleoCoreLocalityBaseClass):
         ordering = ("locality_number", "sublocality")
 
 class Cave(Locality):
-    find_type = models.CharField(null=True, blank=True, max_length=255)
     dip = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
     strike = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
     color = models.CharField(null=True, blank=True, max_length=255)
@@ -104,7 +105,7 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
         """
     basis_of_record = models.CharField("Basis of Record", max_length=50, blank=True, null=False,
                                        help_text='e.g. Observed item or Collected item')
-    field_number = models.CharField("Field Number", max_length=50, null=True, blank=True)
+    item_number = models.IntegerField("Item #", null=True, blank=True)
     item_type = models.CharField("Item Type", max_length=255, blank=True, null=False) #code
     # TODO merge with taxon
     #item_scientific_name = models.CharField("Sci Name", max_length=255, null=True, blank=True)
@@ -119,18 +120,20 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
                                  on_delete=models.SET_NULL)
     collecting_method = models.CharField("Collecting Method", max_length=50,
                                          null=True, blank=True)
+
     locality = models.ForeignKey("Locality", null=True, blank=True, on_delete=models.SET_NULL)
-    item_number = models.IntegerField("Item #", null=True, blank=True)
-    unit = models.ForeignKey("Unit", null=True, blank=True, on_delete=models.SET_NULL)
-    id = models.IntegerField("Item ID", null=True, blank=True)
-    suffix = models.IntegerField("Item ID", null=True, blank=True)
+    unit = models.ForeignKey("ExcavationUnit", null=True, blank=True, on_delete=models.SET_NULL)
+    field_id = models.CharField("Field ID", max_length=50, null=True, blank=True)
+    suffix = models.IntegerField("Suffix", null=True, blank=True)
+    cat_number = models.CharField("Cat Number", max_length=255, blank=True, null=True)  # unit + newplot_id
     prism =  models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
+    point = models.GeometryField(dim=3, null=True, blank=True, srid=-1)
+    objects = GeoManager()
+
     item_part = models.CharField("Item Part", max_length=10, null=True, blank=True)
-    cat_number = models.CharField("Cat Number", max_length=255, blank=True, null=True) #recno
     disposition = models.CharField("Disposition", max_length=255, blank=True, null=True)
     preparation_status = models.CharField("Prep Status", max_length=50, blank=True, null=True)
     collection_remarks = models.TextField("Collection Remarks", null=True, blank=True, max_length=255)
-
     problem = models.BooleanField(default=False)
     problem_remarks = models.TextField(null=True, blank=True, max_length=64000)
 
@@ -224,6 +227,7 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
 
 class Biology(Occurrence):
     # Biology
+    biology_type = models.CharField(null=True, blank=True, max_length=255)
     sex = models.CharField("Sex", null=True, blank=True, max_length=50)
     life_stage = models.CharField("Life Stage", null=True, blank=True, max_length=50)
     size_class = models.CharField("Size Class", null=True, blank=True, max_length=50)
@@ -285,6 +289,8 @@ class Lithic(Archaeology):
 
 class Bone(Archaeology):
     cutmarks = models.BooleanField(default=False)
+    burning = models.BooleanField(default=False)
+    part = models.CharField(null=True, blank=True, max_length=255)
 
     class Meta:
         verbose_name = f"{app_label.upper()} Archaeological Fauna"
@@ -293,26 +299,18 @@ class Bone(Archaeology):
 
 class Ceramic(Archaeology):
     type = models.CharField(null=True, blank=True, max_length=255)
+    decorated = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = f"{app_label.upper()} Ceramic"
         verbose_name_plural = f"{app_label.upper()} Ceramic"
 
 class Geology(Occurrence): #need to think about a possible subclass for Locality that is cave
-    find_type = models.CharField(null=True, blank=True, max_length=255)
+    geology_type = models.CharField(null=True, blank=True, max_length=255)
     dip = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
     strike = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
     color = models.CharField(null=True, blank=True, max_length=255)
     texture = models.CharField(null=True, blank=True, max_length=255)
-    #height = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
-    #width = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
-    #depth = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
-    #slope_character = models.TextField(null=True, blank=True, max_length=64000)
-    #sediment_presence = models.BooleanField(default=False)
-    #sediment_character = models.TextField(null=True, blank=True, max_length=64000)
-    #cave_mouth_character = models.TextField(null=True, blank=True, max_length=64000)
-    #rockfall_character = models.TextField(null=True, blank=True, max_length=64000)
-    #speleothem_character = models.TextField(null=True, blank=True, max_length=64000)
 
     class Meta:
         verbose_name = f"{app_label.upper()} Geology"
