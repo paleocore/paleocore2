@@ -76,6 +76,7 @@ INSTALLED_APPS = (
     'pages',  # app that contains the site page models
     'people',  # people app
     'products',  # products app
+    'publications',  # publications app
     'search',
     'utils',
 
@@ -91,7 +92,7 @@ INSTALLED_APPS = (
     'gdb',  # Greate Divide Basin
     'omo_mursi',  # Omo Mursi
     'origins',  # Origins
-    'psr', # Paleo Silk Road
+    # 'psr', # Paleo Silk Road
     'cc',  # Combe Capelle
     'fc',  # Fontechevad
     'wtap',  # West Turkana Archaeology Project
