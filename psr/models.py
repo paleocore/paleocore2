@@ -16,16 +16,17 @@ class Person(projects.models.Person):
 
     def __str__(self):
         if self.last_name and self.first_name:
-            name = self.last_name+', '+self.first_name
+            name = self.last_name + ', ' + self.first_name
         else:
             name = self.last_name
         return name
 
 
 class TaxonRank(projects.models.TaxonRank):
-   class Meta:
-       verbose_name = f"{app_label.upper()} Taxon Rank"
-       verbose_name_plural = f"{app_label.upper()} Taxon Ranks"
+    class Meta:
+        verbose_name = f"{app_label.upper()} Taxon Rank"
+        verbose_name_plural = f"{app_label.upper()} Taxon Ranks"
+
 
 class Taxon(projects.models.Taxon):
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
@@ -35,10 +36,12 @@ class Taxon(projects.models.Taxon):
         verbose_name = f"{app_label.upper()} Taxon"
         verbose_name_plural = f"{app_label.upper()} Taxa"
 
+
 class IdentificationQualifier(projects.models.IdentificationQualifier):
     class Meta:
         verbose_name = f"{app_label.upper()} ID Qualifier"
         verbose_name_plural = f"{app_label.upper()} ID Qualifiers"
+
 
 # Locality Class and Subclasses
 class Locality(projects.models.PaleoCoreLocalityBaseClass):
@@ -67,6 +70,7 @@ class Locality(projects.models.PaleoCoreLocalityBaseClass):
         verbose_name_plural = f"{app_label.upper()} Localities"
         ordering = ("locality_number", "sublocality")
 
+
 class Cave(Locality):
     dip = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
     strike = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
@@ -86,6 +90,7 @@ class Cave(Locality):
         verbose_name = f"{app_label.upper()} Cave/Rockshelter"
         verbose_name_plural = f"{app_label.upper()} Caves/Rockshelters"
 
+
 class ExcavationUnit(models.Model):
     unit = models.CharField(max_length=6, blank=False)
     extent = models.GeometryField(dim=3, blank=True, null=True)
@@ -95,6 +100,7 @@ class ExcavationUnit(models.Model):
     class Meta:
         verbose_name = f"{app_label.upper()} Excavation Unit"
         verbose_name_plural = f"{app_label.upper()} Excavation Units"
+
 
 # Occurrence Class and Subclasses
 class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
@@ -106,16 +112,16 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
     basis_of_record = models.CharField("Basis of Record", max_length=50, blank=True, null=False,
                                        help_text='e.g. Observed item or Collected item')
     item_number = models.IntegerField("Item #", null=True, blank=True)
-    item_type = models.CharField("Item Type", max_length=255, blank=True, null=False) #code
+    item_type = models.CharField("Item Type", max_length=255, blank=True, null=False)  # code
     # TODO merge with taxon
-    #item_scientific_name = models.CharField("Sci Name", max_length=255, null=True, blank=True)
+    # item_scientific_name = models.CharField("Sci Name", max_length=255, null=True, blank=True)
     # TODO merge with element
     item_description = models.CharField("Description", max_length=255, blank=True, null=True)
     item_count = models.IntegerField("Item Count", blank=True, null=True, default=1)
     collector = models.CharField("Collector", max_length=50, blank=True, null=True)
     recorded_by = models.ForeignKey("Person", null=True, blank=True, related_name="occurrence_recorded_by",
                                     on_delete=models.SET_NULL)
-    finder = models.CharField("Finder", null=True, blank=True, max_length=50) #excavator
+    finder = models.CharField("Finder", null=True, blank=True, max_length=50)  # excavator
     found_by = models.ForeignKey("Person", null=True, blank=True, related_name="occurrence_found_by",
                                  on_delete=models.SET_NULL)
     collecting_method = models.CharField("Collecting Method", max_length=50,
@@ -126,7 +132,7 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
     field_id = models.CharField("Field ID", max_length=50, null=True, blank=True)
     suffix = models.IntegerField("Suffix", null=True, blank=True)
     cat_number = models.CharField("Cat Number", max_length=255, blank=True, null=True)  # unit + newplot_id
-    prism =  models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
+    prism = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
     point = models.GeometryField(dim=3, null=True, blank=True, srid=-1)
     objects = GeoManager()
 
@@ -252,7 +258,7 @@ class Biology(Occurrence):
         verbose_name_plural = f"{app_label.upper()} Biology"
 
 
-#Archaeology Class and Subclasses
+# Archaeology Class and Subclasses
 class Archaeology(Occurrence):
     archaeology_type = models.CharField(null=True, blank=True, max_length=255)
     period = models.CharField(null=True, blank=True, max_length=255)
@@ -267,6 +273,7 @@ class Archaeology(Occurrence):
     class Meta:
         verbose_name = f"{app_label.upper()} Archaeology"
         verbose_name_plural = f"{app_label.upper()} Archaeology"
+
 
 class Lithic(Archaeology):
     dataclass = models.CharField(null=True, blank=True, max_length=255)
@@ -287,6 +294,7 @@ class Lithic(Archaeology):
         verbose_name = f"{app_label.upper()} Lithic"
         verbose_name_plural = f"{app_label.upper()} Lithics"
 
+
 class Bone(Archaeology):
     cutmarks = models.BooleanField(default=False)
     burning = models.BooleanField(default=False)
@@ -305,7 +313,8 @@ class Ceramic(Archaeology):
         verbose_name = f"{app_label.upper()} Ceramic"
         verbose_name_plural = f"{app_label.upper()} Ceramic"
 
-class Geology(Occurrence): #need to think about a possible subclass for Locality that is cave
+
+class Geology(Occurrence):  # need to think about a possible subclass for Locality that is cave
     geology_type = models.CharField(null=True, blank=True, max_length=255)
     dip = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
     strike = models.DecimalField(max_digits=38, decimal_places=8, null=True, blank=True)
@@ -315,6 +324,7 @@ class Geology(Occurrence): #need to think about a possible subclass for Locality
     class Meta:
         verbose_name = f"{app_label.upper()} Geology"
         verbose_name_plural = f"{app_label.upper()} Geology"
+
 
 class Aggregate(Occurrence):
     screen_size = models.CharField(null=True, blank=True, max_length=255)
