@@ -26,6 +26,7 @@ class TermAdmin(admin.ModelAdmin):
     search_fields = ['name', 'projectterm__mapping' ]
     inlines = (ProjectTermInline, )
     list_per_page = 200
+    save_as = True
 
     def iri_link(self, obj):
         link = obj.iri
