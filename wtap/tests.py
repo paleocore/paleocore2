@@ -1,3 +1,9 @@
 from django.test import TestCase
+from .models import *
 
-# Create your tests here.
+
+class ArtifactGenerator:
+    def create_random_artifact(self):
+        """
+        return an Artifact instance
+        """
