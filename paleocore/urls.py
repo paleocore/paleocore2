@@ -35,6 +35,9 @@ urlpatterns = [
     # Paleo Core Projects
     path('projects/', include(('projects.urls', 'projects'), namespace='projects')),
 
+    # Third party django-publications apps
+    url(r'^publications/', include('publications.urls')),
+
     # JSON feed
     url(r'^blog/feed/basic.json$', BasicJsonFeed(), name='basic_json_feed'),
     url(r'^blog/feed/extended.json$', ExtendedJsonFeed(), name='extended_json_feed'),

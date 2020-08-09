@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block head %}
+	{{ block.super }}
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="?rss" />
+	<link rel="unapi-server" type="application/xml" title="unAPI" href="{% url 'publications:unapi' %}"/>
+{% endblock %}
+
+{% block content %}
+	<div id="content" class="grid-container">
+    <div class="grid-x grid-margin-x">
+			<div id="standard_page" class="cell">
+        {% if self.title %} <h1>{{ self.title }}</h1>
+        {% else %}<h1>References by Author or Types</h1>
+        {% endif %}
+        {% if publications %}
+          <div class="special_links">
+            <a href="?plain" class="button">Plain text</a>
+            <a href="?ris" class="button">RIS</a>
+            <a href="?bibtex" class="button">BibTex</a>
+          </div>
+          {% for type in types %}
+            <h2>{{ type.description }}{% if forloop.first %} by {{ author }}{% endif %}</h2>
+            <hr/>
+            <div{% if not forloop.last %} style="margin-bottom: 30px;"{% endif %}>
+              {% for publication in type.publications %}
+                <div{% if not forloop.last %} style="margin-bottom: 20px;"{% endif %}>
+                  {% include "publications/publication.html" %}
+                </div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        {% else %}
+          No publications found for {{ author }}.
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

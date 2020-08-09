@@ -76,6 +76,7 @@ INSTALLED_APPS = (
     'pages',  # app that contains the site page models
     'people',  # people app
     'products',  # products app
+    'publications',  # publications app
     'search',
     'utils',
 
