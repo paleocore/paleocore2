@@ -27,3 +27,7 @@ django-map-widgets==0.2.3
 unicodecsv==0.14.1
 wagtailgeowidget==5.0.2
 lxml==4.5.0
+pygeoif==0.7
+dateutils==0.6.7
+lxml==4.5.0
+
