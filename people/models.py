@@ -19,6 +19,33 @@ from taggit.models import Tag, TaggedItemBase
 from utils.models import ContactFields, RelatedLink
 
 
+# Person model
+class Person(models.Model):
+    order = models.IntegerField(null=True, blank=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    last = models.CharField(max_length=255, null=True, blank=True)
+    first = models.CharField(max_length=255, null=True, blank=True)
+    orcid = models.CharField(max_length=255, null=True, blank=True)
+    academic_rank = models.CharField(max_length=255, null=True, blank=True)
+    area = models.TextField(null=True, blank=True)
+    affiliation = models.CharField(max_length=255, null=True, blank=True)
+    graduating_institution = models.CharField(max_length=255, null=True, blank=True)
+    advisor = models.CharField(max_length=255, null=True, blank=True)
+    major_works = models.TextField(null=True, blank=True)
+    url = models.URLField(null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    remarks = RichTextField(null=True, blank=True)
+    other = RichTextField(null=True, blank=True)
+    biblio = models.BooleanField(null=True, blank=True, default=False)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Person"
+        verbose_name_plural = "People"
+
+
 # Person page
 class PersonIndexPageRelatedLink(Orderable, RelatedLink):
     page = ParentalKey('people.PersonIndexPage', related_name='related_links')
