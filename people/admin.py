@@ -13,7 +13,7 @@ class PersonResource(resources.ModelResource):
 class PersonAdmin(ImportExportActionModelAdmin):
     list_display = ['order', 'biblio', 'name', 'last', 'first', 'orcid', 'academic_rank', 'area', 'affiliation', 'email']
     list_display_links = ['name']
-    list_editable = ['biblio']
+    # list_editable = ['biblio']
     resource_class = PersonResource
 
 
