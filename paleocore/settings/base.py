@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'djgeojson',  # Django geojson
     'leaflet',  # leaflet mapping
 
+
     'blog',  # generic blog app
     'contact',  # contact information app
     'documents_gallery',  # documents app
@@ -96,6 +97,8 @@ INSTALLED_APPS = (
     'cc',  # Combe Capelle
     'fc',  # Fontechevad
     'wtap',  # West Turkana Archaeology Project
+    #'arvrc',  # African Rift Valley Research Consortium
+    'eval',  # Evaluation
 
     'wagtail.contrib.routable_page',
     'wagtail.contrib.sitemaps',
