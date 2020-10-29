@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from hrp.models import Occurrence, Biology, Locality
 from hrp.models import Taxon, IdentificationQualifier
 from datetime import datetime
-from django.contrib.auth.models import User
+from users.models import User
 from django.contrib.gis.geos import Point, Polygon
 
 
