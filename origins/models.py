@@ -94,6 +94,9 @@ class Reference(models.Model):
 
 
 class Site(projects.models.PaleoCoreSiteBaseClass):
+    """
+    Inherits country,
+    """
     name = models.CharField(max_length=40, null=True, blank=True)
     alternate_names = models.TextField(null=True, blank=True)
     min_ma = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
@@ -103,6 +106,7 @@ class Site(projects.models.PaleoCoreSiteBaseClass):
     # Location
     country = CountryField('Country', blank=True, null=True)
     geom = models.PointField(srid=4326, null=True, blank=True)
+    location_remarks = models.TextField(null=True, blank=True)
 
     # Filter and Search
     origins = models.BooleanField(default=False)  # in scope for origins project

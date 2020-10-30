@@ -75,7 +75,7 @@ class SiteAdmin(PaleoCoreLocalityAdminGoogle):
             'classes': ['collapse'],
         }),
         ('Location', {
-            'fields': [('country', ), ('latitude', 'longitude'), ('geom',)]
+            'fields': [('country', ), ('location_remarks', ), ('latitude', 'longitude'), ('geom',)]
         }),
     ]
 
