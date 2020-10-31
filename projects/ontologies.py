@@ -533,6 +533,36 @@ COUNTRY_CHOICES = (
     ('Zimbabwe', ('Zimbabwe')),
 )
 
+# Chronostratigraphic Choices
+phanerozoic = "Phanerozoic"
+proterozoic = "Proterozoic"
+archaen = "Archaen"
+EON_CHOICES = (
+    (phanerozoic, "Phanerozoic"),
+    (proterozoic, "Proterozoic"),
+    (archaen, "Archaen")
+)
+
+cenozoic = "Cenozoic"
+mesozoic = "Mesozoic"
+paleozoic = "Paleozoic"
+ERA_CHOICES = (
+    (cenozoic, "Cenozoic"),
+    (mesozoic, "Mesozoic"),
+    (paleozoic, "Paleozoic")
+)
+
+quaternary = "Quaternary"
+neogene = "Neogene"
+paleogene = "Paleogene"
+cretaceous = "Cretaceous"
+PERIOD_CHOICES = (
+    (quaternary, "Quaternary"),
+    (neogene, "Neogene"),
+    (paleogene, "Paleogene"),
+    (cretaceous, "Cretaceous"),
+)
+
 # Epochs of the Cenozooic
 holocene = 'Holocene'
 pleistocene = 'Pleistocene'
@@ -551,6 +581,35 @@ EPOCH_CHOICES = (
     (eocene, "Eocene"),
     (paleocene, "Paleocene")
 )
+
+upper = "Upper"
+middle = "Middle"
+calabrian = "Calabrian"
+gelasian = "Gelasian"
+piacenzian = "Piacenzian"
+zanclean = "Zanclean"
+messinian = "Messinian"
+tortonian = "Tortonian"
+Serravallian = "Seravallian"
+langhian = "Langhian"
+burdigalian = "Burdigalian"
+aquitanian = "Aquitanian"
+
+AGE_CHOICES = (
+    (upper, "Upper"),
+    (middle, "Middle"),
+    (calabrian, "Calabrian"),
+    (gelasian, "Gelasian"),
+    (piacenzian, "Piacenzian"),
+    (zanclean, "Zanclean"),
+    (messinian, "Messinian"),
+    (tortonian, "Tortonian"),
+    (Serravallian, "Seravallian"),
+    (langhian, "Langhian"),
+    (burdigalian, "Burdigalian"),
+    (aquitanian, "Aquitanian",)
+)
+
 
 # Raw Material Choices - Derived from tDAR
 basketry = 'basketry'
@@ -600,6 +659,7 @@ SETTING_CHOICES = (
     (cave, "cave"),
     (rockshelter, "rockshelter")
 )
+
 
 
 

@@ -25,7 +25,9 @@ from taggit.models import TaggedItemBase
 from utils.models import RelatedLink, CarouselItem
 # Paleo Core imports
 import projects.models
+import publications.models
 from .ontologies import CONTINENT_CHOICES
+import publications.models
 
 
 # Taxonomy models inherited from paleo core base project
@@ -37,11 +39,12 @@ class TaxonRank(projects.models.TaxonRank):
 class Taxon(projects.models.Taxon):
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
     rank = models.ForeignKey('TaxonRank', null=True, blank=True, on_delete=models.SET_NULL)
+    references = models.ManyToManyField(publications.models.Publication, blank=True)
 
     class Meta:
         verbose_name = "Taxon"
         verbose_name_plural = "Taxa"
-        ordering = ['rank__ordinal', 'name']
+        ordering = ['rank__ordinal', 'label']
 
 
 class IdentificationQualifier(projects.models.IdentificationQualifier):
@@ -97,14 +100,14 @@ class Site(projects.models.PaleoCoreSiteBaseClass):
     """
     Inherits country,
     """
-    name = models.CharField(max_length=40, null=True, blank=True)
+    name = models.CharField("Site Name", max_length=40, null=True, blank=True)
     alternate_names = models.TextField(null=True, blank=True)
     min_ma = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
     max_ma = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
     formation = models.CharField(max_length=50, null=True, blank=True)
 
     # Location
-    country = CountryField('Country', blank=True, null=True)
+    # country = CountryField('Country', blank=True, null=True)
     geom = models.PointField(srid=4326, null=True, blank=True)
     location_remarks = models.TextField(null=True, blank=True)
 
@@ -130,6 +133,9 @@ class Site(projects.models.PaleoCoreSiteBaseClass):
 
     # Calculated Fields
     fossil_count = models.IntegerField(null=True, blank=True)
+
+    # References
+    references = models.ManyToManyField(publications.models.Publication, blank=True)
 
     @staticmethod
     def update_fossil_count():
@@ -191,6 +197,8 @@ class Context(projects.models.PaleoCoreContextBaseClass):
 
     # foreign keys
     reference = models.ForeignKey(to=Reference, on_delete=models.CASCADE, null=True, blank=True)
+    # References
+    references = models.ManyToManyField(publications.models.Publication, blank=True)
     site = models.ForeignKey(to=Site, on_delete=models.CASCADE, null=True, blank=True)
 
     # Original Fields from Paleobiology DB
@@ -244,6 +252,9 @@ class Fossil(models.Model):
     description = models.TextField(null=True, blank=True)
     remarks = models.TextField(null=True, blank=True)
 
+    # Taxon
+    taxon = models.ForeignKey(Taxon, null=True, blank=True, on_delete=models.SET_NULL)
+
     # Project
     project_name = models.CharField(max_length=100, null=True, blank=True)
     project_abbreviation = models.CharField(max_length=10, null=True, blank=True)
@@ -285,6 +296,9 @@ class Fossil(models.Model):
     verbatim_Locality = models.CharField(max_length=40, null=True, blank=True)
     verbatim_Country = models.CharField(max_length=20, null=True, blank=True)
     verbatim_provenience = models.TextField(null=True, blank=True)
+
+    # References
+    references = models.ManyToManyField(publications.models.Publication, blank=True)
 
     def __str__(self):
         return str(self.id)+' '+str(self.catalog_number)

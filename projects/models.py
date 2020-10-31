@@ -28,6 +28,7 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 from utils.models import RelatedLink, CarouselItem
 from ckeditor.fields import RichTextField as CKRichTextField
+from projects.ontologies import PERIOD_CHOICES, EPOCH_CHOICES, AGE_CHOICES
 
 
 # MODELS
@@ -449,6 +450,25 @@ class PaleoCoreContextBaseClass(PaleoCoreBaseClass):
     geological_formation = models.CharField("Formation", max_length=50, null=True, blank=True)
     geological_member = models.CharField("Member", max_length=50, null=True, blank=True)
     geological_bed = models.CharField(max_length=50, null=True, blank=True)
+    min_period = models.CharField("Min System-Period", max_length=50, null=True, blank=True,
+                                  choices=PERIOD_CHOICES,
+                                  help_text="Minimum Chronostratigraphic System/Period")
+    max_period = models.CharField("Max System-Period", max_length=50, null=True, blank=True,
+                                  choices=PERIOD_CHOICES,
+                                  help_text="Maximum Chronostratigraphic System/Period")
+    min_epoch = models.CharField("Min Series-Epoch", max_length=50, null=True, blank=True,
+                                 choices=EPOCH_CHOICES,
+                                 help_text="Minimum Chronostratigraphic Series/Epoch")
+    max_epoch = models.CharField("Max Series-Epoch", max_length=50, null=True, blank=True,
+                                 choices=EPOCH_CHOICES,
+                                 help_text="Maximum Chronostratigraphic Series/Epoch")
+    min_stage = models.CharField("Min Stage-Age", max_length=50, null=True, blank=True,
+                                 choices=AGE_CHOICES,
+                                 help_text="Minimum Chronostratigraphic Age/Stage")
+    max_stage = models.CharField("Max Stage-Age", max_length=50, null=True, blank=True,
+                                 choices=AGE_CHOICES,
+                                 help_text="Maximum Chronostratigraphic Age/Stage")
+
     older_interval = models.CharField(max_length=50, null=True, blank=True)
     younger_interval = models.CharField(max_length=50, null=True, blank=True)
     max_age = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
