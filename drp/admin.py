@@ -110,8 +110,7 @@ class OccurrenceResource(resources.ModelResource):
 
     class Meta:
         model = Occurrence
-        fields = ('id', 'catalog_number', 'barcode')
-        # fields = Occurrence().get_all_field_names()
+        fields = Occurrence().get_all_field_names()
 
 
 class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
@@ -215,7 +214,7 @@ class BiologyResource(resources.ModelResource):
                   'llp2', 'llp3', 'llp4', 'lrp1', 'lrp2', 'lrp3', 'lrp4', 'llm1', 'llm2', 'llm3',
                   'lrm1', 'lrm2', 'lrm3',
                   )
-        export_order =  fields
+        export_order = fields
 
 
 class BiologyAdmin(OccurrenceAdmin):
