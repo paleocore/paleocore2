@@ -146,7 +146,7 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
     analytical_unit_3 = models.CharField(max_length=255, blank=True, null=True)
     in_situ = models.BooleanField(default=False)
     ranked = models.BooleanField(default=False)
-    image = models.FileField(max_length=255, blank=True, upload_to="uploads/images/mlp", null=True)
+    image = models.FileField(max_length=255, blank=True, upload_to="uploads/images/drp", null=True)
     weathering = models.SmallIntegerField(blank=True, null=True)
     surface_modification = models.CharField(max_length=255, blank=True, null=True)
 
