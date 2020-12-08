@@ -95,9 +95,9 @@ INSTALLED_APPS = (
     'origins',  # Origins
     'psr', # Paleo Silk Road
     'cc',  # Combe Capelle
-    'fc',  # Fontechevad
+    'fc',  # Fontechevadpc
     'wtap',  # West Turkana Archaeology Project
-    #'arvrc',  # African Rift Valley Research Consortium
+    'arvrc',  # African Rift Valley Research Consortium
     'eval',  # Evaluation
 
     'wagtail.contrib.routable_page',
