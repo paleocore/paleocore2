@@ -1,25 +1,9 @@
 from django.contrib import admin
-
 from import_export import resources
 from import_export.fields import Field
 
 from .models import *
 import projects.admin
-
-
-drp_search_fields = ('id',
-                     'catalog_number',
-                     'basis_of_record',
-                     'item_type',
-                     'barcode',
-                     'collection_code',
-                     'item_scientific_name',
-                     'item_description',
-                     'stratigraphic_marker_found',
-                     'stratigraphic_marker_likely',
-                     'analytical_unit',
-                     'finder',
-                     'collector',)
 
 
 ###############
@@ -38,60 +22,12 @@ class FilesInline(admin.TabularInline):
     readonly_fields = ("id",)
 
 
-#################
-# Biology Admin #
-#################
-
-occurrence_fieldsets = (
-    ('Curatorial', {
-        'fields': [('barcode', 'catalog_number', 'id'),
-                   ('date_recorded', 'year_collected', 'date_last_modified'),
-                   ("collection_code", "paleolocality_number", "item_number", "item_part")]
-    }),
-
-    ('Occurrence Details', {
-        'fields': [('basis_of_record', 'item_type', 'disposition', 'preparation_status'),
-                   ('collecting_method', 'finder', 'collector', 'individual_count'),
-                   ('item_description', 'item_scientific_name', 'image'),
-                   ('problem', 'problem_comment'),
-                   ('remarks',)],
-    }),
-    ('Provenience', {
-        'fields': [('stratigraphic_marker_upper', 'distance_from_upper'),
-                   ('stratigraphic_marker_lower', 'distance_from_lower'),
-                   ('stratigraphic_marker_found', 'distance_from_found'),
-                   ('stratigraphic_marker_likely', 'distance_from_likely'),
-                   ('analytical_unit', 'analytical_unit_2', 'analytical_unit_3'),
-                   ('in_situ', 'ranked'),
-                   ('stratigraphic_member',),
-                   ('locality',),
-                   ('point_x', 'point_y'),
-                   ('easting', 'northing',),
-                   ('geom',)]
-    }),
-)
-
-biology_fieldsets = (
-    ('Taxonomy', {'fields': (('taxon',),)
-                  }),
-)
-
-
 class BiologyInline(admin.TabularInline):
     model = Biology
     extra = 0
     readonly_fields = ("id",)
-    fieldsets = biology_fieldsets
+    fieldsets = projects.admin.default_taxonomy
 
-
-####################
-# Occurrence Admin #
-####################
-
-
-###################
-# Hydrology Admin #
-###################
 
 class HydrologyAdmin(admin.ModelAdmin):
     list_display = ("id", "size",)
@@ -100,9 +36,10 @@ class HydrologyAdmin(admin.ModelAdmin):
 
 
 class PaleoCoreLocalityAdmin(projects.admin.PaleoCoreLocalityAdminGoogle):
-    list_display = ("collection_code", "paleolocality_number", "paleo_sublocality")
+    list_display = ('name', 'collection_code', 'paleolocality_number', 'paleo_sublocality')
     list_filter = ("collection_code",)
     search_fields = ("paleolocality_number",)
+    list_per_page = 200
 
 
 class OccurrenceResource(resources.ModelResource):
@@ -117,20 +54,33 @@ class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
     """
     OccurrenceAdmin <- PaleoCoreOccurrenceAdmin <- BingGeoAdmin <- OSMGeoAdmin <- GeoModelAdmin
     """
-    # change_list_template = 'admin/projects/projects_change_list.html'
-    # actions = ['create_data_csv', 'change_xy', 'get_nearest_locality']
     resource_class = OccurrenceResource
-    default_read_only_fields = ('id', 'point_x', 'point_y', 'easting', 'northing', 'date_last_modified')
-    readonly_fields = default_read_only_fields + ('photo',)
-    default_list_display = ('barcode', 'date_recorded', 'catalog_number', 'basis_of_record', 'item_type',
-                            'collecting_method', 'collector', 'item_scientific_name', 'item_description',
-                            'year_collected',
-                            'in_situ', 'problem', 'disposition', 'easting', 'northing')
-    list_display = default_list_display + ('thumbnail',)
-    fieldsets = occurrence_fieldsets
-    default_list_filter = ['basis_of_record', 'item_type', 'collector', 'problem', 'disposition']
-    list_filter = default_list_filter + ['collection_code']
-    search_fields = drp_search_fields
+    change_list_template = 'admin/projects/projects_change_list.html'
+    readonly_fields = projects.admin.default_readonly_fields
+    list_display =['barcode', ] + projects.admin.default_list_display + ['easting', 'northing']
+    list_display_links = ['barcode', ] + projects.admin.default_list_display_links
+    list_filter = projects.admin.default_list_filter + ['collection_code']
+    search_fields = projects.admin.default_search_fields
+
+    list_select_related = ['locality', 'biology', ]
+    fieldsets = (
+        projects.admin.default_curatorial_locality,
+        projects.admin.default_details,
+        projects.admin.default_photos,
+        projects.admin.default_taphonomy,
+        ('Geological Context', {
+            'fields': [
+                       ('stratigraphic_marker_upper', 'distance_from_upper'),
+                       ('stratigraphic_marker_lower', 'distance_from_lower'),
+                       ('stratigraphic_marker_found', 'distance_from_found'),
+                       ('stratigraphic_marker_likely', 'distance_from_likely'),
+                       ('analytical_unit', 'analytical_unit_2', 'analytical_unit_3'),
+                       ('in_situ', 'ranked'),
+                       ('stratigraphic_member',)],
+            'classes': ['collapse']
+        }),
+        projects.admin.default_location
+    )
 
     # admin action to get nearest locality
     def get_nearest_locality(self, request, queryset):
@@ -167,7 +117,6 @@ class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
 
 
 class BiologyResource(resources.ModelResource):
-
     class Meta:
         model = Biology
         # fields = ('id', 'catalog_number', 'barcode', 'taxon__name', 'taxon__rank__name')
@@ -219,13 +168,14 @@ class BiologyResource(resources.ModelResource):
 
 class BiologyAdmin(OccurrenceAdmin):
     model = Biology
+    list_select_related = ['locality', 'occurrence_ptr', 'taxon' ]
     resource_class = BiologyResource
-    fieldsets = occurrence_fieldsets + biology_fieldsets
+    fieldsets = list(OccurrenceAdmin.fieldsets) + projects.admin.default_taxonomy
+    list_display = ['id', 'barcode', 'catalog_number', 'item_scientific_name', 'taxon']
 
 ##########################
 # Register Admin Classes #
 ##########################
-
 admin.site.register(Biology, BiologyAdmin)
 admin.site.register(Hydrology, HydrologyAdmin)
 admin.site.register(Locality, PaleoCoreLocalityAdmin)
