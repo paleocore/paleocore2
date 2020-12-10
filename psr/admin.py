@@ -46,16 +46,6 @@ class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
         ]
         return tool_item_urls + super(OccurrenceAdmin, self).get_urls()
 
-# class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
-#     resource_class = OccurrenceResource
-#     default_read_only_fields = ('id', 'point_x', 'point_y', 'easting', 'northing', 'date_last_modified')
-#     readonly_fields = default_read_only_fields + ('photo', 'catalog_number', 'longitude', 'latitude')
-#     default_list_filter = ['basis_of_record', 'item_type',
-#                            'field_number', 'collector', 'problem', 'disposition']
-#     list_filter = default_list_filter
-#     search_fields = ['id', 'item_scientific_name', 'item_description', 'barcode', 'cat_number']
-#     list_per_page = 500
-
 
 class ArchaeologyResource(resources.ModelResource):
     class Meta:
