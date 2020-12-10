@@ -1,4 +1,6 @@
 from django.contrib.gis import admin
+from django.urls import reverse, path
+from .views import ImportKMZ
 
 from import_export import resources
 import unicodecsv
@@ -34,6 +36,25 @@ class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
     list_filter = default_list_filter
     search_fields = ['id', 'item_scientific_name', 'item_description', 'barcode', 'cat_number']
     list_per_page = 500
+
+    def get_urls(self):
+        tool_item_urls = [
+            path(r'import_kmz/', ImportKMZ.as_view()),
+            # path(r'^summary/$',permission_required('mlp.change_occurrence',
+            #                         login_url='login/')(self.views.Summary.as_view()),
+            #     name="summary"),
+        ]
+        return tool_item_urls + super(OccurrenceAdmin, self).get_urls()
+
+# class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
+#     resource_class = OccurrenceResource
+#     default_read_only_fields = ('id', 'point_x', 'point_y', 'easting', 'northing', 'date_last_modified')
+#     readonly_fields = default_read_only_fields + ('photo', 'catalog_number', 'longitude', 'latitude')
+#     default_list_filter = ['basis_of_record', 'item_type',
+#                            'field_number', 'collector', 'problem', 'disposition']
+#     list_filter = default_list_filter
+#     search_fields = ['id', 'item_scientific_name', 'item_description', 'barcode', 'cat_number']
+#     list_per_page = 500
 
 
 class ArchaeologyResource(resources.ModelResource):
