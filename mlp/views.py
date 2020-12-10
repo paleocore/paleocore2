@@ -3,7 +3,7 @@ import os
 from fastkml import kml, Placemark, Folder, Document
 from lxml import etree
 from datetime import datetime
-from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.geos import GEOSGeometry, Point
 from pygeoif import geometry
 from zipfile import ZipFile
 
@@ -109,13 +109,13 @@ class ImportKMZ(generic.FormView):
                 item_type = attributes_dict.get("Item Type")
                 occurrence_count += 1
                 # variables imported from .ontologies
-                if item_type in (artifactual, "Artifactual", "Archeology", "Archaeological"):
+                if item_type in (ontologies.artifactual, "Artifactual", "Archeology", "Archaeological"):
                     lgrp_occ = Archaeology()
                     archaeology_count += 1
-                elif item_type in (faunal, "Fauna", "Floral", "Flora"):
+                elif item_type in (ontologies.faunal, "Fauna", "Floral", "Flora"):
                     lgrp_occ = Biology()
                     biology_count += 1
-                elif item_type in (geological, "Geology"):
+                elif item_type in (ontologies.geological, "Geology"):
                     lgrp_occ = Geology()
                     geology_count += 1
 
@@ -131,22 +131,22 @@ class ImportKMZ(generic.FormView):
                 lgrp_occ.verbatim_kml_data = attributes + geom
 
                 # Validate Basis of Record
-                if attributes_dict.get("Basis Of Record") in (fossil_specimen, "Fossil", "Collection"):
+                if attributes_dict.get("Basis Of Record") in (ontologies.fossil_specimen, "Fossil", "Collection"):
                     # TODO update basis_of_record vocab, change Fossil Specimen to Collection
-                    lgrp_occ.basis_of_record = fossil_specimen  # from .ontologies
-                elif attributes_dict.get("Basis Of Record") in (human_observation, "Observation"):
-                    lgrp_occ.basis_of_record = human_observation  # from .ontologies
+                    lgrp_occ.basis_of_record = ontologies.fossil_specimen  # from .ontologies
+                elif attributes_dict.get("Basis Of Record") in (ontologies.human_observation, "Observation"):
+                    lgrp_occ.basis_of_record = ontologies.human_observation  # from .ontologies
 
                 # Validate Item Type
                 item_type = attributes_dict.get("Item Type")
-                if item_type in (artifactual, "Artifact", "Archeology", "Archaeological"):
-                    lgrp_occ.item_type = artifactual
-                elif item_type in (faunal, "Fauna"):
-                    lgrp_occ.item_type = faunal
-                elif item_type in (floral, "Flora"):
-                    lgrp_occ.item_type = floral
-                elif item_type in (geological, "Geology"):
-                    lgrp_occ.item_type = geological
+                if item_type in (ontologies.artifactual, "Artifact", "Archeology", "Archaeological"):
+                    lgrp_occ.item_type = ontologies.artifactual
+                elif item_type in (ontologies.faunal, "Fauna"):
+                    lgrp_occ.item_type = ontologies.faunal
+                elif item_type in (ontologies.floral, "Flora"):
+                    lgrp_occ.item_type = ontologies.floral
+                elif item_type in (ontologies.geological, "Geology"):
+                    lgrp_occ.item_type = ontologies.geological
 
                 # Date Recorded
                 error_string = ''

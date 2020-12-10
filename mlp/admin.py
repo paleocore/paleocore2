@@ -1,89 +1,52 @@
 from django.contrib import admin
+from import_export import resources
 from django.contrib.auth.decorators import permission_required
-from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, path
 
 from .models import *
-from projects.admin import PaleoCoreOccurrenceAdmin, TaxonomyAdmin
+import projects.admin
 # TODO Why does the line below raise an error!
 import mlp.views  # This line raises exception!
 import unicodecsv
 
-mlp_default_list_display = ('barcode', 'date_recorded', 'catalog_number', 'basis_of_record', 'item_type',
-                            'collecting_method', 'collector', 'item_scientific_name', 'item_description',
-                            'year_collected',
-                            'in_situ', 'problem', 'easting', 'northing')
 
-mlp_default_readonly_fields = ('id', 'point_x', 'point_y', 'easting', 'northing', 'date_last_modified', 'thumbnail')
+class OccurrenceResource(resources.ModelResource):
 
-mlp_search_fields = ('id',
-                     'basis_of_record',
-                     'item_type',
-                     'barcode',
-                     'collection_code',
-                     'item_scientific_name',
-                     'item_description',
-                     'stratigraphic_marker_found',
-                     'stratigraphic_marker_likely',
-                     'analytical_unit',
-                     'finder',
-                     'collector',)
+    class Meta:
+        model = Occurrence
+        fields = Occurrence().get_all_field_names()
 
 
-class OccurrenceAdmin(PaleoCoreOccurrenceAdmin):
+class OccurrenceAdmin(projects.admin.PaleoCoreOccurrenceAdmin):
     """
     OccurrenceAdmin <- PaleoCoreOccurrenceAdmin <- BingGeoAdmin <- OSMGeoAdmin <- GeoModelAdmin
     """
-    # default_read_only_fields = ('id', 'point_x', 'point_y', 'easting', 'northing', 'date_last_modified')
-
-    # default_list_display = ('barcode', 'date_recorded', 'catalog_number', 'basis_of_record', 'item_type',
-    #                         'collecting_method', 'collector', 'item_scientific_name', 'item_description',
-    #                         'year_collected',
-    #                         'in_situ', 'problem', 'disposition', 'easting', 'northing')
+    resource_class = OccurrenceResource
     change_list_template = 'admin/projects/projects_change_list.html'
-    list_display = mlp_default_list_display+('thumbnail',)  # defaults plus thumbnail
+    readonly_fields = projects.admin.default_readonly_fields
+    list_display =['barcode', ] + projects.admin.default_list_display + ['easting', 'northing']
+    list_display_links = ['barcode', ] + projects.admin.default_list_display_links
+    list_filter = ['field_season', ] + projects.admin.default_list_filter + ['last_import', ]
+    search_fields = projects.admin.default_search_fields
+
     list_select_related = ['archaeology', 'biology', 'geology']
-    list_filter = ['basis_of_record', 'item_type', 'field_season',
-                   'date_recorded', 'collector', 'problem', 'disposition', 'last_import']
     fieldsets = [
-        ('Curatorial', {
-            'fields': [('barcode', 'catalog_number', 'id'),
-                       ('date_recorded', 'year_collected', 'field_season', 'date_last_modified'),
-                       ('collection_code', 'item_number', 'item_part')]
-        }),
-        ('Occurrence Details', {
-            'fields': [('basis_of_record', 'item_type', 'disposition', 'preparation_status'),
-                       ('collector', 'finder', 'collecting_method', 'individual_count'),
-                       ('item_description', 'item_scientific_name',),
-                       ('problem', 'problem_comment'),
-                       ('remarks',)],
-            'classes': ['collapse']
-        }),
-        ('Verbatim Data', {
-            'fields': ['verbatim_kml_data'],
-        }),
-        ('Photos', {
-            'fields': [('photo', 'image')],
-            'classes': ['collapse'],
-        }),
-        ('Taphonomic Details', {
-            'fields': [('weathering', 'surface_modification')],
-            'classes': ['collapse'],
-        }),
-        ('Provenience', {
+        projects.admin.default_curatorial_nolocality,
+        projects.admin.default_details,
+        projects.admin.default_verbatim,
+        projects.admin.default_photos,
+        projects.admin.default_taphonomy,
+        ('Geological Context', {
             'fields': [('analytical_unit',),
                        ('in_situ',),
-                       # The following fields are based on methods and must be included in the read only field list
-                       ('point_x', 'point_y'),
-                       ('easting', 'northing'),
-                       ('geom',)],
-            # 'classes': ['collapse'],
-        })
+                       ('stratigraphic_member')],
+            'classes': ['collapse'],
+        }),
+        projects.admin.default_location
     ]
-    readonly_fields = mlp_default_readonly_fields + ('photo',)  # defaults plus photo
-    search_fields = mlp_search_fields
+
     actions = ["create_data_csv", "change_xy", "change_occurrence2biology", "create_simple_data_csv"]
 
     # admin action to manually enter coordinates
@@ -211,7 +174,6 @@ class GeologyAdmin(OccurrenceAdmin):
     list_select_related = ['occurrence_ptr']  # required here b/c inherited values won't work
 
 
-
 ############################
 #  Register Admin Classes  #
 ############################
@@ -219,5 +181,4 @@ admin.site.register(Occurrence, OccurrenceAdmin)
 admin.site.register(Archaeology, ArchaeologyAdmin)
 admin.site.register(Biology, BiologyAdmin)
 admin.site.register(Geology, GeologyAdmin)
-admin.site.register(Taxon, TaxonomyAdmin)
-
+admin.site.register(Taxon, projects.admin.TaxonomyAdmin)
