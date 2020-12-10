@@ -77,9 +77,9 @@ class SiteAdmin(PaleoCoreLocalityAdminGoogle):
         ('Location', {
             'fields': [('country', ), ('location_remarks', ), ('latitude', 'longitude'), ('geom',)]
         }),
-        ('References', {
-            'fields': [('references',),]
-        }),
+        # ('References', {
+        #     'fields': [('references',),]
+        # }),
 
     ]
 
@@ -201,9 +201,11 @@ class ReferenceInline(admin.TabularInline):
     extra = 1
 
 
-# class PublicationsInline(admin.TabularInline):
-#     model = publications.models.Publication
-#     extra = 1
+class PublicationsInline(admin.TabularInline):
+    model = Fossil.references.through
+    extra = 1
+    verbose_name = "Publication"
+    verbose_name_plural = "Publications"
 
 
 class PhotosInline(admin.StackedInline):
@@ -232,7 +234,7 @@ class FossilAdmin(admin.ModelAdmin):
     list_per_page = 200
     inlines = [
         # ReferenceInline, # the number of references significantly slows page loads
-        # PublicationsInline,
+        PublicationsInline,
         FossilElementInline,
         PhotosInline,
     ]
@@ -266,11 +268,16 @@ class FossilAdmin(admin.ModelAdmin):
             'classes': ['collapse'],
         }),
         ('Location', {
-            'fields': [('site', 'locality', 'country', 'continent', 'context')]
+            'fields': [
+                ('continent', ),
+                ('country', ),
+                ('site', 'locality'),
+                ('context')
+            ]
         }),
-        ('References', {
-            'fields': [('references',)]
-        })
+        # ('References', {
+        #     'fields': [('references',)]
+        # })
     ]
 
     actions = ['toggle_origins', 'update_sites']
@@ -383,16 +390,9 @@ class FossilAdmin(admin.ModelAdmin):
         """
         if db_field.name == "site" and self.current_obj:
             kwargs["queryset"] = Site.objects.filter(country=self.current_obj.country).order_by('name')
-        # if db_field.name == "context":
-        #     if self.current_obj:
-        #         if self.current_obj.context and self.current_obj.context.site:
-        #             kwargs["queryset"] = Context.objects.filter(site=self.current_obj.context.site)
-        #         elif self.current_obj.country:
-        #             kwargs["queryset"] = Context.objects.filter(site__country=self.current_obj.country).filter(origins=True)
-        #         else:
-        #             kwargs["queryset"] = Context.objects.filter(origins=True)
-        #             # If ever I add geom for fossil specimens, then query below useful to find closest context objects
-        #             # nearby = Context.objects.filter(geom__distance_lte=(self.geom, D(m=10000)))[:5]
+        if db_field.name == "context" and self.current_obj:
+            kwargs["queryset"] = Context.objects.filter(site=self.current_obj.site).order_by('name')
+
         return super(FossilAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def update_sites(self, request, queryset):
