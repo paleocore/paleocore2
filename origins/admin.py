@@ -201,6 +201,11 @@ class ReferenceInline(admin.TabularInline):
     extra = 1
 
 
+# class PublicationsInline(admin.TabularInline):
+#     model = publications.models.Publication
+#     extra = 1
+
+
 class PhotosInline(admin.StackedInline):
     model = Photo
     extra = 0
@@ -212,9 +217,14 @@ class PhotosInline(admin.StackedInline):
 
 class FossilAdmin(admin.ModelAdmin):
     list_display = ['id', 'catalog_number', 'site_link', 'context_link', 'taxon_link',
-                    'country', 'context__best_age', 'default_image', 'element_description',]
-    list_filter = ['origins', 'holotype', 'source', 'country', ]
+                    'country', 'context__best_age',
+                    'short_description',
+                    # 'default_image',
+                    # 'element_description',
+                    ]
+    list_filter = ['origins', 'holotype', 'source', 'site__name', 'country', ]
     list_display_links = ['id', 'catalog_number']
+    list_select_related = ['site', 'context', 'taxon']
     search_fields = ['catalog_number', 'place_name', 'country', 'locality',
                      'fossil_element__skeletal_element']
     readonly_fields = ['element_count', 'aapa', 'id', 'default_image', 'element_description']
@@ -222,10 +232,11 @@ class FossilAdmin(admin.ModelAdmin):
     list_per_page = 200
     inlines = [
         # ReferenceInline, # the number of references significantly slows page loads
+        # PublicationsInline,
         FossilElementInline,
         PhotosInline,
-        ReferenceInline
     ]
+    filter_horizontal = ('references', )
 
     fieldsets = [
         ('Fossil Details', {
@@ -234,6 +245,7 @@ class FossilAdmin(admin.ModelAdmin):
                         #'guid',
                          'uuid', 'organism_id'),
                        ('description'),
+                       ('short_description'),
                        ('nickname', 'place_name'),
                        ('holotype', 'lifestage', 'sex'),
                        ('origins',)],
@@ -371,10 +383,10 @@ class FossilAdmin(admin.ModelAdmin):
         """
         if db_field.name == "site" and self.current_obj:
             kwargs["queryset"] = Site.objects.filter(country=self.current_obj.country).order_by('name')
-        if db_field.name == "context":
-            if self.current_obj:
-                if self.current_obj.context and self.current_obj.context.site:
-                    kwargs["queryset"] = Context.objects.filter(site=self.current_obj.context.site)
+        # if db_field.name == "context":
+        #     if self.current_obj:
+        #         if self.current_obj.context and self.current_obj.context.site:
+        #             kwargs["queryset"] = Context.objects.filter(site=self.current_obj.context.site)
         #         elif self.current_obj.country:
         #             kwargs["queryset"] = Context.objects.filter(site__country=self.current_obj.country).filter(origins=True)
         #         else:

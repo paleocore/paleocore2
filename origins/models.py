@@ -244,11 +244,14 @@ class Fossil(models.Model):
     guid = models.URLField(null=True, blank=True)
     uuid = models.UUIDField(default=uuid.uuid4)
     catalog_number = models.CharField(max_length=40, null=True, blank=True)
+    year_collected = models.IntegerField("Year", blank=True, null=True,
+                                         help_text='The year, event or field campaign during which the item was found.')
     organism_id = models.CharField(max_length=40, null=True, blank=True)
     nickname = models.CharField(max_length=40, null=True, blank=True)
     holotype = models.BooleanField(default=False)
     lifestage = models.CharField(max_length=20, null=True, blank=True)
     sex = models.CharField(max_length=10, null=True, blank=True)
+    short_description = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     remarks = models.TextField(null=True, blank=True)
 
