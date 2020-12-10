@@ -2,6 +2,7 @@
 <div class="sections" data-magellan-target="{{class_group.label}}">
   <div class="target" id="{{class_group.label}}">
     <h3>{{ class_group.mapping }}</h3>
+    <h4>{{class_group.terms|length}} properties</h4>
 
     <!-- button links for each term in the class -->
     {% for term in class_group.terms %}
