@@ -66,9 +66,9 @@ default_search_fields = ['id',
                          'stratigraphic_marker_found',
                          'stratigraphic_marker_likely',
                          'analytical_unit',
-                         'formation',
-                         'member',
-                         'bed'
+                         'stratigraphic_formation',
+                         'stratigraphic_member',
+                         #'bed'
                          'finder',
                          'collector',
                          ]

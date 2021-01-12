@@ -34,6 +34,9 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
     field_season = models.CharField(max_length=50, null=True, blank=True, choices=FIELD_SEASON_CHOICES)
     individual_count = models.IntegerField(blank=True, null=True, default=1)
     preparation_status = models.CharField(max_length=50, blank=True, null=True)
+
+    # Geological Context
+
     stratigraphic_marker_upper = models.CharField(max_length=255, blank=True, null=True)
     distance_from_upper = models.DecimalField(max_digits=38, decimal_places=8, blank=True, null=True)
     stratigraphic_marker_lower = models.CharField(max_length=255, blank=True, null=True)
@@ -42,7 +45,8 @@ class Occurrence(projects.models.PaleoCoreOccurrenceBaseClass):
     distance_from_found = models.DecimalField(max_digits=38, decimal_places=8, blank=True, null=True)
     stratigraphic_marker_likely = models.CharField(max_length=255, blank=True, null=True)
     distance_from_likely = models.DecimalField(max_digits=38, decimal_places=8, blank=True, null=True)
-    stratigraphic_member = models.CharField(max_length=255, blank=True, null=True)
+    stratigraphic_formation = models.CharField("Formation", max_length=255, blank=True, null=True)  # dwc:formation
+    stratigraphic_member = models.CharField("Member", max_length=255, blank=True, null=True)  # dwc:member
     analytical_unit = models.CharField("Submember", max_length=255, blank=True, null=True)
     analytical_unit_2 = models.CharField(max_length=255, blank=True, null=True)
     analytical_unit_3 = models.CharField(max_length=255, blank=True, null=True)
